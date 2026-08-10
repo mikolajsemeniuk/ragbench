@@ -1,5 +1,27 @@
 # Rag
 
+## Run on vLLM
+
+```sh
+docker compose up -d qdrant vllm-embed vllm-llm
+
+go run ./cmd/bench -provider vllm -provider-url http://localhost:8000 -embed-url http://localhost:8001 -llm-model qwen2.5-7b-instruct -embed-model bge-base-en-v1.5 -vector-size 768 -corpus data/sample_corpus.jsonl -dataset data/sample_dataset.jsonl -tex-out paper/baseline.gen.tex -name NaiveRAG
+```
+
+## Run on Ollama
+
+```sh
+ollama pull nomic-embed-text
+ollama pull qwen2.5:7b
+
+podman machine init
+podman machine start
+
+podman compose up -d qdrant
+
+go run ./cmd/bench -provider ollama -provider-url http://localhost:11434 -embed-url http://localhost:11434 -llm-model qwen2.5:7b -embed-model nomic-embed-text -vector-size 768 -corpus data/sample_corpus.jsonl -dataset data/sample_dataset.jsonl -tex-out paper/baseline.gen.tex -name NaiveRAG
+```
+
 ## Dataset
 [RUC-NLPIR/FlashRAG_datasets](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/retrieval-corpus)
 [Natural Questions (nq)](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/nq)

@@ -53,7 +53,7 @@ func (q *Qdrant) Upsert(ctx context.Context, collection string, points []Point) 
 	return nil
 }
 
-func (q *Qdrant) Search(ctx context.Context, collection string, vector []float32, limit int) ([]string, error) {
+func (q *Qdrant) Search(ctx context.Context, collection string, vector []float32, limit int) ([]Point, error) {
 	body := map[string]any{
 		"vector":       vector,
 		"limit":        limit,
@@ -66,6 +66,7 @@ func (q *Qdrant) Search(ctx context.Context, collection string, vector []float32
 
 	var resp struct {
 		Result []struct {
+			ID      uint64 `json:"id"`
 			Payload struct {
 				Text string `json:"text"`
 			} `json:"payload"`
@@ -75,11 +76,11 @@ func (q *Qdrant) Search(ctx context.Context, collection string, vector []float32
 		return nil, fmt.Errorf("decode search response: %w", err)
 	}
 
-	texts := make([]string, len(resp.Result))
+	points := make([]Point, len(resp.Result))
 	for i, res := range resp.Result {
-		texts[i] = res.Payload.Text
+		points[i] = Point{ID: res.ID, Text: res.Payload.Text}
 	}
-	return texts, nil
+	return points, nil
 }
 
 func (q *Qdrant) doJSON(ctx context.Context, method, url string, body any) ([]byte, error) {

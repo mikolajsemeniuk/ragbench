@@ -74,39 +74,48 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 	return nil
 }
 
-func (r *NaiveRAG) Query(ctx context.Context, question string) (string, error) {
-	contexts, err := r.retrieve(ctx, question)
+// Query wykonuje pełny przebieg NaiveRAG i zwraca odpowiedź modelu razem z ID
+// dokumentów zwróconych przez retrieval (w kolejności malejącej trafności) -
+// retrievedIDs są potrzebne do policzenia metryk jakości retrievalu
+// (Recall@K, MRR) względem złotych dokumentów w cmd/bench.
+func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, retrievedIDs []uint64, err error) {
+	points, err := r.retrieve(ctx, question)
 	if err != nil {
-		return "", fmt.Errorf("retrieve: %w", err)
+		return "", nil, fmt.Errorf("retrieve: %w", err)
 	}
 
-	answer, err := r.Generator.Generate(ctx, buildPrompt(question, contexts))
+	answer, err = r.Generator.Generate(ctx, buildPrompt(question, points))
 	if err != nil {
-		return "", fmt.Errorf("generate: %w", err)
+		return "", nil, fmt.Errorf("generate: %w", err)
 	}
-	return answer, nil
+
+	retrievedIDs = make([]uint64, len(points))
+	for i, p := range points {
+		retrievedIDs[i] = p.ID
+	}
+	return answer, retrievedIDs, nil
 }
 
-func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]string, error) {
+func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Point, error) {
 	vectors, err := r.Embedder.Embed(ctx, []string{question})
 	if err != nil {
 		return nil, fmt.Errorf("embed question: %w", err)
 	}
 
-	contexts, err := r.Store.Search(ctx, r.Collection, vectors[0], r.TopK)
+	points, err := r.Store.Search(ctx, r.Collection, vectors[0], r.TopK)
 	if err != nil {
 		return nil, fmt.Errorf("search: %w", err)
 	}
-	return contexts, nil
+	return points, nil
 }
 
-func buildPrompt(question string, contexts []string) string {
+func buildPrompt(question string, contexts []storage.Point) string {
 	var b bytes.Buffer
 	b.WriteString("Odpowiedz na pytanie wyłącznie na podstawie poniższego kontekstu. ")
 	b.WriteString("Jeśli kontekst nie zawiera odpowiedzi, powiedz, że nie wiesz.\n\n")
 	b.WriteString("Kontekst:\n")
 	for i, c := range contexts {
-		fmt.Fprintf(&b, "[%d] %s\n", i+1, c)
+		fmt.Fprintf(&b, "[%d] %s\n", i+1, c.Text)
 	}
 	b.WriteString("\nPytanie: ")
 	b.WriteString(question)

@@ -1,10 +1,7 @@
-// Package storage zawiera klientów baz wektorowych używanych do przechowywania
-// i wyszukiwania fragmentów korpusu w pipeline'ach RAG.
 package storage
 
 import "context"
 
-// Point to pojedynczy wektor z tekstem, zapisywany w bazie wektorowej.
 type Point struct {
 	ID     uint64
 	Vector []float32

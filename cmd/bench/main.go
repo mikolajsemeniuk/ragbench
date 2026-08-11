@@ -19,13 +19,11 @@ import (
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
 
-// corpusLine to jeden wiersz pliku korpusu (jsonl): {"id": 1, "text": "..."}
 type corpusLine struct {
 	ID   uint64 `json:"id"`
 	Text string `json:"text"`
 }
 
-// datasetLine to jeden wiersz pliku pytań (jsonl): {"question": "...", "answers": ["...", ...]}
 type datasetLine struct {
 	Question string   `json:"question"`
 	Answers  []string `json:"answers"`

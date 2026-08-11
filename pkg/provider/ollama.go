@@ -28,7 +28,7 @@ func (o *Ollama) Embed(ctx context.Context, texts []string) ([][]float32, error)
 			"model":  o.Model,
 			"prompt": text,
 		}
-		raw, err := doJSON(ctx, o.Client, http.MethodPost, o.URL+"/api/embeddings", body)
+		raw, err := doJSON(ctx, http.MethodPost, o.URL+"/api/embeddings", body)
 		if err != nil {
 			return nil, err
 		}
@@ -51,7 +51,7 @@ func (o *Ollama) Generate(ctx context.Context, prompt string) (string, error) {
 		"prompt": prompt,
 		"stream": false,
 	}
-	raw, err := doJSON(ctx, o.Client, http.MethodPost, o.URL+"/api/generate", body)
+	raw, err := doJSON(ctx, http.MethodPost, o.URL+"/api/generate", body)
 	if err != nil {
 		return "", err
 	}

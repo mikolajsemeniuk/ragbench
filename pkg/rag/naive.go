@@ -18,15 +18,11 @@ type Generator interface {
 	Generate(ctx context.Context, prompt string) (string, error)
 }
 
-// Document to pojedynczy fragment korpusu, który trafia do bazy wektorowej.
 type Document struct {
 	ID   uint64
 	Text string
 }
 
-// NaiveRAG to najprostszy, klasyczny pipeline RAG: embed -> retrieve top-K -> generate.
-// Nie ma tu żadnej pętli, oceny jakości kontekstu ani decyzji agenta - to punkt
-// odniesienia (baseline) dla bardziej zaawansowanych architektur (Self-RAG, CRAG, ...).
 type NaiveRAG struct {
 	Store      storage.VectorStore
 	Collection string
@@ -34,10 +30,9 @@ type NaiveRAG struct {
 	Embedder  Embedder
 	Generator Generator
 
-	TopK int // ile fragmentów kontekstu pobrać przed generacją
+	TopK int
 }
 
-// NewNaiveRAG tworzy NaiveRAG z rozsądnymi wartościami domyślnymi.
 func NewNaiveRAG(store storage.VectorStore, collection string, embedder Embedder, generator Generator) *NaiveRAG {
 	return &NaiveRAG{
 		Store:      store,
@@ -48,14 +43,10 @@ func NewNaiveRAG(store storage.VectorStore, collection string, embedder Embedder
 	}
 }
 
-// EnsureCollection tworzy kolekcję w bazie wektorowej, jeśli jeszcze nie istnieje.
-// vectorSize musi odpowiadać wymiarowi wektorów zwracanych przez model embeddingowy
-// (np. 768 dla BAAI/bge-base-en-v1.5).
 func (r *NaiveRAG) EnsureCollection(ctx context.Context, vectorSize int) error {
 	return r.Store.EnsureCollection(ctx, r.Collection, vectorSize)
 }
 
-// Ingest liczy embeddingi dla dokumentów i zapisuje je (wraz z tekstem) do bazy wektorowej.
 func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 	if len(docs) == 0 {
 		return nil
@@ -79,12 +70,10 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 	if err := r.Store.Upsert(ctx, r.Collection, points); err != nil {
 		return fmt.Errorf("upsert points: %w", err)
 	}
+
 	return nil
 }
 
-// Query to główna metoda baseline'u: dla pytania użytkownika pobiera TopK
-// najbardziej podobnych fragmentów tekstu z bazy wektorowej, wkleja je do promptu
-// i zwraca odpowiedź wygenerowaną przez LLM.
 func (r *NaiveRAG) Query(ctx context.Context, question string) (string, error) {
 	contexts, err := r.retrieve(ctx, question)
 	if err != nil {
@@ -98,7 +87,6 @@ func (r *NaiveRAG) Query(ctx context.Context, question string) (string, error) {
 	return answer, nil
 }
 
-// retrieve embeduje pytanie i szuka TopK najbliższych fragmentów w bazie wektorowej.
 func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]string, error) {
 	vectors, err := r.Embedder.Embed(ctx, []string{question})
 	if err != nil {

@@ -28,7 +28,7 @@ func (v *VLLM) Embed(ctx context.Context, texts []string) ([][]float32, error) {
 		"model": v.Model,
 		"input": texts,
 	}
-	raw, err := doJSON(ctx, v.Client, http.MethodPost, v.URL+"/v1/embeddings", body)
+	raw, err := doJSON(ctx, http.MethodPost, v.URL+"/v1/embeddings", body)
 	if err != nil {
 		return nil, err
 	}
@@ -42,11 +42,12 @@ func (v *VLLM) Embed(ctx context.Context, texts []string) ([][]float32, error) {
 		return nil, fmt.Errorf("decode embeddings response: %w", err)
 	}
 
-	vectors := make([][]float32, len(resp.Data))
+	out := make([][]float32, len(resp.Data))
 	for i, d := range resp.Data {
-		vectors[i] = d.Embedding
+		out[i] = d.Embedding
 	}
-	return vectors, nil
+
+	return out, nil
 }
 
 // Generate woła OpenAI-compatible endpoint /v1/chat/completions.
@@ -57,56 +58,56 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 			{"role": "user", "content": prompt},
 		},
 	}
-	raw, err := doJSON(ctx, v.Client, http.MethodPost, v.URL+"/v1/chat/completions", body)
+	raw, err := doJSON(ctx, http.MethodPost, v.URL+"/v1/chat/completions", body)
 	if err != nil {
 		return "", err
 	}
 
-	var resp struct {
+	var out struct {
 		Choices []struct {
 			Message struct {
 				Content string `json:"content"`
 			} `json:"message"`
 		} `json:"choices"`
 	}
-	if err := json.Unmarshal(raw, &resp); err != nil {
+	if err := json.Unmarshal(raw, &out); err != nil {
 		return "", fmt.Errorf("decode chat completion response: %w", err)
 	}
-	if len(resp.Choices) == 0 {
+
+	if len(out.Choices) == 0 {
 		return "", fmt.Errorf("llm returned no choices")
 	}
-	return resp.Choices[0].Message.Content, nil
+
+	return out.Choices[0].Message.Content, nil
 }
 
 // doJSON to mały helper wysyłający JSON-owe żądanie HTTP i zwracający surową odpowiedź.
-func doJSON(ctx context.Context, client *http.Client, method, url string, body any) ([]byte, error) {
-	payload, err := json.Marshal(body)
+func doJSON(ctx context.Context, method, url string, in any) ([]byte, error) {
+	body, err := json.Marshal(in)
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("build request: %w", err)
 	}
-	req.Header.Set("Content-Type", "application/json")
 
-	if client == nil {
-		client = http.DefaultClient
-	}
-	resp, err := client.Do(req)
+	req.Header.Set("Content-Type", "application/json")
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
-	raw, err := io.ReadAll(resp.Body)
+	raw, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, fmt.Errorf("read response body: %w", err)
 	}
 
-	if resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("%s %s returned status %d: %s", method, url, resp.StatusCode, string(raw))
+	if res.StatusCode >= 300 {
+		return nil, fmt.Errorf("%s %s returned status %d: %s", method, url, res.StatusCode, string(raw))
 	}
+
 	return raw, nil
 }

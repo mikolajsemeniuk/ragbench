@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/metrics"
 	"github.com/mikolajsemeniuk/ragbench/pkg/provider"
 	"github.com/mikolajsemeniuk/ragbench/pkg/rag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
@@ -110,8 +111,8 @@ func main() {
 			continue
 		}
 
-		em := exactMatch(answer, item.Answers)
-		f1 := f1Score(answer, item.Answers)
+		em := metrics.ExactMatch(answer, item.Answers)
+		f1 := metrics.F1Score(answer, item.Answers)
 		sumEM += em
 		sumF1 += f1
 		sumLatency += latency
@@ -219,72 +220,3 @@ func loadDataset(path string) ([]datasetLine, error) {
 	return items, scanner.Err()
 }
 
-// normalize ujednolica tekst przed porównaniem: lowercase, bez interpunkcji,
-// bez wielokrotnych spacji (standardowa normalizacja EM/F1 dla QA).
-func normalize(s string) string {
-	s = strings.ToLower(s)
-	var b strings.Builder
-	for _, r := range s {
-		if strings.ContainsRune(".,!?;:'\"()[]{}", r) {
-			continue
-		}
-		b.WriteRune(r)
-	}
-	return strings.Join(strings.Fields(b.String()), " ")
-}
-
-// exactMatch zwraca 1, jeśli znormalizowana odpowiedź jest identyczna z jedną
-// ze złotych odpowiedzi, w przeciwnym razie 0.
-func exactMatch(answer string, golden []string) float64 {
-	na := normalize(answer)
-	for _, g := range golden {
-		if na == normalize(g) {
-			return 1
-		}
-	}
-	return 0
-}
-
-// f1Score liczy token-level F1 między odpowiedzią a najlepiej pasującą złotą
-// odpowiedzią (standardowa metryka dla SQuAD/NQ/HotpotQA).
-func f1Score(answer string, golden []string) float64 {
-	predTokens := strings.Fields(normalize(answer))
-	best := 0.0
-	for _, g := range golden {
-		goldTokens := strings.Fields(normalize(g))
-		f1 := tokenF1(predTokens, goldTokens)
-		if f1 > best {
-			best = f1
-		}
-	}
-	return best
-}
-
-func tokenF1(pred, gold []string) float64 {
-	if len(pred) == 0 || len(gold) == 0 {
-		if len(pred) == len(gold) {
-			return 1
-		}
-		return 0
-	}
-
-	counts := make(map[string]int, len(gold))
-	for _, t := range gold {
-		counts[t]++
-	}
-
-	common := 0
-	for _, t := range pred {
-		if counts[t] > 0 {
-			common++
-			counts[t]--
-		}
-	}
-	if common == 0 {
-		return 0
-	}
-
-	precision := float64(common) / float64(len(pred))
-	recall := float64(common) / float64(len(gold))
-	return 2 * precision * recall / (precision + recall)
-}

@@ -1,51 +1,39 @@
 # Rag
+* vLLM
+  * Setup
+* Ollama
+  * Setup
+  * Ingest data
+  * Check ingested data
 
-## Run on vLLM
+## vLLM
+
+### Setup
 
 ```sh
 docker compose up -d qdrant vllm-embed vllm-llm
-
-go run ./cmd/bench -provider vllm -provider-url http://localhost:8000 -embed-url http://localhost:8001 -llm-model qwen2.5-7b-instruct -embed-model bge-base-en-v1.5 -vector-size 768 -corpus data/sample_corpus.jsonl -dataset data/sample_dataset.jsonl -tex-out paper/baseline.gen.tex -name NaiveRAG
 ```
 
-## Run on Ollama
+## Ollama
+
+### Setup
 
 ```sh
 ollama pull nomic-embed-text
 ollama pull qwen2.5-7b-instruct
-
 podman compose up -d qdrant
-
-go run ./cmd/bench -provider ollama -provider-url http://localhost:11434 -embed-url http://localhost:11434 -llm-model qwen2.5-7b-instruct -embed-model nomic-embed-text -vector-size 768 -corpus data/sample_corpus.jsonl -dataset data/sample_dataset.jsonl -tex-out paper/baseline.gen.tex -name NaiveRAG
 ```
 
-## Ingest corpus into Qdrant
+### Ingest
 
 ```sh
-podman compose up -d qdrant vllm-embed
-
-go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench -vector-size 768
+go run ./cmd/ingest -input dataset/wiki18_100w.test.jsonl -provider ollama -embed-url http://localhost:11434 -embed-model nomic-embed-text -qdrant-url http://localhost:6333 -collection ragbench-test
 ```
 
-## Backup / restore the Qdrant volume
+### Check ingested data
 
 ```sh
-mkdir -p snapshots
-
-# backup: name it after corpus + embedding model + date, so you don't
-# accidentally restore a volume embedded with a different model
-docker compose stop qdrant
-docker run --rm --volumes-from qdrant -v "$(pwd)/snapshots:/backup" busybox \
-  tar czf "/backup/qdrant-wiki18_100w-bge-base-en-v1.5-$(date +%Y%m%d).tar.gz" -C /qdrant/storage .
-docker compose start qdrant
-```
-
-```sh
-# restore: stop qdrant first so it isn't writing to the volume mid-restore
-docker compose stop qdrant
-docker run --rm --volumes-from qdrant -v "$(pwd)/snapshots:/backup" busybox \
-  sh -c "rm -rf /qdrant/storage/* && tar xzf /backup/qdrant-wiki18_100w-bge-base-en-v1.5-20260811.tar.gz -C /qdrant/storage"
-docker compose start qdrant
+curl -s http://localhost:6333/collections/ragbench-test | jq '.result.points_count'
 ```
 
 ## Dataset

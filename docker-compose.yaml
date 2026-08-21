@@ -22,7 +22,7 @@ services:
       - "8001:8000"
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
-    command: --model BAAI/bge-base-en-v1.5 --served-model-name bge-base-en-v1.5 --task embed
+    command: --model BAAI/bge-base-en-v1.5 --served-model-name bge-base-en-v1.5 --runner pooling
     deploy:
       resources:
         reservations:

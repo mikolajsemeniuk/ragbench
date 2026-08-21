@@ -1,10 +1,11 @@
 # Rag
 * vLLM
   * Setup
+  * Ingest data
 * Ollama
   * Setup
   * Ingest data
-  * Check ingested data
+* Check ingested data
 
 ## vLLM
 
@@ -12,6 +13,17 @@
 
 ```sh
 docker compose up -d qdrant vllm-embed vllm-llm
+```
+
+### Ingest data
+
+```sh
+# Approx 3h
+tmux new -s ingest
+
+go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-test
+
+tmux attach -t ingest
 ```
 
 ## Ollama
@@ -30,10 +42,16 @@ podman compose up -d qdrant
 go run ./cmd/ingest -input dataset/wiki18_100w.test.jsonl -provider ollama -embed-url http://localhost:11434 -embed-model nomic-embed-text -qdrant-url http://localhost:6333 -collection ragbench-test
 ```
 
-### Check ingested data
+## Check ingested data
 
 ```sh
 curl -s http://localhost:6333/collections/ragbench-test | jq '.result.points_count'
+```
+
+## Clean collection
+
+```sh
+curl -s -X DELETE http://localhost:6333/collections/ragbench-test
 ```
 
 ## Dataset

@@ -7,6 +7,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -17,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/schollz/progressbar/v3"
@@ -25,6 +27,47 @@ import (
 	"github.com/mikolajsemeniuk/ragbench/pkg/rag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
+
+// countLines liczy liczbę linii w pliku (potrzebne do paska postępu opartego
+// o liczbę dokumentów, a nie o bajty). Robi to jednym szybkim przejściem po
+// pliku, licząc bajty '\n'.
+func countLines(path string) (int64, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return 0, err
+	}
+	defer f.Close()
+
+	var count int64
+	buf := make([]byte, 1024*1024)
+	for {
+		n, err := f.Read(buf)
+		count += int64(bytes.Count(buf[:n], []byte{'\n'}))
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return 0, err
+		}
+	}
+	return count, nil
+}
+
+// truncateWords przycina tekst do co najwyżej maxWords słów. Modele
+// embeddingowe mają twardy limit długości kontekstu (np. bge-base-en-v1.5:
+// 512 tokenów); ponieważ nie liczymy tu dokładnej liczby tokenów (brak
+// tokenizera BPE po stronie Go), używamy liczby słów jako bezpiecznego,
+// konserwatywnego przybliżenia (średnio 1 token odpowiada mniej niż 1
+// słowu w języku angielskim, więc limit słów niższy niż limit tokenów jest
+// bezpieczny). Zwraca przycięty tekst oraz informację, czy przycięcie
+// nastąpiło.
+func truncateWords(text string, maxWords int) (string, bool) {
+	words := strings.Fields(text)
+	if len(words) <= maxWords {
+		return text, false
+	}
+	return strings.Join(words[:maxWords], " "), true
+}
 
 type corpusLine struct {
 	ID       string `json:"id"`
@@ -47,6 +90,7 @@ func main() {
 		collection  = flag.String("collection", "ragbench", "nazwa kolekcji w Qdrant do utworzenia/zapełnienia")
 		batchSize   = flag.Int("batch-size", 128, "liczba dokumentów embedowanych i wysyłanych do bazy wektorowej w jednym wsadzie")
 		concurrency = flag.Int("concurrency", 8, "liczba wsadów embedowanych i wysyłanych do bazy wektorowej równolegle")
+		maxWords    = flag.Int("max-words", 400, "maksymalna liczba słów dokumentu przekazywana do embeddera; dłuższe dokumenty są przycinane (bezpieczne przybliżenie limitu tokenów modelu embeddingowego, np. 512 dla bge-base-en-v1.5)")
 	)
 	flag.Parse()
 
@@ -77,16 +121,21 @@ func main() {
 	}
 	defer f.Close()
 
-	stat, err := f.Stat()
+	lineCount, err := countLines(*inputPath)
 	if err != nil {
-		log.Fatalf("stat pliku korpusu: %v", err)
+		log.Fatalf("liczenie linii korpusu: %v", err)
 	}
 
-	bar := progressbar.DefaultBytes(stat.Size(), "ingest")
-	reader := io.TeeReader(f, bar)
+	bar := progressbar.NewOptions64(lineCount,
+		progressbar.OptionSetDescription("ingest"),
+		progressbar.OptionShowCount(),
+		progressbar.OptionShowIts(),
+		progressbar.OptionSetItsString("docs"),
+	)
 
 	start := time.Now()
 	total := 0
+	var truncated atomic.Int64
 	batch := make([]rag.Document, 0, *batchSize)
 	collectionReady := false
 
@@ -100,9 +149,13 @@ func main() {
 
 	sem := make(chan struct{}, *concurrency)
 	var wg sync.WaitGroup
-	var mu sync.Mutex
-	var ingestErr error
+	var failedBatches atomic.Int64
 
+	// submit wysyła jeden wsad asynchronicznie. Błąd pojedynczego wsadu
+	// (np. przejściowy błąd sieci/serwera embeddingów) jest logowany i
+	// zliczany, ale nie przerywa reszty ingestu - przy 21M dokumentów
+	// zatrzymanie całego procesu z powodu jednego wsadu byłoby zbyt
+	// kosztowne.
 	submit := func(docs []rag.Document) {
 		wg.Add(1)
 		sem <- struct{}{}
@@ -110,23 +163,14 @@ func main() {
 			defer wg.Done()
 			defer func() { <-sem }()
 			if err := pipeline.Ingest(ctx, docs); err != nil {
-				mu.Lock()
-				if ingestErr == nil {
-					ingestErr = err
-				}
-				mu.Unlock()
+				failedBatches.Add(1)
+				log.Printf("ingest wsadu (dokumenty %d-%d) nieudany, pomijam: %v", docs[0].ID, docs[len(docs)-1].ID, err)
 			}
 		}()
 	}
 
 	flush := func() {
 		if len(batch) == 0 {
-			return
-		}
-		mu.Lock()
-		failed := ingestErr
-		mu.Unlock()
-		if failed != nil {
 			return
 		}
 
@@ -144,9 +188,10 @@ func main() {
 		batch = batch[:0]
 	}
 
-	scanner := bufio.NewScanner(reader)
+	scanner := bufio.NewScanner(f)
 	scanner.Buffer(make([]byte, 0, 1024*1024), 10*1024*1024)
 	for scanner.Scan() {
+		bar.Add(1)
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
 			continue
@@ -161,7 +206,13 @@ func main() {
 			log.Fatalf("parsowanie id korpusu %q: %v", cl.ID, err)
 		}
 
-		batch = append(batch, rag.Document{ID: id, Text: cl.Contents})
+		text := cl.Contents
+		if t, wasTruncated := truncateWords(text, *maxWords); wasTruncated {
+			text = t
+			truncated.Add(1)
+		}
+
+		batch = append(batch, rag.Document{ID: id, Text: text})
 		total++
 		if len(batch) >= *batchSize {
 			flush()
@@ -174,9 +225,7 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("czytanie pliku korpusu: %v", err)
 	}
-	if ingestErr != nil {
-		log.Fatalf("ingest wsadu: %v", ingestErr)
-	}
 
-	fmt.Printf("gotowe: %d dokumentów zaingestowanych do kolekcji %q w %s\n", total, *collection, time.Since(start).Round(time.Second))
+	fmt.Printf("gotowe: %d dokumentów przetworzonych do kolekcji %q w %s (przycięto do %d słów: %d dokumentów, nieudanych wsadów: %d)\n",
+		total, *collection, time.Since(start).Round(time.Second), *maxWords, truncated.Load(), failedBatches.Load())
 }

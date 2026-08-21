@@ -109,12 +109,11 @@ func main() {
 		embedModel   = flag.String("embed-model", "bge-base-en-v1.5", "nazwa modelu embeddingowego")
 
 		qdrantURL  = flag.String("qdrant-url", "http://localhost:6333", "URL Qdrant")
-		collection = flag.String("collection", "ragbench", "nazwa kolekcji w Qdrant")
-		vectorSize = flag.Int("vector-size", 768, "wymiar wektorów embeddingowych")
+		collection = flag.String("collection", "ragbench", "nazwa kolekcji w Qdrant - musi już istnieć i być zaingestowana wcześniej przez cmd/ingest")
 		topK       = flag.Int("top-k", 5, "liczba fragmentów kontekstu pobieranych przed generacją (K dla Recall@K)")
 
-		corpusPath   = flag.String("corpus", "", "ścieżka do pliku korpusu FlashRAG (jsonl: id, contents) - opcjonalne, do ingestu przed benchmarkiem; wymagane też do policzenia Recall@K/MRR (potrzebny indeks tytuł->ID)")
-		corpusLimit  = flag.Int("corpus-limit", 0, "0 = zaingestuj cały korpus; N>0 = wylosuj (reservoir sampling, deterministycznie przez -seed) tylko N dokumentów - do szybkiego smoke testu mechaniki pipeline'u. UWAGA: przy małym N złote dokumenty pytań z dużym prawdopodobieństwem nie znajdą się w korpusie, więc EM/F1/Recall@K/MRR będą zaniżone/niereprezentatywne dla jakości - to test 'czy działa', nie benchmark jakości")
+		corpusPath   = flag.String("corpus", "", "ścieżka do pliku korpusu FlashRAG (jsonl: id, contents), z którego wcześniej zaingestowano kolekcję (patrz cmd/ingest) - opcjonalne, samo nie ingestuje niczego, służy tylko do zbudowania indeksu tytuł->ID potrzebnego do policzenia Recall@K/MRR")
+		corpusLimit  = flag.Int("corpus-limit", 0, "0 = zbuduj indeks tytuł->ID z całego korpusu; N>0 = wylosuj (reservoir sampling, deterministycznie przez -seed) tylko N dokumentów do indeksu - do szybkiego smoke testu. UWAGA: przy małym N złote dokumenty pytań z dużym prawdopodobieństwem nie trafią do próbki, więc Recall@K/MRR będą zaniżone/niereprezentatywne - to test 'czy działa', nie benchmark jakości")
 		datasetPath  = flag.String("dataset", "", "ścieżka do pliku pytań FlashRAG (jsonl: question, golden_answers[, metadata]) - wymagane. Ewaluację robimy zawsze na splicie dev lub test (np. *_dev.jsonl, *_test.jsonl), nigdy na *_train.jsonl - train w tych datasetach służy wyłącznie jako pula przykładów few-shot, tak jak w FlashRAG/Self-RAG/IRCoT/Adaptive-RAG i innych pracach z README")
 		datasetLimit = flag.Int("limit", 0, "0 = użyj całego datasetu; N>0 = wylosuj (bez powtórzeń, deterministycznie przez -seed) tylko N pytań - do szybkiego smoke testu. Losowanie zamiast brania pierwszych N linii, bo niektóre datasety (np. HotpotQA) mają pytania posortowane wg typu/trudności - wzięcie pierwszych N dałoby nierepreznetatywną, przekłamaną próbkę")
 		seed         = flag.Int64("seed", 42, "seed losowania dla -limit/-corpus-limit (ta sama wartość => ten sam, powtarzalny sample)")
@@ -153,24 +152,19 @@ func main() {
 
 	// titleIndex mapuje tytuł artykułu na ID wszystkich jego fragmentów w
 	// korpusie - potrzebne do zamiany złotych tytułów z datasetu na złote ID
-	// dokumentów, względem których liczymy Recall@K/MRR.
+	// dokumentów, względem których liczymy Recall@K/MRR. cmd/bench sam niczego
+	// nie ingestuje do Qdranta - kolekcja musi już być zaingestowana wcześniej
+	// przez cmd/ingest.
 	var titleIndex map[string][]uint64
 	if *corpusPath != "" {
-		docs, index, err := loadCorpus(*corpusPath, *corpusLimit, rng)
+		index, err := buildTitleIndex(*corpusPath, *corpusLimit, rng)
 		if err != nil {
-			log.Fatalf("wczytywanie korpusu: %v", err)
+			log.Fatalf("budowanie indeksu tytuł->ID: %v", err)
 		}
 		if *corpusLimit > 0 {
-			log.Printf("smoke test: zaingestowano losową próbkę %d dokumentów (seed=%d) zamiast całego korpusu", len(docs), *seed)
+			log.Printf("smoke test: indeks tytuł->ID zbudowany z losowej próbki %d dokumentów (seed=%d) zamiast całego korpusu", *corpusLimit, *seed)
 		}
 		titleIndex = index
-		if err := pipeline.EnsureCollection(ctx, *vectorSize); err != nil {
-			log.Fatalf("tworzenie kolekcji: %v", err)
-		}
-		if err := pipeline.Ingest(ctx, docs); err != nil {
-			log.Fatalf("ingest korpusu: %v", err)
-		}
-		log.Printf("zaingestowano %d dokumentów do kolekcji %q", len(docs), *collection)
 	} else {
 		log.Printf("brak -corpus: Recall@K/MRR nie zostaną policzone (brak indeksu tytuł->ID), liczone będą tylko EM/F1/latencja")
 	}
@@ -312,23 +306,33 @@ func extractTitle(contents string) string {
 	return strings.Trim(line, "\"")
 }
 
-// loadCorpus wczytuje korpus FlashRAG i buduje indeks tytuł->ID fragmentów,
-// potrzebny do wyznaczenia złotych ID dokumentów przy liczeniu Recall@K/MRR
-// (jeden artykuł Wikipedii jest podzielony na wiele ~100-słowowych
-// fragmentów, każdy z tym samym tytułem).
+// titleEntry to jedna pozycja indeksu tytuł->ID budowanego przez
+// buildTitleIndex - trzymamy tylko tytuł i ID fragmentu, nigdy pełny tekst,
+// żeby indeksowanie całego korpusu (np. 21M fragmentów wiki18_100w.jsonl) nie
+// wymagało trzymania w pamięci treści dokumentów.
+type titleEntry struct {
+	id    uint64
+	title string
+}
+
+// buildTitleIndex wczytuje korpus FlashRAG i buduje indeks tytuł->ID
+// fragmentów, potrzebny do wyznaczenia złotych ID dokumentów przy liczeniu
+// Recall@K/MRR (jeden artykuł Wikipedii jest podzielony na wiele
+// ~100-słowowych fragmentów, każdy z tym samym tytułem). Sam korpus nie jest
+// tu ingestowany do żadnej bazy wektorowej - to zadanie cmd/ingest.
 //
 // Jeśli limit > 0, zamiast wczytać cały plik (np. 21M linii / 14GB dla
 // wiki18_100w.jsonl) stosowane jest reservoir sampling - każda linia ma
 // równe prawdopodobieństwo trafienia do próbki, a w pamięci trzymane jest
-// najwyżej `limit` dokumentów niezależnie od rozmiaru pliku.
-func loadCorpus(path string, limit int, rng *rand.Rand) ([]rag.Document, map[string][]uint64, error) {
+// najwyżej `limit` wpisów niezależnie od rozmiaru pliku.
+func buildTitleIndex(path string, limit int, rng *rand.Rand) (map[string][]uint64, error) {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	defer f.Close()
 
-	var docs []rag.Document
+	var entries []titleEntry
 	seen := 0
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(make([]byte, 0, 1024*1024), 10*1024*1024)
@@ -339,38 +343,38 @@ func loadCorpus(path string, limit int, rng *rand.Rand) ([]rag.Document, map[str
 		}
 		var cl corpusLine
 		if err := json.Unmarshal([]byte(line), &cl); err != nil {
-			return nil, nil, fmt.Errorf("parse corpus line: %w", err)
+			return nil, fmt.Errorf("parse corpus line: %w", err)
 		}
 		id, err := strconv.ParseUint(cl.ID, 10, 64)
 		if err != nil {
-			return nil, nil, fmt.Errorf("parse corpus id %q: %w", cl.ID, err)
+			return nil, fmt.Errorf("parse corpus id %q: %w", cl.ID, err)
 		}
-		doc := rag.Document{ID: id, Text: cl.Contents}
+		entry := titleEntry{id: id, title: extractTitle(cl.Contents)}
 
 		if limit <= 0 {
-			docs = append(docs, doc)
+			entries = append(entries, entry)
 			continue
 		}
 
 		// Algorytm R (reservoir sampling).
-		if len(docs) < limit {
-			docs = append(docs, doc)
+		if len(entries) < limit {
+			entries = append(entries, entry)
 		} else if j := rng.Intn(seen + 1); j < limit {
-			docs[j] = doc
+			entries[j] = entry
 		}
 		seen++
 	}
 	if err := scanner.Err(); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	titleIndex := make(map[string][]uint64, len(docs))
-	for _, d := range docs {
-		if title := extractTitle(d.Text); title != "" {
-			titleIndex[title] = append(titleIndex[title], d.ID)
+	titleIndex := make(map[string][]uint64, len(entries))
+	for _, e := range entries {
+		if e.title != "" {
+			titleIndex[e.title] = append(titleIndex[e.title], e.id)
 		}
 	}
-	return docs, titleIndex, nil
+	return titleIndex, nil
 }
 
 func loadDataset(path string) ([]datasetLine, error) {

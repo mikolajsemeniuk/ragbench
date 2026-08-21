@@ -19,14 +19,48 @@ func NewQdrant(url string) *Qdrant {
 }
 
 func (q *Qdrant) EnsureCollection(ctx context.Context, collection string, vectorSize int) error {
+	exists, err := q.collectionExists(ctx, collection)
+	if err != nil {
+		return fmt.Errorf("check collection exists: %w", err)
+	}
+	if exists {
+		return nil
+	}
+
 	body := map[string]any{
 		"vectors": map[string]any{
 			"size":     vectorSize,
 			"distance": "Cosine",
 		},
 	}
-	_, err := q.doJSON(ctx, http.MethodPut, q.URL+"/collections/"+collection, body)
+	_, err = q.doJSON(ctx, http.MethodPut, q.URL+"/collections/"+collection, body)
 	return err
+}
+
+func (q *Qdrant) collectionExists(ctx context.Context, collection string) (bool, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, q.URL+"/collections/"+collection, nil)
+	if err != nil {
+		return false, fmt.Errorf("build request: %w", err)
+	}
+
+	client := q.Client
+	if client == nil {
+		client = http.DefaultClient
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return false, fmt.Errorf("do request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return false, nil
+	}
+	if resp.StatusCode >= 300 {
+		raw, _ := io.ReadAll(resp.Body)
+		return false, fmt.Errorf("GET %s/collections/%s returned status %d: %s", q.URL, collection, resp.StatusCode, string(raw))
+	}
+	return true, nil
 }
 
 func (q *Qdrant) Upsert(ctx context.Context, collection string, points []Point) error {

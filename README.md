@@ -19,11 +19,7 @@ docker compose up -d qdrant vllm-embed vllm-llm
 
 ```sh
 # Approx 3h
-tmux new -s ingest
-
 go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-test
-
-tmux attach -t ingest
 ```
 
 ## Ollama

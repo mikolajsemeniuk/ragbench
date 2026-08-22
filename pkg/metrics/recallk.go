@@ -1,8 +1,8 @@
 package metrics
 
-// RecallAtK zwraca ułamek dokumentów uznanych za trafne (relevant), które
-// znalazły się wśród pierwszych k pozycji listy retrieved (posortowanej wg
-// malejącej trafności). Retrieved dłuższe niż k jest przycinane do k.
+// RecallAtK returns the fraction of relevant documents that appear within
+// the first k positions of the retrieved list (ordered by decreasing
+// relevance). A retrieved list longer than k is trimmed to k.
 func RecallAtK(retrieved []uint64, relevant []uint64, k int) float64 {
 	if len(relevant) == 0 {
 		return 0

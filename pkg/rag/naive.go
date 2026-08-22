@@ -1,5 +1,5 @@
-// Package rag zawiera implementacje baseline'owych architektur RAG
-// (Retrieval-Augmented Generation) porównywanych w artykule.
+// Package rag contains the baseline Retrieval-Augmented Generation
+// architectures compared in the paper.
 package rag
 
 import (
@@ -31,6 +31,14 @@ type NaiveRAG struct {
 	Generator Generator
 
 	TopK int
+
+	// QueryPrefix and DocumentPrefix are the asymmetric instructions the
+	// embedding model expects - see PrefixesFor. They are applied to the text
+	// handed to the encoder only: the passage stored in the vector store, and
+	// therefore the context handed to the generator, is always the clean
+	// original.
+	QueryPrefix    string
+	DocumentPrefix string
 }
 
 func NewNaiveRAG(store storage.VectorStore, collection string, embedder Embedder, generator Generator) *NaiveRAG {
@@ -54,7 +62,7 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 
 	texts := make([]string, len(docs))
 	for i, d := range docs {
-		texts[i] = d.Text
+		texts[i] = r.DocumentPrefix + d.Text
 	}
 
 	vectors, err := r.Embedder.Embed(ctx, texts)
@@ -64,6 +72,8 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 
 	points := make([]storage.Point, len(docs))
 	for i, d := range docs {
+		// d.Text, not the prefixed text: the prefix is an instruction to the
+		// encoder, not part of the passage.
 		points[i] = storage.Point{ID: d.ID, Vector: vectors[i], Text: d.Text}
 	}
 
@@ -74,10 +84,10 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 	return nil
 }
 
-// Query wykonuje pełny przebieg NaiveRAG i zwraca odpowiedź modelu razem z ID
-// dokumentów zwróconych przez retrieval (w kolejności malejącej trafności) -
-// retrievedIDs są potrzebne do policzenia metryk jakości retrievalu
-// (Recall@K, MRR) względem złotych dokumentów w cmd/bench.
+// Query runs the full NaiveRAG pass and returns the model's answer together
+// with the IDs of the retrieved documents, ordered by decreasing relevance.
+// retrievedIDs are what cmd/bench needs to compute the retrieval metrics
+// (Recall@K, MRR) against the gold documents.
 func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, retrievedIDs []uint64, err error) {
 	points, err := r.retrieve(ctx, question)
 	if err != nil {
@@ -97,7 +107,7 @@ func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, r
 }
 
 func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Point, error) {
-	vectors, err := r.Embedder.Embed(ctx, []string{question})
+	vectors, err := r.Embedder.Embed(ctx, []string{r.QueryPrefix + question})
 	if err != nil {
 		return nil, fmt.Errorf("embed question: %w", err)
 	}
@@ -109,15 +119,21 @@ func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Poi
 	return points, nil
 }
 
+// buildPrompt renders the baseline prompt. It is in English on purpose: the
+// corpora (FlashRAG wiki18_100w) and the question sets (NQ, TriviaQA,
+// HotpotQA, 2WikiMultihopQA, MuSiQue) are English, the gold answers are
+// English, and Exact Match / token-level F1 are computed against them - a
+// prompt in another language would push the model to answer in that language
+// and depress both metrics for reasons that have nothing to do with retrieval.
 func buildPrompt(question string, contexts []storage.Point) string {
 	var b bytes.Buffer
-	b.WriteString("Odpowiedz na pytanie wyłącznie na podstawie poniższego kontekstu. ")
-	b.WriteString("Jeśli kontekst nie zawiera odpowiedzi, powiedz, że nie wiesz.\n\n")
-	b.WriteString("Kontekst:\n")
+	b.WriteString("Answer the question using only the context below. ")
+	b.WriteString("If the context does not contain the answer, say that you do not know.\n\n")
+	b.WriteString("Context:\n")
 	for i, c := range contexts {
 		fmt.Fprintf(&b, "[%d] %s\n", i+1, c.Text)
 	}
-	b.WriteString("\nPytanie: ")
+	b.WriteString("\nQuestion: ")
 	b.WriteString(question)
 	return b.String()
 }

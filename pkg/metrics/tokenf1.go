@@ -1,7 +1,7 @@
 package metrics
 
-// TokenF1 liczy F1 na poziomie tokenów między przewidywaną a złotą sekwencją
-// tokenów (standardowa metryka dla SQuAD/NQ/HotpotQA).
+// TokenF1 computes the token-level F1 between the predicted and the gold
+// token sequence - the standard metric for SQuAD/NQ/HotpotQA.
 func TokenF1(pred, gold []string) float64 {
 	if len(pred) == 0 || len(gold) == 0 {
 		if len(pred) == len(gold) {

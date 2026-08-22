@@ -1,12 +1,11 @@
-// Package metrics dostarcza metryki oceny jakości odpowiedzi QA (Exact
-// Match, F1) używane przez cmd/bench do ewaluacji baseline'u i przyszłych
-// architektur RAG.
+// Package metrics provides the QA answer-quality metrics (Exact Match, F1)
+// used by cmd/bench to evaluate the baseline and further RAG architectures.
 package metrics
 
 import "strings"
 
-// Normalize ujednolica tekst przed porównaniem: lowercase, bez interpunkcji,
-// bez wielokrotnych spacji (standardowa normalizacja EM/F1 dla QA).
+// Normalize canonicalises text before comparison: lowercase, punctuation
+// stripped, whitespace collapsed - the standard EM/F1 normalisation for QA.
 func Normalize(s string) string {
 	s = strings.ToLower(s)
 	var b strings.Builder

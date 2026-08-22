@@ -1,6 +1,7 @@
 # Rag
 * vLLM
   * Setup
+  * Health check the embedder
   * Ingest data
 * Ollama
   * Setup
@@ -15,11 +16,17 @@
 docker compose up -d qdrant vllm-embed vllm-llm
 ```
 
+### Health check the embedder
+
+```sh
+curl -s http://localhost:8001/v1/embeddings -H 'Content-Type: application/json' -d '{"model":"bge-base-en-v1.5","input":["hello world"],"truncate_prompt_tokens":512}' | jq '{dim:(.data[0].embedding|length), tokens:.usage.prompt_tokens}'
+```
+
 ### Ingest data
 
 ```sh
 # Approx 3h
-go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-test
+go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-wiki18 -batch-size 128 -concurrency 8 -max-tokens 512
 ```
 
 ## Ollama

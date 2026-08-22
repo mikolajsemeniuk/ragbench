@@ -1,7 +1,7 @@
 package metrics
 
-// ExactMatch zwraca 1, jeśli znormalizowana odpowiedź jest identyczna z jedną
-// ze złotych odpowiedzi, w przeciwnym razie 0.
+// ExactMatch returns 1 if the normalised answer is identical to one of the
+// gold answers, and 0 otherwise.
 func ExactMatch(answer string, golden []string) float64 {
 	na := Normalize(answer)
 	for _, g := range golden {

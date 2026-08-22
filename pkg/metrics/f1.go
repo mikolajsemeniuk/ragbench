@@ -2,8 +2,8 @@ package metrics
 
 import "strings"
 
-// F1Score liczy token-level F1 między odpowiedzią a najlepiej pasującą złotą
-// odpowiedzią.
+// F1Score computes the token-level F1 between the answer and the best
+// matching gold answer.
 func F1Score(answer string, golden []string) float64 {
 	predTokens := strings.Fields(Normalize(answer))
 	best := 0.0

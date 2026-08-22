@@ -1,9 +1,9 @@
 package metrics
 
-// ReciprocalRank zwraca 1/rank pierwszego trafnego (relevant) dokumentu na
-// liście retrieved (indeksowanej od 1), albo 0, jeśli żaden trafny dokument
-// nie został znaleziony. Uśrednienie ReciprocalRank po zbiorze zapytań daje
-// MRR (Mean Reciprocal Rank).
+// ReciprocalRank returns 1/rank of the first relevant document in the
+// retrieved list (1-indexed), or 0 if no relevant document was retrieved.
+// Averaging ReciprocalRank over a set of queries yields MRR (Mean Reciprocal
+// Rank).
 func ReciprocalRank(retrieved []uint64, relevant []uint64) float64 {
 	if len(relevant) == 0 {
 		return 0

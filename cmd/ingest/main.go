@@ -141,11 +141,14 @@ func main() {
 	// niepotrzebnie kosztowne (dodatkowy round-trip HTTP na dokument), skoro
 	// korpus FlashRAG jest już wstępnie podzielony na fragmenty ~100-słowne
 	// i zdecydowana większość dokumentów jest krótka. Dlatego stosujemy
-	// tani lokalny pre-filtr po liczbie słów (wordPrefilterThreshold) i
-	// dokładną, kosztowną tokenizację przez sieć wywołujemy tylko dla
-	// dokumentów, które go przekraczają - to one są kandydatami do
-	// faktycznego przekroczenia limitu tokenów modelu.
-	wordPrefilterThreshold := *maxWords
+	// tani lokalny pre-filtr po liczbie słów i dokładną, kosztowną
+	// tokenizację przez sieć wywołujemy tylko dla dokumentów, które go
+	// przekraczają. Próg musi mieć spory margines poniżej *maxWords: sam
+	// *maxWords bywa niewystarczającym przybliżeniem (np. 400 słów dawało w
+	// praktyce 513 tokenów przez interpunkcję/liczby rozbijane przez BPE na
+	// więcej niż jeden token), więc próg pre-filtra jest wyraźnie niższy, by
+	// żaden dokument bliski granicy nie ominął dokładnej tokenizacji.
+	wordPrefilterThreshold := *maxWords / 2
 
 	f, err := os.Open(*inputPath)
 	if err != nil {

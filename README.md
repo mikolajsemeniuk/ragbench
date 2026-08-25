@@ -3,10 +3,12 @@
   * Setup
   * Health check the embedder
   * Ingest data
+  * Run on naive rag
 * Ollama
   * Setup
   * Ingest data
 * Check ingested data
+* Run the benchmark
 
 ## vLLM
 
@@ -27,6 +29,16 @@ curl -s http://localhost:8001/v1/embeddings -H 'Content-Type: application/json' 
 ```sh
 # Approx 3h
 go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-wiki18 -batch-size 128 -concurrency 8 -max-tokens 512
+```
+
+### Run on naive rag
+
+```sh
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl          -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGHotpotQA -tex-out paper/naiverag-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl   -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGTwoWiki   -tex-out paper/naiverag-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl           -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGMuSiQue  -tex-out paper/naiverag-musique.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGNQ       -tex-out paper/naiverag-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl         -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGTriviaQA -tex-out paper/naiverag-triviaqa.gen.tex
 ```
 
 ## Ollama
@@ -56,6 +68,26 @@ curl -s http://localhost:6333/collections/ragbench-test | jq '.result.points_cou
 ```sh
 curl -s -X DELETE http://localhost:6333/collections/ragbench-test
 ```
+
+## Run the benchmark
+
+```sh
+# Smoke test, ~1 min
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -limit 200 -concurrency 8
+
+# Full split: hotpotqa_dev ~39 min, 2wikimultihopqa_dev ~66 min, musique_dev ~13 min,
+# naturalquestions_test ~19 min, triviaqa_test ~59 min
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -concurrency 8 -tex-out paper/baseline.gen.tex
+```
+
+Generation is greedy (`-temperature 0`), so re-runs reproduce the numbers.
+Latency is only valid at `-concurrency 1`; above it the timings include
+queueing and the summary says so.
+
+Recall@K and MRR score retrieval at the article level and need gold
+annotations, so they apply to HotpotQA, 2WikiMultihopQA and MuSiQue.
+NaturalQuestions and TriviaQA annotate no gold documents, so only Exact Match,
+F1 and answer-in-context apply there.
 
 ## Dataset
 [RUC-NLPIR/FlashRAG_datasets](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/retrieval-corpus)

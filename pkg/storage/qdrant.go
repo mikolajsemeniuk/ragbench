@@ -116,12 +116,53 @@ func (q *Qdrant) EnsureCollectionWithConfig(ctx context.Context, collection stri
 // SetIndexingThreshold updates the collection's indexing threshold. Called
 // after a bulk load with the production value to let Qdrant build the HNSW
 // index once, over finished segments.
+//
+// Setting the value is not enough on its own. Qdrant acknowledges the change
+// but can leave the collection in status "grey" - optimizations pending, with
+// no optimizer actually running - in which case the HNSW index is never built
+// and every search silently falls back to a full scan. Observed on a 21M
+// point collection: the threshold read back correctly, indexed_vectors_count
+// stayed at 0 for hours at 0.4% CPU, and a single search took 12.7s. Issuing
+// the same update again moves the collection to "yellow" and starts the
+// build, so the status is verified here and the update repeated until the
+// optimizer picks it up.
 func (q *Qdrant) SetIndexingThreshold(ctx context.Context, collection string, threshold int) error {
 	body := map[string]any{
 		"optimizers_config": map[string]any{"indexing_threshold": threshold},
 	}
-	_, err := q.doJSON(ctx, http.MethodPatch, q.URL+"/collections/"+collection, body)
-	return err
+
+	for attempt := range 3 {
+		if _, err := q.doJSON(ctx, http.MethodPatch, q.URL+"/collections/"+collection, body); err != nil {
+			return err
+		}
+		if attempt == 2 || threshold == 0 {
+			// A threshold of 0 disables indexing on purpose, so "grey" is the
+			// expected outcome and there is nothing to wake up.
+			return nil
+		}
+
+		status, err := q.collectionStatus(ctx, collection)
+		if err != nil || status != "grey" {
+			return err
+		}
+
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(2 * time.Second):
+		}
+	}
+	return nil
+}
+
+// collectionStatus returns Qdrant's collection status: green (indexed),
+// yellow (optimizing), grey (optimizations pending) or red (error).
+func (q *Qdrant) collectionStatus(ctx context.Context, collection string) (string, error) {
+	info, err := q.collectionInfo(ctx, collection)
+	if err != nil || info == nil {
+		return "", err
+	}
+	return info.Result.Status, nil
 }
 
 // CountPoints returns the exact number of points stored in the collection.
@@ -147,6 +188,7 @@ func (q *Qdrant) CountPoints(ctx context.Context, collection string) (int64, err
 
 type collectionInfoResponse struct {
 	Result struct {
+		Status string `json:"status"`
 		Config struct {
 			Params struct {
 				Vectors struct {

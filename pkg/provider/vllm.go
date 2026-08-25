@@ -30,11 +30,25 @@ type VLLM struct {
 	// the model's own tokenizer does the cut, on the exact token sequence it
 	// is about to embed, so the limit cannot be overshot.
 	TruncatePromptTokens int
+
+	// Temperature and MaxTokens pin down generation. Left unset, vLLM samples
+	// with temperature 1.0, so the same question yields a different answer on
+	// every run and no reported number can be reproduced - by a reviewer or by
+	// us. Short-form QA wants greedy decoding (temperature 0) and a hard cap
+	// on the answer length.
+	Temperature float64
+	MaxTokens   int
 }
 
 // NewVLLM creates a VLLM client with defaults suited to a long ingest run.
 func NewVLLM(url, model string) *VLLM {
-	return &VLLM{URL: url, Model: model, Client: NewHTTPClient(5*time.Minute, 64)}
+	return &VLLM{
+		URL:         url,
+		Model:       model,
+		Client:      NewHTTPClient(5*time.Minute, 64),
+		Temperature: 0,
+		MaxTokens:   64,
+	}
 }
 
 // Health reports whether the server is up and serving. Used to fail fast with
@@ -133,6 +147,10 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 		"messages": []map[string]string{
 			{"role": "user", "content": prompt},
 		},
+		"temperature": v.Temperature,
+	}
+	if v.MaxTokens > 0 {
+		body["max_tokens"] = v.MaxTokens
 	}
 	raw, err := doJSON(ctx, v.Client, http.MethodPost, v.URL+"/v1/chat/completions", body)
 	if err != nil {

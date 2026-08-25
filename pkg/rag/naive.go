@@ -85,10 +85,11 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 }
 
 // Query runs the full NaiveRAG pass and returns the model's answer together
-// with the IDs of the retrieved documents, ordered by decreasing relevance.
-// retrievedIDs are what cmd/bench needs to compute the retrieval metrics
-// (Recall@K, MRR) against the gold documents.
-func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, retrievedIDs []uint64, err error) {
+// with the retrieved passages, ordered by decreasing relevance. The passages
+// themselves are returned - not just their IDs - because cmd/bench derives
+// every retrieval metric from them: the article title is the first line of a
+// FlashRAG passage, and answer-in-context recall needs the text.
+func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, retrieved []storage.Point, err error) {
 	points, err := r.retrieve(ctx, question)
 	if err != nil {
 		return "", nil, fmt.Errorf("retrieve: %w", err)
@@ -98,12 +99,7 @@ func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, r
 	if err != nil {
 		return "", nil, fmt.Errorf("generate: %w", err)
 	}
-
-	retrievedIDs = make([]uint64, len(points))
-	for i, p := range points {
-		retrievedIDs[i] = p.ID
-	}
-	return answer, retrievedIDs, nil
+	return answer, points, nil
 }
 
 func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Point, error) {
@@ -119,7 +115,18 @@ func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Poi
 	return points, nil
 }
 
-// buildPrompt renders the baseline prompt. It is in English on purpose: the
+// buildPrompt renders the baseline prompt.
+//
+// The instruction to answer with nothing but the answer is not stylistic. The
+// gold answers in these datasets are short spans ("yes", "1994", "Tokyo"),
+// and Exact Match compares against them literally. An instruct model left to
+// answer freely replies "Yes, Scott Derrickson and Ed Wood were both
+// American", which scores EM 0 while being entirely correct. Measured over 50
+// HotpotQA dev questions, constraining the output moves EM from 0.02 to 0.40
+// and token-level F1 from 0.11 to 0.53 - without touching retrieval. The
+// phrasing follows the convention used by FlashRAG and the works it compares.
+//
+// It is in English on purpose: the
 // corpora (FlashRAG wiki18_100w) and the question sets (NQ, TriviaQA,
 // HotpotQA, 2WikiMultihopQA, MuSiQue) are English, the gold answers are
 // English, and Exact Match / token-level F1 are computed against them - a
@@ -127,9 +134,9 @@ func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Poi
 // and depress both metrics for reasons that have nothing to do with retrieval.
 func buildPrompt(question string, contexts []storage.Point) string {
 	var b bytes.Buffer
-	b.WriteString("Answer the question using only the context below. ")
-	b.WriteString("If the context does not contain the answer, say that you do not know.\n\n")
-	b.WriteString("Context:\n")
+	b.WriteString("Answer the question based on the given documents. ")
+	b.WriteString("Only give me the answer and do not output any other words.\n\n")
+	b.WriteString("Documents:\n")
 	for i, c := range contexts {
 		fmt.Fprintf(&b, "[%d] %s\n", i+1, c.Text)
 	}

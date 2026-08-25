@@ -17,11 +17,22 @@ type Ollama struct {
 	URL    string // e.g. http://localhost:11434
 	Model  string
 	Client *http.Client
+
+	// Temperature and MaxTokens pin down generation, for the same
+	// reproducibility reason as provider.VLLM.
+	Temperature float64
+	MaxTokens   int
 }
 
 // NewOllama creates an Ollama client with sensible defaults.
 func NewOllama(url, model string) *Ollama {
-	return &Ollama{URL: url, Model: model, Client: NewHTTPClient(5*time.Minute, 64)}
+	return &Ollama{
+		URL:         url,
+		Model:       model,
+		Client:      NewHTTPClient(5*time.Minute, 64),
+		Temperature: 0,
+		MaxTokens:   64,
+	}
 }
 
 // Embed calls /api/embeddings once per text, because that endpoint takes a
@@ -54,10 +65,15 @@ func (o *Ollama) Embed(ctx context.Context, texts []string) ([][]float32, error)
 
 // Generate calls /api/generate with streaming disabled.
 func (o *Ollama) Generate(ctx context.Context, prompt string) (string, error) {
+	options := map[string]any{"temperature": o.Temperature}
+	if o.MaxTokens > 0 {
+		options["num_predict"] = o.MaxTokens
+	}
 	body := map[string]any{
-		"model":  o.Model,
-		"prompt": prompt,
-		"stream": false,
+		"model":   o.Model,
+		"prompt":  prompt,
+		"stream":  false,
+		"options": options,
 	}
 	raw, err := doJSON(ctx, o.Client, http.MethodPost, o.URL+"/api/generate", body)
 	if err != nil {

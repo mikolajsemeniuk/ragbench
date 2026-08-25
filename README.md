@@ -1,60 +1,58 @@
 # Rag
-* vLLM
-  * Setup
-  * Health check the embedder
-  * Ingest data
-  * Run on naive rag
-* Ollama
-  * Setup
-  * Ingest data
+* Setup
+* Health check the embedder
+* Ingest data
+* Run benchmark
 * Check ingested data
-* Run the benchmark
+* Clean collection
+* Dataset
+* Groups
+* RAG Measurements 
+* Generation Measurements
+* Bibliography
 
-## vLLM
-
-### Setup
+## Setup
 
 ```sh
 docker compose up -d qdrant vllm-embed vllm-llm
 ```
 
-### Health check the embedder
+## Health check the embedder
 
 ```sh
 curl -s http://localhost:8001/v1/embeddings -H 'Content-Type: application/json' -d '{"model":"bge-base-en-v1.5","input":["hello world"],"truncate_prompt_tokens":512}' | jq '{dim:(.data[0].embedding|length), tokens:.usage.prompt_tokens}'
 ```
 
-### Ingest data
+## Ingest data
 
 ```sh
 # Approx 3h
 go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-wiki18 -batch-size 128 -concurrency 8 -max-tokens 512
 ```
 
-### Run on naive rag
+## Run benchmark
 
 ```sh
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl          -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGHotpotQA -tex-out paper/naiverag-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl   -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGTwoWiki   -tex-out paper/naiverag-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl           -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGMuSiQue  -tex-out paper/naiverag-musique.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGNQ       -tex-out paper/naiverag-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl         -collection ragbench-wiki18 -concurrency 8 -name NaiveRAGTriviaQA -tex-out paper/naiverag-triviaqa.gen.tex
-```
+# Smoke test, ~1 min
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -limit 200 -concurrency 8
 
-## Ollama
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-musique.jsonl -name NaiveRAGMuSiQue -tex-out paper/naive-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-hotpotqa.jsonl -name NaiveRAGHotpotQA -tex-out paper/naive-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-2wiki.jsonl -name NaiveRAGTwoWiki -tex-out paper/naive-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-nq.jsonl -name NaiveRAGNQ -tex-out paper/naive-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-triviaqa.jsonl -name NaiveRAGTriviaQA -tex-out paper/naive-triviaqa.gen.tex
 
-### Setup
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-musique.jsonl -name IRCoTMuSiQue -tex-out paper/ircot-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-hotpotqa.jsonl -name IRCoTHotpotQA -tex-out paper/ircot-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-2wiki.jsonl -name IRCoTTwoWiki -tex-out paper/ircot-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-nq.jsonl -name IRCoTNQ -tex-out paper/ircot-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-triviaqa.jsonl -name IRCoTTriviaQA -tex-out paper/ircot-triviaqa.gen.tex
 
-```sh
-ollama pull nomic-embed-text
-ollama pull qwen2.5-7b-instruct
-podman compose up -d qdrant
-```
-
-### Ingest
-
-```sh
-go run ./cmd/ingest -input dataset/wiki18_100w.test.jsonl -provider ollama -embed-url http://localhost:11434 -embed-model nomic-embed-text -qdrant-url http://localhost:6333 -collection ragbench-test
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-musique.jsonl -name CRAGMuSiQue -tex-out paper/crag-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-hotpotqa.jsonl -name CRAGHotpotQA -tex-out paper/crag-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-2wiki.jsonl -name CRAGTwoWiki -tex-out paper/crag-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-nq.jsonl -name CRAGNQ -tex-out paper/crag-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-triviaqa.jsonl -name CRAGTriviaQA -tex-out paper/crag-triviaqa.gen.tex
 ```
 
 ## Check ingested data
@@ -68,26 +66,6 @@ curl -s http://localhost:6333/collections/ragbench-test | jq '.result.points_cou
 ```sh
 curl -s -X DELETE http://localhost:6333/collections/ragbench-test
 ```
-
-## Run the benchmark
-
-```sh
-# Smoke test, ~1 min
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -limit 200 -concurrency 8
-
-# Full split: hotpotqa_dev ~39 min, 2wikimultihopqa_dev ~66 min, musique_dev ~13 min,
-# naturalquestions_test ~19 min, triviaqa_test ~59 min
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -concurrency 8 -tex-out paper/baseline.gen.tex
-```
-
-Generation is greedy (`-temperature 0`), so re-runs reproduce the numbers.
-Latency is only valid at `-concurrency 1`; above it the timings include
-queueing and the summary says so.
-
-Recall@K and MRR score retrieval at the article level and need gold
-annotations, so they apply to HotpotQA, 2WikiMultihopQA and MuSiQue.
-NaturalQuestions and TriviaQA annotate no gold documents, so only Exact Match,
-F1 and answer-in-context apply there.
 
 ## Dataset
 [RUC-NLPIR/FlashRAG_datasets](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/retrieval-corpus)

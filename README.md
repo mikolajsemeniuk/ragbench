@@ -53,6 +53,18 @@ go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-2wiki.jsonl -name CRAGTwoWiki -tex-out paper/crag-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-nq.jsonl -name CRAGNQ -tex-out paper/crag-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-triviaqa.jsonl -name CRAGTriviaQA -tex-out paper/crag-triviaqa.gen.tex
+
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-musique.jsonl -name ClosedBookMuSiQue -tex-out paper/closedbook-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-hotpotqa.jsonl -name ClosedBookHotpotQA -tex-out paper/closedbook-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-2wiki.jsonl -name ClosedBookTwoWiki -tex-out paper/closedbook-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-nq.jsonl -name ClosedBookNQ -tex-out paper/closedbook-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-triviaqa.jsonl -name ClosedBookTriviaQA -tex-out paper/closedbook-triviaqa.gen.tex
+
+go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot-musique.jsonl -name-a Naive10 -name-b IRCoT
+go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a Naive10 -name-b IRCoT
+go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a Naive10 -name-b IRCoT
+go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG
+go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG
 ```
 
 ## Check ingested data

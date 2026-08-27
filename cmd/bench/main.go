@@ -165,7 +165,7 @@ func main() {
 
 		qdrantURL    = flag.String("qdrant-url", "http://localhost:6333", "Qdrant URL")
 		collection   = flag.String("collection", "ragbench", "Qdrant collection name - it must already exist and have been filled by cmd/ingest")
-		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: naive | ircot | crag")
+		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag")
 		ircotSteps   = flag.Int("ircot-steps", 4, "ircot only: maximum reasoning/retrieval rounds per question")
 		ircotMaxDocs = flag.Int("ircot-max-passages", 15, "ircot only: cap on the accumulated passage set")
 		cragMaxDocs  = flag.Int("crag-max-passages", 10, "crag only: cap on the passage set after correction")
@@ -225,6 +225,9 @@ func main() {
 
 	var pipeline Pipeline
 	switch *architecture {
+	case "closedbook":
+		pipeline = rag.NewClosedBook(generator)
+		log.Printf("architecture: closedbook (no retrieval - measures what the generator knows on its own)")
 	case "naive":
 		p := rag.NewNaiveRAG(store, *collection, embedder, generator)
 		p.TopK = *topK
@@ -246,7 +249,7 @@ func main() {
 		pipeline = p
 		log.Printf("architecture: crag (grade retrieval, rewrite and re-search when it is poor, up to %d passages)", *cragMaxDocs)
 	default:
-		log.Fatalf("unknown architecture: %s (expected naive | ircot | crag)", *architecture)
+		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag)", *architecture)
 	}
 
 	// The query instruction materially changes retrieval, so it is reported

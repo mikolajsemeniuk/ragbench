@@ -56,6 +56,47 @@ services:
               device_ids: ["0"]
               capabilities: [gpu]
 
+  # Cross-encoder reranker used by the rerank architecture in cmd/bench.
+  #
+  # The diagnosis in cmd/diagnose shows the answer-bearing article is already
+  # inside the top 100 of the dense ranking for 16-33% of the questions the
+  # top-5 baseline gets wrong; it is simply ranked too low to survive the cut.
+  # A cross-encoder scores the question against each passage jointly instead of
+  # comparing two independently produced vectors, which is what lets it reorder
+  # those results.
+  vllm-rerank:
+    image: vllm/vllm-openai:v0.25.1
+    container_name: vllm-rerank
+    ports:
+      - "8002:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    command: >
+      --model BAAI/bge-reranker-base
+      --served-model-name bge-reranker-base
+      --runner pooling
+      --max-model-len 512
+      --max-num-seqs 256
+      --max-num-batched-tokens 16384
+      --gpu-memory-utilization 0.10
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 300s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+
   # Generative server used by cmd/bench only.
   vllm-llm:
     image: vllm/vllm-openai:v0.25.1

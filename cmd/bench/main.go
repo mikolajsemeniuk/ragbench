@@ -97,10 +97,13 @@ func main() {
 
 		qdrantURL    = flag.String("qdrant-url", "http://localhost:6333", "Qdrant URL")
 		collection   = flag.String("collection", "ragbench", "Qdrant collection name - it must already exist and have been filled by cmd/ingest")
-		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag")
+		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank")
 		ircotSteps   = flag.Int("ircot-steps", 4, "ircot only: maximum reasoning/retrieval rounds per question")
 		ircotMaxDocs = flag.Int("ircot-max-passages", 15, "ircot only: cap on the accumulated passage set")
 		cragMaxDocs  = flag.Int("crag-max-passages", 10, "crag only: cap on the passage set after correction")
+		rerankURL    = flag.String("rerank-url", "http://localhost:8002", "rerank only: cross-encoder provider URL")
+		rerankModel  = flag.String("rerank-model", "bge-reranker-base", "rerank only: cross-encoder model name")
+		candidates   = flag.Int("candidates", 100, "rerank only: how deep the retriever shortlist goes before reranking. The measured payoff comes from candidates the top-k cut discards, so this has to exceed -top-k by a wide margin")
 		topK         = flag.Int("top-k", 5, "number of context passages retrieved before generation (the K in Recall@K)")
 
 		queryPrefix = flag.String("query-prefix", rag.PrefixAuto, "instruction prepended to the question before embedding it. \"auto\" uses the convention documented for -embed-model; pass an empty string to run the no-instruction ablation, or any literal string to override. It must pair with the -doc-prefix the collection was ingested with")
@@ -173,6 +176,14 @@ func main() {
 		p.QueryPrefix = resolvedPrefix
 		pipeline = p
 		log.Printf("architecture: ircot (max %d reasoning rounds, up to %d passages accumulated)", *ircotSteps, *ircotMaxDocs)
+	case "rerank":
+		rr := provider.NewVLLM(*rerankURL, *rerankModel)
+		p := rag.NewRerankRAG(store, *collection, embedder, rr, generator)
+		p.TopK = *topK
+		p.Candidates = *candidates
+		p.QueryPrefix = resolvedPrefix
+		pipeline = p
+		log.Printf("architecture: rerank (%d candidates reordered by %s, top %d kept)", *candidates, *rerankModel, *topK)
 	case "crag":
 		p := rag.NewCRAG(store, *collection, embedder, generator)
 		p.TopK = *topK
@@ -181,7 +192,7 @@ func main() {
 		pipeline = p
 		log.Printf("architecture: crag (grade retrieval, rewrite and re-search when it is poor, up to %d passages)", *cragMaxDocs)
 	default:
-		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag)", *architecture)
+		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank)", *architecture)
 	}
 
 	// The query instruction materially changes retrieval, so it is reported

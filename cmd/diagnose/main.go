@@ -126,8 +126,8 @@ func main() {
 	store := storage.NewQdrant(*qdrantURL)
 
 	var (
-		notInCorpus, inTopK, rankedLow, unreachable int
-		wrongSlice, answerAbsent                    int
+		notInCorpus, rankedLow, unreachable int
+		wrongSlice, answerAbsent            int
 	)
 	for i := 0; i < len(diagnosed); i += 64 {
 		end := min(i+64, len(diagnosed))
@@ -152,41 +152,42 @@ func main() {
 				continue
 			}
 
+			// Classify against the article that actually holds the answer, not
+			// against "any gold article". A two-hop question annotates two gold
+			// articles; retrieving the one that does NOT contain the answer is
+			// not a chunking problem, and expanding it with its neighbouring
+			// passages cannot help. Conflating the two inflates the fixable
+			// bucket and points at the wrong remedy.
+			holders := holderIDs(r.Gold, golds)
+			if len(holders) == 0 {
+				answerAbsent++
+				continue
+			}
+
 			hits, err := store.Search(ctx, *collection, vectors[j], *deep)
 			if err != nil {
 				log.Fatalf("deep search: %v", err)
 			}
-			goldIDs := make(map[uint64]struct{}, len(golds))
-			for _, g := range golds {
-				goldIDs[g.id] = struct{}{}
-			}
 
+			// Where does the answer-bearing article first appear? Any of its
+			// passages counts, because neighbour expansion pulls in the rest
+			// once one is retrieved.
+			article := holderArticles(holders, byTitle, goldTitles[r.Question])
 			rank := 0
 			for k, h := range hits {
-				if _, ok := goldIDs[h.ID]; ok {
+				if _, ok := article[h.ID]; ok {
 					rank = k + 1
 					break
 				}
 			}
 
 			switch {
-			case rank == 0:
-				unreachable++
-			case rank > *topK:
+			case rank > 0 && rank <= *topK:
+				wrongSlice++
+			case rank > 0:
 				rankedLow++
 			default:
-				inTopK++
-				// The retriever did surface the article. Either the answer
-				// sits in a different slice of it - a chunking problem, fixed
-				// by pulling neighbouring passages - or the answer is not
-				// stated in the gold article at all, in which case the
-				// question needs inference rather than retrieval and this was
-				// never a retrieval failure to begin with.
-				if answerAppears(r.Gold, golds) {
-					wrongSlice++
-				} else {
-					answerAbsent++
-				}
+				unreachable++
 			}
 		}
 		log.Printf("  %d/%d diagnosed", end, len(diagnosed))
@@ -199,11 +200,11 @@ func main() {
 	fmt.Printf("questions in run:            %d\n", len(run))
 	fmt.Printf("retrieval failed on:         %d (%.1f%% of the run)\n", len(failed), 100*float64(len(failed))/float64(len(run)))
 	fmt.Printf("diagnosed:                   %d\n\n", len(diagnosed))
-	fmt.Printf("wrong slice of right article %5d  (%4.1f%%)  fix: pull neighbouring passages\n", wrongSlice, pct(wrongSlice))
-	fmt.Printf("answer not in gold article   %5d  (%4.1f%%)  not a retrieval failure: needs inference\n", answerAbsent, pct(answerAbsent))
-	fmt.Printf("article ranked %d-%-4d       %5d  (%4.1f%%)  fix: better ranking / hybrid search\n", *topK+1, *deep, rankedLow, pct(rankedLow))
-	fmt.Printf("unreachable by this query    %5d  (%4.1f%%)  fix: decompose the question\n", unreachable, pct(unreachable))
-	fmt.Printf("article not in corpus        %5d  (%4.1f%%)  not fixable\n", notInCorpus, pct(notInCorpus))
+	fmt.Printf("answer-bearing article in top-%-2d %5d  (%4.1f%%)  wrong slice of it: pull neighbouring passages\n", *topK, wrongSlice, pct(wrongSlice))
+	fmt.Printf("...ranked %d-%-5d               %5d  (%4.1f%%)  fix: better ranking / hybrid search\n", *topK+1, *deep, rankedLow, pct(rankedLow))
+	fmt.Printf("...not found within %-5d        %5d  (%4.1f%%)  fix: decompose the question\n", *deep, unreachable, pct(unreachable))
+	fmt.Printf("no gold article states the answer%4d  (%4.1f%%)  not a retrieval failure: needs inference\n", answerAbsent, pct(answerAbsent))
+	fmt.Printf("gold article not in corpus      %5d  (%4.1f%%)  not fixable\n", notInCorpus, pct(notInCorpus))
 
 	var split, oracle string
 	if *cbPath != "" {
@@ -220,23 +221,44 @@ func main() {
 	log.Printf("done in %s", time.Since(start).Round(time.Second))
 }
 
-// answerAppears reports whether a gold answer is stated anywhere in the gold
-// articles, using the same normalisation the benchmark scores with.
-func answerAppears(gold []string, passages []passage) bool {
-	var b strings.Builder
+// holderIDs returns the passages that actually state a gold answer, using the
+// same normalisation the benchmark scores with.
+func holderIDs(gold []string, passages []passage) map[uint64]struct{} {
+	out := make(map[uint64]struct{})
 	for _, p := range passages {
-		b.WriteString(p.text)
-		b.WriteByte(' ')
-	}
-	blob := metrics.Normalize(b.String())
-
-	for _, g := range gold {
-		ng := metrics.Normalize(g)
-		if ng != "" && strings.Contains(blob, ng) {
-			return true
+		text := metrics.Normalize(p.text)
+		for _, g := range gold {
+			ng := metrics.Normalize(g)
+			if ng != "" && strings.Contains(text, ng) {
+				out[p.id] = struct{}{}
+				break
+			}
 		}
 	}
-	return false
+	return out
+}
+
+// holderArticles returns every passage belonging to an article that holds a
+// gold answer - the set neighbour expansion would pull in once any one of them
+// is retrieved.
+func holderArticles(holders map[uint64]struct{}, byTitle map[string][]passage, titles []string) map[uint64]struct{} {
+	holderTitles := make(map[string]struct{})
+	for _, t := range titles {
+		for _, p := range byTitle[t] {
+			if _, ok := holders[p.id]; ok {
+				holderTitles[t] = struct{}{}
+				break
+			}
+		}
+	}
+
+	out := make(map[uint64]struct{})
+	for t := range holderTitles {
+		for _, p := range byTitle[t] {
+			out[p.id] = struct{}{}
+		}
+	}
+	return out
 }
 
 // compareToClosedBook prints, and returns as .tex bodies, the two figures that

@@ -140,6 +140,55 @@ func (v *VLLM) Embed(ctx context.Context, texts []string) ([][]float32, error) {
 	return out, nil
 }
 
+// Rerank scores every document against the query with a cross-encoder and
+// returns the indices of the top n, best first.
+//
+// A bi-encoder - what the retriever uses - embeds the question and the passage
+// separately and compares the two vectors, so it never sees them together. A
+// cross-encoder reads the pair jointly and can therefore judge relevance far
+// more precisely. It is too slow to run over a whole corpus, which is exactly
+// why it is used as a second stage over a shortlist the retriever produced.
+func (v *VLLM) Rerank(ctx context.Context, query string, documents []string, n int) ([]int, error) {
+	if len(documents) == 0 {
+		return nil, nil
+	}
+	if n > len(documents) {
+		n = len(documents)
+	}
+
+	body := map[string]any{
+		"model":     v.Model,
+		"query":     query,
+		"documents": documents,
+		"top_n":     n,
+	}
+	raw, err := doJSON(ctx, v.Client, http.MethodPost, v.URL+"/v1/rerank", body)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp struct {
+		Results []struct {
+			Index int `json:"index"`
+		} `json:"results"`
+	}
+	if err := json.Unmarshal(raw, &resp); err != nil {
+		return nil, fmt.Errorf("decode rerank response: %w", err)
+	}
+	if len(resp.Results) == 0 {
+		return nil, fmt.Errorf("rerank response is empty for %d documents", len(documents))
+	}
+
+	out := make([]int, 0, len(resp.Results))
+	for _, r := range resp.Results {
+		if r.Index < 0 || r.Index >= len(documents) {
+			return nil, fmt.Errorf("rerank response has out-of-range index %d for %d documents", r.Index, len(documents))
+		}
+		out = append(out, r.Index)
+	}
+	return out, nil
+}
+
 // Generate calls the OpenAI-compatible /v1/chat/completions endpoint.
 func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 	body := map[string]any{

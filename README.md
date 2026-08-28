@@ -36,29 +36,40 @@ go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url h
 # Smoke test, ~1 min
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -limit 200 -concurrency 8
 
+# Naive RAG
 go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-musique.jsonl -name NaiveRAGMuSiQue -tex-out paper/naive-musique.gen.tex
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-hotpotqa.jsonl -name NaiveRAGHotpotQA -tex-out paper/naive-hotpotqa.gen.tex
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-2wiki.jsonl -name NaiveRAGTwoWiki -tex-out paper/naive-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-nq.jsonl -name NaiveRAGNQ -tex-out paper/naive-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-triviaqa.jsonl -name NaiveRAGTriviaQA -tex-out paper/naive-triviaqa.gen.tex
 
+# IRCoT RAG
 go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-musique.jsonl -name IRCoTMuSiQue -tex-out paper/ircot-musique.gen.tex
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-hotpotqa.jsonl -name IRCoTHotpotQA -tex-out paper/ircot-hotpotqa.gen.tex
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-2wiki.jsonl -name IRCoTTwoWiki -tex-out paper/ircot-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-nq.jsonl -name IRCoTNQ -tex-out paper/ircot-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-triviaqa.jsonl -name IRCoTTriviaQA -tex-out paper/ircot-triviaqa.gen.tex
 
+# CRAG RAG
 go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-musique.jsonl -name CRAGMuSiQue -tex-out paper/crag-musique.gen.tex
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-hotpotqa.jsonl -name CRAGHotpotQA -tex-out paper/crag-hotpotqa.gen.tex
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-2wiki.jsonl -name CRAGTwoWiki -tex-out paper/crag-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-nq.jsonl -name CRAGNQ -tex-out paper/crag-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-triviaqa.jsonl -name CRAGTriviaQA -tex-out paper/crag-triviaqa.gen.tex
 
+# ClosedBook RAG
 go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-musique.jsonl -name ClosedBookMuSiQue -tex-out paper/closedbook-musique.gen.tex
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-hotpotqa.jsonl -name ClosedBookHotpotQA -tex-out paper/closedbook-hotpotqa.gen.tex
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-2wiki.jsonl -name ClosedBookTwoWiki -tex-out paper/closedbook-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-nq.jsonl -name ClosedBookNQ -tex-out paper/closedbook-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-triviaqa.jsonl -name ClosedBookTriviaQA -tex-out paper/closedbook-triviaqa.gen.tex
+
+# Rerank
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-musique.jsonl -name RerankMuSiQue -tex-out paper/rerank-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-hotpotqa.jsonl -name RerankHotpotQA -tex-out paper/rerank-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-2wiki.jsonl -name RerankTwoWiki -tex-out paper/rerank-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-nq.jsonl -name RerankNQ -tex-out paper/rerank-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-triviaqa.jsonl -name RerankTriviaQA -tex-out paper/rerank-triviaqa.gen.tex
 
 go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot-musique.jsonl -name-a Naive10 -name-b IRCoT
 go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a Naive10 -name-b IRCoT

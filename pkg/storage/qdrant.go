@@ -326,3 +326,162 @@ func (q *Qdrant) doJSON(ctx context.Context, method, url string, body any) ([]by
 	}
 	return raw, nil
 }
+
+// SparseVectorName is the name of the named sparse vector in a lexical
+// collection. Qdrant requires sparse vectors to be named even when a
+// collection holds only one.
+const SparseVectorName = "text"
+
+// EnsureSparseCollection creates a lexical (BM25) collection if it does not
+// exist yet.
+//
+// The collection holds no dense vectors at all ("vectors": {}). That is the
+// point: the dense corpus is already indexed in its own collection and cost
+// ~3 h of GPU time to build, so lexical search is added next to it rather than
+// by rebuilding it. The two are queried separately and fused by the caller.
+//
+// The "idf" modifier makes Qdrant compute the inverse document frequency of
+// every term over the collection at query time. Without it the client would
+// have to make a full pass over the corpus first just to count in how many
+// passages each term occurs, and would have to redo it whenever the corpus
+// changes.
+func (q *Qdrant) EnsureSparseCollection(ctx context.Context, collection string) error {
+	info, err := q.collectionInfo(ctx, collection)
+	if err != nil {
+		return fmt.Errorf("check collection exists: %w", err)
+	}
+	if info != nil {
+		return nil
+	}
+
+	body := map[string]any{
+		"vectors": map[string]any{},
+		"sparse_vectors": map[string]any{
+			SparseVectorName: map[string]any{
+				"index":    map[string]any{"on_disk": true},
+				"modifier": "idf",
+			},
+		},
+		"on_disk_payload": true,
+	}
+
+	_, err = q.doJSON(ctx, http.MethodPut, q.URL+"/collections/"+collection, body)
+	return err
+}
+
+func (q *Qdrant) UpsertSparse(ctx context.Context, collection string, points []Point) error {
+	if len(points) == 0 {
+		return nil
+	}
+
+	payload := make([]map[string]any, 0, len(points))
+	for _, p := range points {
+		// A passage whose every token was filtered out (punctuation only, or
+		// nothing but stop words) has no lexical representation. Sending an
+		// empty sparse vector is rejected by Qdrant, and storing the point
+		// without one would make it unretrievable anyway, so it is skipped -
+		// counted by the caller as a skipped document.
+		if p.Sparse.Empty() {
+			continue
+		}
+		payload = append(payload, map[string]any{
+			"id": p.ID,
+			"vector": map[string]any{
+				SparseVectorName: map[string]any{
+					"indices": p.Sparse.Indices,
+					"values":  p.Sparse.Values,
+				},
+			},
+			"payload": map[string]any{"text": p.Text},
+		})
+	}
+	if len(payload) == 0 {
+		return nil
+	}
+
+	url := q.URL + "/collections/" + collection + "/points"
+	if q.Wait {
+		url += "?wait=true"
+	}
+	if _, err := q.doJSON(ctx, http.MethodPut, url, map[string]any{"points": payload}); err != nil {
+		return fmt.Errorf("upsert sparse points: %w", err)
+	}
+	return nil
+}
+
+// SearchSparse runs a lexical query through the Query API, which is the
+// endpoint that understands sparse vectors (the legacy /points/search does
+// not).
+func (q *Qdrant) SearchSparse(ctx context.Context, collection string, vector SparseVector, limit int) ([]Point, error) {
+	if vector.Empty() {
+		return nil, nil
+	}
+
+	body := map[string]any{
+		"query": map[string]any{
+			"nearest": map[string]any{
+				"indices": vector.Indices,
+				"values":  vector.Values,
+			},
+		},
+		"using":        SparseVectorName,
+		"limit":        limit,
+		"with_payload": true,
+	}
+	raw, err := q.doJSON(ctx, http.MethodPost, q.URL+"/collections/"+collection+"/points/query", body)
+	if err != nil {
+		return nil, fmt.Errorf("sparse search qdrant: %w", err)
+	}
+
+	var res struct {
+		Result struct {
+			Points []struct {
+				ID      uint64 `json:"id"`
+				Payload struct {
+					Text string `json:"text"`
+				} `json:"payload"`
+			} `json:"points"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(raw, &res); err != nil {
+		return nil, fmt.Errorf("decode sparse search response: %w", err)
+	}
+
+	points := make([]Point, len(res.Result.Points))
+	for i, r := range res.Result.Points {
+		points[i] = Point{ID: r.ID, Text: r.Payload.Text}
+	}
+	return points, nil
+}
+
+// Retrieve fetches points by id. Unlike Search it imposes no ordering: the
+// caller already knows which passages it wants and only needs their text.
+func (q *Qdrant) Retrieve(ctx context.Context, collection string, ids []uint64) ([]Point, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	body := map[string]any{"ids": ids, "with_payload": true}
+	raw, err := q.doJSON(ctx, http.MethodPost, q.URL+"/collections/"+collection+"/points", body)
+	if err != nil {
+		return nil, fmt.Errorf("retrieve points: %w", err)
+	}
+
+	var res struct {
+		Result []struct {
+			ID      uint64 `json:"id"`
+			Payload struct {
+				Text string `json:"text"`
+			} `json:"payload"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(raw, &res); err != nil {
+		return nil, fmt.Errorf("decode retrieve response: %w", err)
+	}
+
+	points := make([]Point, len(res.Result))
+	for i, r := range res.Result {
+		points[i] = Point{ID: r.ID, Text: r.Payload.Text}
+	}
+	return points, nil
+}

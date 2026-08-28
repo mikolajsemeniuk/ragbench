@@ -10,9 +10,11 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"maps"
 	"math/rand"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -97,19 +99,28 @@ func main() {
 
 		qdrantURL    = flag.String("qdrant-url", "http://localhost:6333", "Qdrant URL")
 		collection   = flag.String("collection", "ragbench", "Qdrant collection name - it must already exist and have been filled by cmd/ingest")
-		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank")
+		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | adaptive | neighbour")
 		ircotSteps   = flag.Int("ircot-steps", 4, "ircot only: maximum reasoning/retrieval rounds per question")
 		ircotMaxDocs = flag.Int("ircot-max-passages", 15, "ircot only: cap on the accumulated passage set")
 		cragMaxDocs  = flag.Int("crag-max-passages", 10, "crag only: cap on the passage set after correction")
 		rerankURL    = flag.String("rerank-url", "http://localhost:8002", "rerank only: cross-encoder provider URL")
 		rerankModel  = flag.String("rerank-model", "bge-reranker-base", "rerank only: cross-encoder model name")
-		candidates   = flag.Int("candidates", 100, "rerank only: how deep the retriever shortlist goes before reranking. The measured payoff comes from candidates the top-k cut discards, so this has to exceed -top-k by a wide margin")
+		candidates   = flag.Int("candidates", 100, "rerank/bm25/hybrid: how deep each retriever's shortlist goes before it is reordered or fused. The measured payoff comes from candidates the top-k cut discards, so this has to exceed -top-k by a wide margin")
 		topK         = flag.Int("top-k", 5, "number of context passages retrieved before generation (the K in Recall@K)")
+
+		sparseColl = flag.String("sparse-collection", "ragbench-wiki18-bm25", "bm25/hybrid only: Qdrant collection holding the lexical index - it must already exist and have been filled by cmd/ingest -sparse")
+		rrfK       = flag.Int("rrf-k", 60, "hybrid only: the k of Reciprocal Rank Fusion. Larger values flatten the influence of the top positions; 60 is the value the RRF paper proposes and what every implementation uses")
+
+		neighbourRadius  = flag.Int("neighbour-radius", 1, "neighbour only: how many passages to either side of each hit to pull in from the same article")
+		neighbourMaxDocs = flag.Int("neighbour-max-passages", 15, "neighbour only: cap on the expanded passage set. Compare the run against a naive run with a matching -top-k, not against the 5-passage baseline")
+		titleIndexPath   = flag.String("title-index", "dataset/wiki18_100w.titles.gob", "neighbour only: path of the article-title index. Built from -corpus on first use and reused afterwards, because the corpus is not laid out in article order and the neighbours of a passage cannot be derived from its id")
+		corpusPath       = flag.String("corpus", "dataset/wiki18_100w.jsonl", "neighbour only: FlashRAG corpus the collection was built from, used to build -title-index when it does not exist yet")
 
 		queryPrefix = flag.String("query-prefix", rag.PrefixAuto, "instruction prepended to the question before embedding it. \"auto\" uses the convention documented for -embed-model; pass an empty string to run the no-instruction ablation, or any literal string to override. It must pair with the -doc-prefix the collection was ingested with")
 
 		temperature = flag.Float64("temperature", 0, "generation temperature. 0 means greedy decoding, which is what makes a run reproducible; anything above it makes the reported numbers differ between runs")
 		maxAnswer   = flag.Int("max-answer-tokens", 64, "hard cap on generated answer length. The gold answers are short spans, so a low cap costs nothing and bounds the runtime")
+		maxStep     = flag.Int("max-step-tokens", 256, "hard cap on an intermediate generation call that is not the answer - currently the hypothetical passage hyde drafts. It needs a larger budget than the answer: a draft cut off after 64 tokens is half a sentence and embeds poorly")
 
 		datasetPath  = flag.String("dataset", "", "path to the FlashRAG question file (jsonl: question, golden_answers[, metadata]) - required. Evaluation always runs on a dev or test split (e.g. *_dev.jsonl, *_test.jsonl), never on *_train.jsonl: in these datasets the train split serves only as a pool of few-shot examples")
 		datasetLimit = flag.Int("limit", 0, "0 = use the whole dataset; N>0 = sample only N questions (without replacement, deterministic via -seed) for a quick smoke test. Sampling rather than taking the first N lines, because some datasets order questions by type/difficulty")
@@ -136,8 +147,12 @@ func main() {
 
 	ctx := context.Background()
 
+	// generator produces the final answer and is capped accordingly; drafter
+	// is the same model and the same server with a larger token budget, used
+	// by the architectures whose intermediate step is a piece of prose rather
+	// than a short span.
 	var embedder Embedder
-	var generator Generator
+	var generator, drafter Generator
 	switch *providerName {
 	case "vllm":
 		embedder = provider.NewVLLM(*embedURL, *embedModel)
@@ -145,12 +160,20 @@ func main() {
 		gen.Temperature = *temperature
 		gen.MaxTokens = *maxAnswer
 		generator = gen
+		draft := provider.NewVLLM(*providerURL, *llmModel)
+		draft.Temperature = *temperature
+		draft.MaxTokens = *maxStep
+		drafter = draft
 	case "ollama":
 		embedder = provider.NewOllama(*embedURL, *embedModel)
 		gen := provider.NewOllama(*providerURL, *llmModel)
 		gen.Temperature = *temperature
 		gen.MaxTokens = *maxAnswer
 		generator = gen
+		draft := provider.NewOllama(*providerURL, *llmModel)
+		draft.Temperature = *temperature
+		draft.MaxTokens = *maxStep
+		drafter = draft
 	default:
 		log.Fatalf("unknown provider: %s (expected vllm | ollama)", *providerName)
 	}
@@ -158,23 +181,72 @@ func main() {
 	store := storage.NewQdrant(*qdrantURL)
 	resolvedPrefix := rag.ResolvePrefix(*queryPrefix, *embedModel, true)
 
+	// newNaive and newIRCoT are shared with the adaptive router, which is
+	// built out of the other architectures rather than reimplementing them -
+	// that is what keeps its rows comparable with theirs.
+	newNaive := func() *rag.NaiveRAG {
+		p := rag.NewNaiveRAG(store, *collection, embedder, generator)
+		p.TopK = *topK
+		p.QueryPrefix = resolvedPrefix
+		return p
+	}
+	newIRCoT := func() *rag.IRCoT {
+		p := rag.NewIRCoT(store, *collection, embedder, generator)
+		p.TopK = *topK
+		p.MaxSteps = *ircotSteps
+		p.MaxPassages = *ircotMaxDocs
+		p.QueryPrefix = resolvedPrefix
+		return p
+	}
+
 	var pipeline Pipeline
 	switch *architecture {
 	case "closedbook":
 		pipeline = rag.NewClosedBook(generator)
 		log.Printf("architecture: closedbook (no retrieval - measures what the generator knows on its own)")
 	case "naive":
-		p := rag.NewNaiveRAG(store, *collection, embedder, generator)
+		pipeline = newNaive()
+	case "hyde":
+		p := rag.NewHyDE(store, *collection, embedder, generator, drafter)
 		p.TopK = *topK
 		p.QueryPrefix = resolvedPrefix
+		p.DocumentPrefix = rag.ResolvePrefix(rag.PrefixAuto, *embedModel, false)
 		pipeline = p
+		log.Printf("architecture: hyde (search with a drafted passage of up to %d tokens, averaged with the question)", *maxStep)
+	case "bm25":
+		p := rag.NewBM25RAG(store, *sparseColl, generator)
+		p.TopK = *topK
+		p.Candidates = *candidates
+		pipeline = p
+		log.Printf("architecture: bm25 (lexical only, collection %q)", *sparseColl)
+	case "hybrid":
+		p := rag.NewHybridRAG(store, store, *collection, *sparseColl, embedder, generator)
+		p.TopK = *topK
+		p.Candidates = *candidates
+		p.RRFK = *rrfK
+		p.QueryPrefix = resolvedPrefix
+		pipeline = p
+		log.Printf("architecture: hybrid (dense %q + lexical %q, top %d of each fused by RRF k=%d, top %d kept)", *collection, *sparseColl, *candidates, *rrfK, *topK)
+	case "neighbour":
+		start := time.Now()
+		index, err := flashrag.OpenTitleIndex(*titleIndexPath, *corpusPath)
+		if err != nil {
+			log.Fatalf("title index: %v", err)
+		}
+		log.Printf("title index: %d articles, %d passages (%s)", len(index.ByTitle), index.Passages(), time.Since(start).Round(time.Second))
+		p := rag.NewNeighbourRAG(store, store, *collection, embedder, generator, index)
+		p.TopK = *topK
+		p.Radius = *neighbourRadius
+		p.MaxPassages = *neighbourMaxDocs
+		p.QueryPrefix = resolvedPrefix
+		pipeline = p
+		log.Printf("architecture: neighbour (top %d expanded by +/-%d passages of the same article, up to %d)", *topK, *neighbourRadius, *neighbourMaxDocs)
+	case "adaptive":
+		p := rag.NewAdaptiveRAG(generator, rag.NewClosedBook(generator), newNaive(), newIRCoT())
+		pipeline = p
+		log.Printf("architecture: adaptive (one classification call routes to closedbook | naive | ircot)")
 	case "ircot":
-		p := rag.NewIRCoT(store, *collection, embedder, generator)
-		p.TopK = *topK
-		p.MaxSteps = *ircotSteps
-		p.MaxPassages = *ircotMaxDocs
-		p.QueryPrefix = resolvedPrefix
-		pipeline = p
+		pipeline = newIRCoT()
 		log.Printf("architecture: ircot (max %d reasoning rounds, up to %d passages accumulated)", *ircotSteps, *ircotMaxDocs)
 	case "rerank":
 		rr := provider.NewVLLM(*rerankURL, *rerankModel)
@@ -192,7 +264,7 @@ func main() {
 		pipeline = p
 		log.Printf("architecture: crag (grade retrieval, rewrite and re-search when it is poor, up to %d passages)", *cragMaxDocs)
 	default:
-		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank)", *architecture)
+		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | adaptive | neighbour)", *architecture)
 	}
 
 	// The query instruction materially changes retrieval, so it is reported
@@ -346,12 +418,56 @@ func main() {
 		fmt.Printf("Avg latency:        %s - NOT a latency measurement at concurrency=%d, it includes queueing. Re-run with -concurrency 1 on a subsample to report latency.\n", avgLatency.Round(time.Millisecond), *concurrency)
 	}
 
+	// A routing architecture's row is unreadable without its route
+	// distribution: a router that sends every question down one branch scores
+	// exactly like that branch, and the mean alone cannot tell that apart from
+	// a router that is genuinely choosing.
+	var routes map[string]int64
+	if reporter, ok := pipeline.(rag.RouteReporter); ok {
+		routes = reporter.Routes()
+		routed := 0.0
+		for _, count := range routes {
+			routed += float64(count)
+		}
+		fmt.Printf("routes:            ")
+		for _, key := range slices.Sorted(maps.Keys(routes)) {
+			fmt.Printf(" %s=%d (%.1f%%)", key, routes[key], 100*float64(routes[key])/routed)
+		}
+		fmt.Println()
+	}
+
 	if *texOut != "" {
 		if err := writeTex(*texOut, *name, answered, em, f1, inCtx, avgLatency, *topK, recall, mrr, withGold); err != nil {
 			log.Fatalf("writing the tex file: %v", err)
 		}
+		if err := appendRoutesTex(*texOut, *name, routes); err != nil {
+			log.Fatalf("writing the route distribution: %v", err)
+		}
 		log.Printf("results written to %s", *texOut)
 	}
+}
+
+// appendRoutesTex adds one \newcommand per branch of a routing architecture to
+// the fragment writeTex has just produced.
+func appendRoutesTex(path, name string, routes map[string]int64) error {
+	if len(routes) == 0 {
+		return nil
+	}
+
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0o644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	id := texSafeID(name)
+	for _, key := range slices.Sorted(maps.Keys(routes)) {
+		label := texSafeID(strings.ToUpper(key[:1]) + key[1:])
+		if _, err := fmt.Fprintf(f, "\\newcommand{\\%sRoute%s}{%d}\n", id, label, routes[key]); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // evaluate runs one question through the pipeline and scores it.

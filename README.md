@@ -30,6 +30,11 @@ curl -s http://localhost:8001/v1/embeddings -H 'Content-Type: application/json' 
 ```sh
 # Approx 3h
 go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-wiki18 -batch-size 128 -concurrency 8 -max-tokens 512
+
+# Lexical BM25 index, approx 25 min, no GPU and no embedding server.
+# It is a separate collection over the same passage ids, so the dense one is
+# left untouched and the two are fused at query time.
+go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -sparse -collection ragbench-wiki18-bm25 -total 21015324 -batch-size 512 -concurrency 8
 ```
 
 ## Run benchmark
@@ -82,6 +87,49 @@ go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-2wiki.jsonl -name RerankTwoWiki -tex-out paper/rerank-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-nq.jsonl -name RerankNQ -tex-out paper/rerank-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-triviaqa.jsonl -name RerankTriviaQA -tex-out paper/rerank-triviaqa.gen.tex
+
+# HyDE - search with a drafted passage instead of the question.
+# One extra generation call per question.
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-musique.jsonl -name HyDEMuSiQue -tex-out paper/hyde-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-hotpotqa.jsonl -name HyDEHotpotQA -tex-out paper/hyde-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-2wiki.jsonl -name HyDETwoWiki -tex-out paper/hyde-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-nq.jsonl -name HyDENQ -tex-out paper/hyde-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-triviaqa.jsonl -name HyDETriviaQA -tex-out paper/hyde-triviaqa.gen.tex
+
+# BM25 - lexical retrieval only, no embedding model in the loop.
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-musique.jsonl -name BMTwentyFiveMuSiQue -tex-out paper/bm25-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-hotpotqa.jsonl -name BMTwentyFiveHotpotQA -tex-out paper/bm25-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-2wiki.jsonl -name BMTwentyFiveTwoWiki -tex-out paper/bm25-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-nq.jsonl -name BMTwentyFiveNQ -tex-out paper/bm25-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-triviaqa.jsonl -name BMTwentyFiveTriviaQA -tex-out paper/bm25-triviaqa.gen.tex
+
+# Hybrid - dense and lexical fused by Reciprocal Rank Fusion.
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-musique.jsonl -name HybridMuSiQue -tex-out paper/hybrid-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-hotpotqa.jsonl -name HybridHotpotQA -tex-out paper/hybrid-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-2wiki.jsonl -name HybridTwoWiki -tex-out paper/hybrid-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-nq.jsonl -name HybridNQ -tex-out paper/hybrid-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-triviaqa.jsonl -name HybridTriviaQA -tex-out paper/hybrid-triviaqa.gen.tex
+
+# Adaptive - one classification call routes each question to closedbook, naive or ircot.
+# The generated .tex also carries the route distribution (\<Name>RouteClosedbook / RouteSingle / RouteMulti).
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-musique.jsonl -name AdaptiveMuSiQue -tex-out paper/adaptive-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-hotpotqa.jsonl -name AdaptiveHotpotQA -tex-out paper/adaptive-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-2wiki.jsonl -name AdaptiveTwoWiki -tex-out paper/adaptive-2wiki.gen.tex
+go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-nq.jsonl -name AdaptiveNQ -tex-out paper/adaptive-nq.gen.tex
+go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-triviaqa.jsonl -name AdaptiveTriviaQA -tex-out paper/adaptive-triviaqa.gen.tex
+
+# Neighbour expansion - each hit is joined by the passages next to it in the same article.
+# The first run builds dataset/wiki18_100w.titles.gob from the corpus (~1.5 min, 159 MB) and reuses it afterwards.
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-musique.jsonl -name NeighbourMuSiQue -tex-out paper/neighbour-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-hotpotqa.jsonl -name NeighbourHotpotQA -tex-out paper/neighbour-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-2wiki.jsonl -name NeighbourTwoWiki -tex-out paper/neighbour-2wiki.gen.tex
+
+# Naive RAG, 12 passages - the matched-budget control for neighbour expansion,
+# which puts 11.7 passages in context on average. Without it the neighbour row
+# measures context size rather than chunking.
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-musique.jsonl -name NaiveRAGTopTwelveMuSiQue -tex-out paper/naive12-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-hotpotqa.jsonl -name NaiveRAGTopTwelveHotpotQA -tex-out paper/naive12-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-2wiki.jsonl -name NaiveRAGTopTwelveTwoWiki -tex-out paper/naive12-2wiki.gen.tex
 ```
 
 ## Diagnose retrieval failures
@@ -116,6 +164,20 @@ go run ./cmd/compare -a runs/closedbook-hotpotqa.jsonl -b runs/naive-hotpotqa.js
 go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTwoWiki -tex-out paper/cmp-closedbook-naive-2wiki.gen.tex
 go run ./cmd/compare -a runs/closedbook-nq.jsonl -b runs/naive-nq.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveNQ -tex-out paper/cmp-closedbook-naive-nq.gen.tex
 go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTriviaQA -tex-out paper/cmp-closedbook-naive-triviaqa.gen.tex
+
+# Rerank and HyDE keep the baseline's 5-passage budget, so naive is the right control.
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/rerank-hotpotqa.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveVsRerankHotpotQA -tex-out paper/cmp-naive-rerank-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/hyde-hotpotqa.jsonl -name-a NaiveRAG -name-b HyDE -name NaiveVsHyDEHotpotQA -tex-out paper/cmp-naive-hyde-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/bm25-hotpotqa.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveHotpotQA -tex-out paper/cmp-naive-bm25-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/hybrid-hotpotqa.jsonl -name-a NaiveRAG -name-b Hybrid -name NaiveVsHybridHotpotQA -tex-out paper/cmp-naive-hybrid-hotpotqa.gen.tex
+
+# Neighbour expansion changes the context size, so it is read against naive12.
+go run ./cmd/compare -a runs/naive12-hotpotqa.jsonl -b runs/neighbour-hotpotqa.jsonl -name-a NaiveTwelve -name-b Neighbour -name NaiveTwelveVsNeighbourHotpotQA -tex-out paper/cmp-naive12-neighbour-hotpotqa.gen.tex
+
+# The adaptive router is the baseline for a routing architecture, so it is read
+# against the branches it picks between.
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/adaptive-hotpotqa.jsonl -name-a NaiveRAG -name-b Adaptive -name NaiveVsAdaptiveHotpotQA -tex-out paper/cmp-naive-adaptive-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/ircot-hotpotqa.jsonl -b runs/adaptive-hotpotqa.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveHotpotQA -tex-out paper/cmp-ircot-adaptive-hotpotqa.gen.tex
 ```
 
 ## Check ingested data

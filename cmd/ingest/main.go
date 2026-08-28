@@ -65,6 +65,8 @@ func main() {
 		embedURL   = flag.String("embed-url", "http://localhost:8001", "embedding provider URL")
 		embedModel = flag.String("embed-model", "bge-base-en-v1.5", "embedding model name")
 
+		sparse = flag.Bool("sparse", false, "build a lexical BM25 index instead of a dense one. It needs no embedding server and no GPU: the vectors are term frequencies computed locally, and Qdrant supplies the inverse document frequency at query time. Use a different -collection from the dense one - the two are separate collections over the same passage ids, fused at query time by cmd/bench -architecture hybrid")
+
 		storeName  = flag.String("store", "qdrant", "target vector database: qdrant (the only one supported so far - the flag reserves room for further backends)")
 		qdrantURL  = flag.String("qdrant-url", "http://localhost:6333", "Qdrant URL")
 		collection = flag.String("collection", "ragbench", "name of the Qdrant collection to create/fill")
@@ -152,12 +154,30 @@ func main() {
 		log.Fatalf("unknown store: %s (currently supported: qdrant)", *storeName)
 	}
 
-	pipeline := rag.NewNaiveRAG(store, *collection, embedder, nil)
-	pipeline.DocumentPrefix = rag.ResolvePrefix(*docPrefix, *embedModel, false)
-	if _, _, known := rag.PrefixesFor(*embedModel); !known && *docPrefix == rag.PrefixAuto {
-		log.Printf("document prefix: none (no convention known for embedding model %q; pass -doc-prefix explicitly if it expects one)", *embedModel)
+	// The two modes differ only in what a batch turns into: a dense vector
+	// from the embedding server, or a bag of term frequencies computed here.
+	// Everything downstream - batching, retries, bisection, resume,
+	// verification - is shared.
+	var (
+		pipeline      batchIngester
+		bm25          *rag.BM25Ingester
+		docPrefixInfo string
+	)
+	if *sparse {
+		bm25 = rag.NewBM25Ingester(qdrant, *collection)
+		pipeline = bm25
+		docPrefixInfo = "n/a (lexical index, no encoder)"
+		truncateLocally = func(text string) string { return text }
 	} else {
-		log.Printf("document prefix: %q", pipeline.DocumentPrefix)
+		dense := rag.NewNaiveRAG(store, *collection, embedder, nil)
+		dense.DocumentPrefix = rag.ResolvePrefix(*docPrefix, *embedModel, false)
+		if _, _, known := rag.PrefixesFor(*embedModel); !known && *docPrefix == rag.PrefixAuto {
+			log.Printf("document prefix: none (no convention known for embedding model %q; pass -doc-prefix explicitly if it expects one)", *embedModel)
+		} else {
+			log.Printf("document prefix: %q", dense.DocumentPrefix)
+		}
+		pipeline = dense
+		docPrefixInfo = fmt.Sprintf("%q", dense.DocumentPrefix)
 	}
 
 	in := &ingester{
@@ -169,32 +189,39 @@ func main() {
 		inFlight:      make(map[int64]struct{}),
 	}
 
-	// Probe the embedding server before touching the corpus: this both fails
-	// fast with a readable message when the server is not up, and yields the
-	// vector dimension needed to create the collection. The dimension of an
-	// embedding model does not depend on the input, so a short fixed string is
-	// enough.
 	var dim int
-	err := in.withRetry(ctx, "probe embedding server", func() error {
-		vectors, err := embedder.Embed(ctx, []string{"dimension probe"})
-		if err != nil {
-			return err
+	if *sparse {
+		if err := qdrant.EnsureSparseCollection(ctx, *collection); err != nil {
+			log.Fatalf("creating sparse collection: %v", err)
 		}
-		dim = len(vectors[0])
-		return nil
-	})
-	if err != nil {
-		log.Fatalf("embedding server %s (model %q) is not usable: %v", *embedURL, *embedModel, err)
-	}
-	log.Printf("embedding model %q at %s returns %d-dimensional vectors", *embedModel, *embedURL, dim)
+		log.Printf("collection %q ready (sparse BM25 index on disk, inverse document frequency computed by Qdrant)", *collection)
+	} else {
+		// Probe the embedding server before touching the corpus: this both
+		// fails fast with a readable message when the server is not up, and
+		// yields the vector dimension needed to create the collection. The
+		// dimension of an embedding model does not depend on the input, so a
+		// short fixed string is enough.
+		err := in.withRetry(ctx, "probe embedding server", func() error {
+			vectors, err := embedder.Embed(ctx, []string{"dimension probe"})
+			if err != nil {
+				return err
+			}
+			dim = len(vectors[0])
+			return nil
+		})
+		if err != nil {
+			log.Fatalf("embedding server %s (model %q) is not usable: %v", *embedURL, *embedModel, err)
+		}
+		log.Printf("embedding model %q at %s returns %d-dimensional vectors", *embedModel, *embedURL, dim)
 
-	cfg := storage.DefaultCollectionConfig(dim)
-	bulkThreshold := 0
-	cfg.IndexingThreshold = &bulkThreshold
-	if err := qdrant.EnsureCollectionWithConfig(ctx, *collection, cfg); err != nil {
-		log.Fatalf("creating collection: %v", err)
+		cfg := storage.DefaultCollectionConfig(dim)
+		bulkThreshold := 0
+		cfg.IndexingThreshold = &bulkThreshold
+		if err := qdrant.EnsureCollectionWithConfig(ctx, *collection, cfg); err != nil {
+			log.Fatalf("creating collection: %v", err)
+		}
+		log.Printf("collection %q ready (vector size: %d, distance: %s, vectors and payload on disk, indexing_threshold=0 for the load)", *collection, dim, cfg.Distance)
 	}
-	log.Printf("collection %q ready (vector size: %d, distance: %s, vectors and payload on disk, indexing_threshold=0 for the load)", *collection, dim, cfg.Distance)
 
 	f, err := os.Open(*inputPath)
 	if err != nil {
@@ -353,8 +380,13 @@ readLoop:
 	fmt.Printf("\n--- ingest summary ---\n")
 	fmt.Printf("corpus:               %s\n", *inputPath)
 	fmt.Printf("collection:           %s (%s)\n", *collection, *qdrantURL)
-	fmt.Printf("embedding model:      %s (%s, %d dims, truncated to %d tokens)\n", *embedModel, *provName, dim, *maxTokens)
-	fmt.Printf("document prefix:      %q\n", pipeline.DocumentPrefix)
+	if *sparse {
+		fmt.Printf("index:                lexical BM25 (k1=%.1f, b=%.2f, avgdl=%.0f), no embedding model used\n", rag.NewBM25().K1, rag.NewBM25().B, rag.NewBM25().AvgDocLen)
+		fmt.Printf("documents with no indexable term: %d\n", bm25.Empty.Load())
+	} else {
+		fmt.Printf("embedding model:      %s (%s, %d dims, truncated to %d tokens)\n", *embedModel, *provName, dim, *maxTokens)
+	}
+	fmt.Printf("document prefix:      %s\n", docPrefixInfo)
 	fmt.Printf("documents read:       %d\n", processed)
 	fmt.Printf("documents ingested:   %d\n", in.ingested.Load())
 	fmt.Printf("documents shrunk:     %d (rejected individually, retried with less text)\n", in.shrunk.Load())
@@ -371,7 +403,9 @@ readLoop:
 		in.hardFailures.Load() == 0 && in.skipped.Load() == 0 &&
 		in.ingested.Load() == processed
 
-	if complete && *finalize {
+	// Only the dense collection was loaded with indexing disabled; Qdrant
+	// builds a sparse index inline, so there is nothing to restore for it.
+	if complete && *finalize && !*sparse {
 		if err := qdrant.SetIndexingThreshold(context.Background(), *collection, *indexingThreshold); err != nil {
 			log.Printf("restoring indexing_threshold=%d failed: %v", *indexingThreshold, err)
 		} else {
@@ -417,8 +451,14 @@ type job struct {
 	firstLine int64
 }
 
+// batchIngester stores one batch of documents. It is an interface so that the
+// dense and the lexical ingest share every piece of machinery around it.
+type batchIngester interface {
+	Ingest(ctx context.Context, docs []rag.Document) error
+}
+
 type ingester struct {
-	pipeline *rag.NaiveRAG
+	pipeline batchIngester
 	bar      *progressbar.ProgressBar
 
 	maxRetries    int

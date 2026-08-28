@@ -37,6 +37,13 @@ type IRCoT struct {
 	Embedder  Embedder
 	Generator Generator
 
+	// Stepper produces the reasoning sentences. It is separate from Generator
+	// because the two calls want opposite token budgets: the final answer is a
+	// short span and is capped hard, while a reasoning sentence cut off at the
+	// same cap is half a sentence - and that half sentence is then used
+	// verbatim as the next retrieval query. Nil falls back to Generator.
+	Stepper Generator
+
 	// TopK is the number of passages fetched per retrieval step, and the K
 	// reported as Recall@K. MaxSteps bounds the reasoning loop, and
 	// MaxPassages bounds the accumulated context so it cannot outgrow the
@@ -97,7 +104,7 @@ func (r *IRCoT) Query(ctx context.Context, question string) (answer string, retr
 			break
 		}
 
-		sentence, err := r.Generator.Generate(ctx, buildReasoningPrompt(question, passages, reasoning))
+		sentence, err := r.stepper().Generate(ctx, buildReasoningPrompt(question, passages, reasoning))
 		if err != nil {
 			return "", nil, fmt.Errorf("reasoning step: %w", err)
 		}
@@ -106,6 +113,7 @@ func (r *IRCoT) Query(ctx context.Context, question string) (answer string, retr
 			break
 		}
 		reasoning = append(reasoning, sentence)
+		TraceFrom(ctx).AddReasoning(sentence)
 
 		// The model signalling it can answer means further retrieval has
 		// nothing left to contribute.
@@ -131,6 +139,14 @@ func (r *IRCoT) Query(ctx context.Context, question string) (answer string, retr
 		return "", nil, fmt.Errorf("generate: %w", err)
 	}
 	return answer, passages, nil
+}
+
+// stepper returns the generator to use for an intermediate call.
+func (r *IRCoT) stepper() Generator {
+	if r.Stepper != nil {
+		return r.Stepper
+	}
+	return r.Generator
 }
 
 func (r *IRCoT) retrieve(ctx context.Context, query string) ([]storage.Point, error) {

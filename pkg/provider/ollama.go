@@ -82,9 +82,14 @@ func (o *Ollama) Generate(ctx context.Context, prompt string) (string, error) {
 
 	var resp struct {
 		Response string `json:"response"`
+		// Ollama names the same two counts differently from the OpenAI
+		// schema vLLM serves.
+		PromptEvalCount int64 `json:"prompt_eval_count"`
+		EvalCount       int64 `json:"eval_count"`
 	}
 	if err := json.Unmarshal(raw, &resp); err != nil {
 		return "", fmt.Errorf("decode generate response: %w", err)
 	}
+	recordUsage(ctx, resp.PromptEvalCount, resp.EvalCount)
 	return resp.Response, nil
 }

@@ -1,0 +1,219 @@
+% Skeleton of the paper. Every number in it comes from a generated fragment;
+% none is typed by hand.
+%
+% It exists so that the fragments cmd/bench, cmd/compare, cmd/diagnose and
+% cmd/coverage produce are actually consumed by something. A \newcommand that
+% is renamed, dropped or never generated then shows up as a build failure here
+% instead of as a stale number in a table nobody re-checked. `make check-tex`
+% performs the same check without needing a LaTeX toolchain installed.
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+% Fragments are input only when they exist, so the skeleton still builds while
+% a sweep is half finished. A table that references a command from a fragment
+% that is missing WILL fail, which is the intended signal.
+\newcommand{\useresults}[1]{\IfFileExists{#1.gen.tex}{\input{#1.gen.tex}}{}}
+
+% Generated fragments.
+\useresults{closedbook-musique}
+\useresults{closedbook-hotpotqa}
+\useresults{closedbook-2wiki}
+\useresults{closedbook-nq}
+\useresults{closedbook-triviaqa}
+\useresults{bm25-musique}
+\useresults{bm25-hotpotqa}
+\useresults{bm25-2wiki}
+\useresults{bm25-nq}
+\useresults{bm25-triviaqa}
+\useresults{naive-musique}
+\useresults{naive-hotpotqa}
+\useresults{naive-2wiki}
+\useresults{naive-nq}
+\useresults{naive-triviaqa}
+\useresults{naive10-musique}
+\useresults{naive10-hotpotqa}
+\useresults{naive10-2wiki}
+\useresults{naive10-nq}
+\useresults{naive10-triviaqa}
+\useresults{naive12-musique}
+\useresults{naive12-hotpotqa}
+\useresults{naive12-2wiki}
+\useresults{naive12-nq}
+\useresults{naive12-triviaqa}
+\useresults{hybrid-musique}
+\useresults{hybrid-hotpotqa}
+\useresults{hybrid-2wiki}
+\useresults{hybrid-nq}
+\useresults{hybrid-triviaqa}
+\useresults{hyde-musique}
+\useresults{hyde-hotpotqa}
+\useresults{hyde-2wiki}
+\useresults{hyde-nq}
+\useresults{hyde-triviaqa}
+\useresults{rerank-musique}
+\useresults{rerank-hotpotqa}
+\useresults{rerank-2wiki}
+\useresults{rerank-nq}
+\useresults{rerank-triviaqa}
+\useresults{neighbour-musique}
+\useresults{neighbour-hotpotqa}
+\useresults{neighbour-2wiki}
+\useresults{neighbour-nq}
+\useresults{neighbour-triviaqa}
+\useresults{crag-musique}
+\useresults{crag-hotpotqa}
+\useresults{crag-2wiki}
+\useresults{crag-nq}
+\useresults{crag-triviaqa}
+\useresults{crag10-musique}
+\useresults{crag10-hotpotqa}
+\useresults{crag10-2wiki}
+\useresults{crag10-nq}
+\useresults{crag10-triviaqa}
+\useresults{ircot-musique}
+\useresults{ircot-hotpotqa}
+\useresults{ircot-2wiki}
+\useresults{ircot-nq}
+\useresults{ircot-triviaqa}
+\useresults{adaptive-musique}
+\useresults{adaptive-hotpotqa}
+\useresults{adaptive-2wiki}
+\useresults{adaptive-nq}
+\useresults{adaptive-triviaqa}
+\useresults{diagnosis-musique}
+\useresults{coverage-musique}
+\useresults{diagnosis-hotpotqa}
+\useresults{coverage-hotpotqa}
+\useresults{diagnosis-2wiki}
+\useresults{coverage-2wiki}
+
+\begin{document}
+
+\section*{Generated results}
+
+Every figure below is produced by \texttt{cmd/bench}, \texttt{cmd/compare},
+\texttt{cmd/diagnose} or \texttt{cmd/coverage} and inserted from a
+\texttt{*.gen.tex} fragment. Recall is measured over the passages that were
+actually in the generator's context, whose mean size is reported beside it,
+because a multi-round architecture puts more than \texttt{-top-k} passages
+there; the matched-budget rows (10 and 12 passages) are what make the
+comparison fair. ``EM answered'' is Exact Match restricted to the questions
+the system did not decline to answer.
+
+\subsection*{MuSiQue}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answered & Recall & Passages & LLM calls \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookMuSiQueEM & \ClosedBookMuSiQueFOne & \ClosedBookMuSiQueAbstentionRate & \ClosedBookMuSiQueEMAnswered & -- & -- & \ClosedBookMuSiQueLLMCalls \\
+BM25 (lexical only) & \BMTwentyFiveMuSiQueEM & \BMTwentyFiveMuSiQueFOne & \BMTwentyFiveMuSiQueAbstentionRate & \BMTwentyFiveMuSiQueEMAnswered & \BMTwentyFiveMuSiQueRecallInContext & \BMTwentyFiveMuSiQueMeanPassagesInContext & \BMTwentyFiveMuSiQueLLMCalls \\
+NaiveRAG, 5 passages & \NaiveRAGMuSiQueEM & \NaiveRAGMuSiQueFOne & \NaiveRAGMuSiQueAbstentionRate & \NaiveRAGMuSiQueEMAnswered & \NaiveRAGMuSiQueRecallInContext & \NaiveRAGMuSiQueMeanPassagesInContext & \NaiveRAGMuSiQueLLMCalls \\
+NaiveRAG, 10 passages & \NaiveRAGTopTenMuSiQueEM & \NaiveRAGTopTenMuSiQueFOne & \NaiveRAGTopTenMuSiQueAbstentionRate & \NaiveRAGTopTenMuSiQueEMAnswered & \NaiveRAGTopTenMuSiQueRecallInContext & \NaiveRAGTopTenMuSiQueMeanPassagesInContext & \NaiveRAGTopTenMuSiQueLLMCalls \\
+NaiveRAG, 12 passages & \NaiveRAGTopTwelveMuSiQueEM & \NaiveRAGTopTwelveMuSiQueFOne & \NaiveRAGTopTwelveMuSiQueAbstentionRate & \NaiveRAGTopTwelveMuSiQueEMAnswered & \NaiveRAGTopTwelveMuSiQueRecallInContext & \NaiveRAGTopTwelveMuSiQueMeanPassagesInContext & \NaiveRAGTopTwelveMuSiQueLLMCalls \\
+Hybrid (dense + BM25, RRF) & \HybridMuSiQueEM & \HybridMuSiQueFOne & \HybridMuSiQueAbstentionRate & \HybridMuSiQueEMAnswered & \HybridMuSiQueRecallInContext & \HybridMuSiQueMeanPassagesInContext & \HybridMuSiQueLLMCalls \\
+HyDE & \HyDEMuSiQueEM & \HyDEMuSiQueFOne & \HyDEMuSiQueAbstentionRate & \HyDEMuSiQueEMAnswered & \HyDEMuSiQueRecallInContext & \HyDEMuSiQueMeanPassagesInContext & \HyDEMuSiQueLLMCalls \\
+Rerank (cross-encoder) & \RerankMuSiQueEM & \RerankMuSiQueFOne & \RerankMuSiQueAbstentionRate & \RerankMuSiQueEMAnswered & \RerankMuSiQueRecallInContext & \RerankMuSiQueMeanPassagesInContext & \RerankMuSiQueLLMCalls \\
+Neighbour expansion & \NeighbourMuSiQueEM & \NeighbourMuSiQueFOne & \NeighbourMuSiQueAbstentionRate & \NeighbourMuSiQueEMAnswered & \NeighbourMuSiQueRecallInContext & \NeighbourMuSiQueMeanPassagesInContext & \NeighbourMuSiQueLLMCalls \\
+CRAG (offline), 5 passages & \CRAGMuSiQueEM & \CRAGMuSiQueFOne & \CRAGMuSiQueAbstentionRate & \CRAGMuSiQueEMAnswered & \CRAGMuSiQueRecallInContext & \CRAGMuSiQueMeanPassagesInContext & \CRAGMuSiQueLLMCalls \\
+CRAG (offline), 10 passages & \CRAGTopTenMuSiQueEM & \CRAGTopTenMuSiQueFOne & \CRAGTopTenMuSiQueAbstentionRate & \CRAGTopTenMuSiQueEMAnswered & \CRAGTopTenMuSiQueRecallInContext & \CRAGTopTenMuSiQueMeanPassagesInContext & \CRAGTopTenMuSiQueLLMCalls \\
+IRCoT & \IRCoTMuSiQueEM & \IRCoTMuSiQueFOne & \IRCoTMuSiQueAbstentionRate & \IRCoTMuSiQueEMAnswered & \IRCoTMuSiQueRecallInContext & \IRCoTMuSiQueMeanPassagesInContext & \IRCoTMuSiQueLLMCalls \\
+Adaptive-RAG (router) & \AdaptiveMuSiQueEM & \AdaptiveMuSiQueFOne & \AdaptiveMuSiQueAbstentionRate & \AdaptiveMuSiQueEMAnswered & \AdaptiveMuSiQueRecallInContext & \AdaptiveMuSiQueMeanPassagesInContext & \AdaptiveMuSiQueLLMCalls \\
+\bottomrule
+\end{tabular}
+
+\paragraph{Corpus coverage.} A perfect retriever could not exceed
+\CoverageMuSiQueRecallCeiling{} on this set: only \CoverageMuSiQueGoldTitlesPresent{} of
+the \CoverageMuSiQueGoldTitles{} annotated gold articles exist in the corpus at all,
+and all of them are present for just \CoverageMuSiQueQuestionsFullyCoveredPct\% of
+the \CoverageMuSiQueAnnotatedQuestions{} annotated questions. Read every Recall in
+the table above against that ceiling.
+
+\paragraph{Why retrieval failed.} Of the \DiagMuSiQueDiagnosed{} sampled
+failures out of \DiagMuSiQueFailed{} (\DiagMuSiQueFailedPct\% of the run):
+\DiagMuSiQueWrongSlicePct\% retrieved the right article but the wrong slice of it,
+\DiagMuSiQueRankedLowPct\% had it ranked between \DiagMuSiQueTopK{} and \DiagMuSiQueDeep{},
+\DiagMuSiQueUnreachablePct\% did not reach it within \DiagMuSiQueDeep{},
+\DiagMuSiQueAnswerAbsentPct\% have no gold article stating the answer at all, and
+\DiagMuSiQueNotInCorpusPct\% are not in the corpus. Choosing per question between
+closed-book and this run would be worth \DiagMuSiQueOracleGain{} Exact Match over
+the better single system.
+
+\subsection*{HotpotQA}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answered & Recall & Passages & LLM calls \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookHotpotQAEM & \ClosedBookHotpotQAFOne & \ClosedBookHotpotQAAbstentionRate & \ClosedBookHotpotQAEMAnswered & -- & -- & \ClosedBookHotpotQALLMCalls \\
+BM25 (lexical only) & \BMTwentyFiveHotpotQAEM & \BMTwentyFiveHotpotQAFOne & \BMTwentyFiveHotpotQAAbstentionRate & \BMTwentyFiveHotpotQAEMAnswered & \BMTwentyFiveHotpotQARecallInContext & \BMTwentyFiveHotpotQAMeanPassagesInContext & \BMTwentyFiveHotpotQALLMCalls \\
+NaiveRAG, 5 passages & \NaiveRAGHotpotQAEM & \NaiveRAGHotpotQAFOne & \NaiveRAGHotpotQAAbstentionRate & \NaiveRAGHotpotQAEMAnswered & \NaiveRAGHotpotQARecallInContext & \NaiveRAGHotpotQAMeanPassagesInContext & \NaiveRAGHotpotQALLMCalls \\
+NaiveRAG, 10 passages & \NaiveRAGTopTenHotpotQAEM & \NaiveRAGTopTenHotpotQAFOne & \NaiveRAGTopTenHotpotQAAbstentionRate & \NaiveRAGTopTenHotpotQAEMAnswered & \NaiveRAGTopTenHotpotQARecallInContext & \NaiveRAGTopTenHotpotQAMeanPassagesInContext & \NaiveRAGTopTenHotpotQALLMCalls \\
+NaiveRAG, 12 passages & \NaiveRAGTopTwelveHotpotQAEM & \NaiveRAGTopTwelveHotpotQAFOne & \NaiveRAGTopTwelveHotpotQAAbstentionRate & \NaiveRAGTopTwelveHotpotQAEMAnswered & \NaiveRAGTopTwelveHotpotQARecallInContext & \NaiveRAGTopTwelveHotpotQAMeanPassagesInContext & \NaiveRAGTopTwelveHotpotQALLMCalls \\
+Hybrid (dense + BM25, RRF) & \HybridHotpotQAEM & \HybridHotpotQAFOne & \HybridHotpotQAAbstentionRate & \HybridHotpotQAEMAnswered & \HybridHotpotQARecallInContext & \HybridHotpotQAMeanPassagesInContext & \HybridHotpotQALLMCalls \\
+HyDE & \HyDEHotpotQAEM & \HyDEHotpotQAFOne & \HyDEHotpotQAAbstentionRate & \HyDEHotpotQAEMAnswered & \HyDEHotpotQARecallInContext & \HyDEHotpotQAMeanPassagesInContext & \HyDEHotpotQALLMCalls \\
+Rerank (cross-encoder) & \RerankHotpotQAEM & \RerankHotpotQAFOne & \RerankHotpotQAAbstentionRate & \RerankHotpotQAEMAnswered & \RerankHotpotQARecallInContext & \RerankHotpotQAMeanPassagesInContext & \RerankHotpotQALLMCalls \\
+Neighbour expansion & \NeighbourHotpotQAEM & \NeighbourHotpotQAFOne & \NeighbourHotpotQAAbstentionRate & \NeighbourHotpotQAEMAnswered & \NeighbourHotpotQARecallInContext & \NeighbourHotpotQAMeanPassagesInContext & \NeighbourHotpotQALLMCalls \\
+CRAG (offline), 5 passages & \CRAGHotpotQAEM & \CRAGHotpotQAFOne & \CRAGHotpotQAAbstentionRate & \CRAGHotpotQAEMAnswered & \CRAGHotpotQARecallInContext & \CRAGHotpotQAMeanPassagesInContext & \CRAGHotpotQALLMCalls \\
+CRAG (offline), 10 passages & \CRAGTopTenHotpotQAEM & \CRAGTopTenHotpotQAFOne & \CRAGTopTenHotpotQAAbstentionRate & \CRAGTopTenHotpotQAEMAnswered & \CRAGTopTenHotpotQARecallInContext & \CRAGTopTenHotpotQAMeanPassagesInContext & \CRAGTopTenHotpotQALLMCalls \\
+IRCoT & \IRCoTHotpotQAEM & \IRCoTHotpotQAFOne & \IRCoTHotpotQAAbstentionRate & \IRCoTHotpotQAEMAnswered & \IRCoTHotpotQARecallInContext & \IRCoTHotpotQAMeanPassagesInContext & \IRCoTHotpotQALLMCalls \\
+Adaptive-RAG (router) & \AdaptiveHotpotQAEM & \AdaptiveHotpotQAFOne & \AdaptiveHotpotQAAbstentionRate & \AdaptiveHotpotQAEMAnswered & \AdaptiveHotpotQARecallInContext & \AdaptiveHotpotQAMeanPassagesInContext & \AdaptiveHotpotQALLMCalls \\
+\bottomrule
+\end{tabular}
+
+\paragraph{Corpus coverage.} A perfect retriever could not exceed
+\CoverageHotpotQARecallCeiling{} on this set: only \CoverageHotpotQAGoldTitlesPresent{} of
+the \CoverageHotpotQAGoldTitles{} annotated gold articles exist in the corpus at all,
+and all of them are present for just \CoverageHotpotQAQuestionsFullyCoveredPct\% of
+the \CoverageHotpotQAAnnotatedQuestions{} annotated questions. Read every Recall in
+the table above against that ceiling.
+
+\paragraph{Why retrieval failed.} Of the \DiagHotpotQADiagnosed{} sampled
+failures out of \DiagHotpotQAFailed{} (\DiagHotpotQAFailedPct\% of the run):
+\DiagHotpotQAWrongSlicePct\% retrieved the right article but the wrong slice of it,
+\DiagHotpotQARankedLowPct\% had it ranked between \DiagHotpotQATopK{} and \DiagHotpotQADeep{},
+\DiagHotpotQAUnreachablePct\% did not reach it within \DiagHotpotQADeep{},
+\DiagHotpotQAAnswerAbsentPct\% have no gold article stating the answer at all, and
+\DiagHotpotQANotInCorpusPct\% are not in the corpus. Choosing per question between
+closed-book and this run would be worth \DiagHotpotQAOracleGain{} Exact Match over
+the better single system.
+
+\subsection*{2WikiMultihopQA}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answered & Recall & Passages & LLM calls \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookTwoWikiEM & \ClosedBookTwoWikiFOne & \ClosedBookTwoWikiAbstentionRate & \ClosedBookTwoWikiEMAnswered & -- & -- & \ClosedBookTwoWikiLLMCalls \\
+BM25 (lexical only) & \BMTwentyFiveTwoWikiEM & \BMTwentyFiveTwoWikiFOne & \BMTwentyFiveTwoWikiAbstentionRate & \BMTwentyFiveTwoWikiEMAnswered & \BMTwentyFiveTwoWikiRecallInContext & \BMTwentyFiveTwoWikiMeanPassagesInContext & \BMTwentyFiveTwoWikiLLMCalls \\
+NaiveRAG, 5 passages & \NaiveRAGTwoWikiEM & \NaiveRAGTwoWikiFOne & \NaiveRAGTwoWikiAbstentionRate & \NaiveRAGTwoWikiEMAnswered & \NaiveRAGTwoWikiRecallInContext & \NaiveRAGTwoWikiMeanPassagesInContext & \NaiveRAGTwoWikiLLMCalls \\
+NaiveRAG, 10 passages & \NaiveRAGTopTenTwoWikiEM & \NaiveRAGTopTenTwoWikiFOne & \NaiveRAGTopTenTwoWikiAbstentionRate & \NaiveRAGTopTenTwoWikiEMAnswered & \NaiveRAGTopTenTwoWikiRecallInContext & \NaiveRAGTopTenTwoWikiMeanPassagesInContext & \NaiveRAGTopTenTwoWikiLLMCalls \\
+NaiveRAG, 12 passages & \NaiveRAGTopTwelveTwoWikiEM & \NaiveRAGTopTwelveTwoWikiFOne & \NaiveRAGTopTwelveTwoWikiAbstentionRate & \NaiveRAGTopTwelveTwoWikiEMAnswered & \NaiveRAGTopTwelveTwoWikiRecallInContext & \NaiveRAGTopTwelveTwoWikiMeanPassagesInContext & \NaiveRAGTopTwelveTwoWikiLLMCalls \\
+Hybrid (dense + BM25, RRF) & \HybridTwoWikiEM & \HybridTwoWikiFOne & \HybridTwoWikiAbstentionRate & \HybridTwoWikiEMAnswered & \HybridTwoWikiRecallInContext & \HybridTwoWikiMeanPassagesInContext & \HybridTwoWikiLLMCalls \\
+HyDE & \HyDETwoWikiEM & \HyDETwoWikiFOne & \HyDETwoWikiAbstentionRate & \HyDETwoWikiEMAnswered & \HyDETwoWikiRecallInContext & \HyDETwoWikiMeanPassagesInContext & \HyDETwoWikiLLMCalls \\
+Rerank (cross-encoder) & \RerankTwoWikiEM & \RerankTwoWikiFOne & \RerankTwoWikiAbstentionRate & \RerankTwoWikiEMAnswered & \RerankTwoWikiRecallInContext & \RerankTwoWikiMeanPassagesInContext & \RerankTwoWikiLLMCalls \\
+Neighbour expansion & \NeighbourTwoWikiEM & \NeighbourTwoWikiFOne & \NeighbourTwoWikiAbstentionRate & \NeighbourTwoWikiEMAnswered & \NeighbourTwoWikiRecallInContext & \NeighbourTwoWikiMeanPassagesInContext & \NeighbourTwoWikiLLMCalls \\
+CRAG (offline), 5 passages & \CRAGTwoWikiEM & \CRAGTwoWikiFOne & \CRAGTwoWikiAbstentionRate & \CRAGTwoWikiEMAnswered & \CRAGTwoWikiRecallInContext & \CRAGTwoWikiMeanPassagesInContext & \CRAGTwoWikiLLMCalls \\
+CRAG (offline), 10 passages & \CRAGTopTenTwoWikiEM & \CRAGTopTenTwoWikiFOne & \CRAGTopTenTwoWikiAbstentionRate & \CRAGTopTenTwoWikiEMAnswered & \CRAGTopTenTwoWikiRecallInContext & \CRAGTopTenTwoWikiMeanPassagesInContext & \CRAGTopTenTwoWikiLLMCalls \\
+IRCoT & \IRCoTTwoWikiEM & \IRCoTTwoWikiFOne & \IRCoTTwoWikiAbstentionRate & \IRCoTTwoWikiEMAnswered & \IRCoTTwoWikiRecallInContext & \IRCoTTwoWikiMeanPassagesInContext & \IRCoTTwoWikiLLMCalls \\
+Adaptive-RAG (router) & \AdaptiveTwoWikiEM & \AdaptiveTwoWikiFOne & \AdaptiveTwoWikiAbstentionRate & \AdaptiveTwoWikiEMAnswered & \AdaptiveTwoWikiRecallInContext & \AdaptiveTwoWikiMeanPassagesInContext & \AdaptiveTwoWikiLLMCalls \\
+\bottomrule
+\end{tabular}
+
+\paragraph{Corpus coverage.} A perfect retriever could not exceed
+\CoverageTwoWikiRecallCeiling{} on this set: only \CoverageTwoWikiGoldTitlesPresent{} of
+the \CoverageTwoWikiGoldTitles{} annotated gold articles exist in the corpus at all,
+and all of them are present for just \CoverageTwoWikiQuestionsFullyCoveredPct\% of
+the \CoverageTwoWikiAnnotatedQuestions{} annotated questions. Read every Recall in
+the table above against that ceiling.
+
+\paragraph{Why retrieval failed.} Of the \DiagTwoWikiDiagnosed{} sampled
+failures out of \DiagTwoWikiFailed{} (\DiagTwoWikiFailedPct\% of the run):
+\DiagTwoWikiWrongSlicePct\% retrieved the right article but the wrong slice of it,
+\DiagTwoWikiRankedLowPct\% had it ranked between \DiagTwoWikiTopK{} and \DiagTwoWikiDeep{},
+\DiagTwoWikiUnreachablePct\% did not reach it within \DiagTwoWikiDeep{},
+\DiagTwoWikiAnswerAbsentPct\% have no gold article stating the answer at all, and
+\DiagTwoWikiNotInCorpusPct\% are not in the corpus. Choosing per question between
+closed-book and this run would be worth \DiagTwoWikiOracleGain{} Exact Match over
+the better single system.
+
+\end{document}

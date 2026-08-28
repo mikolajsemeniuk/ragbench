@@ -58,12 +58,13 @@ services:
 
   # Cross-encoder reranker used by the rerank architecture in cmd/bench.
   #
-  # The diagnosis in cmd/diagnose shows the answer-bearing article is already
-  # inside the top 100 of the dense ranking for 16-33% of the questions the
-  # top-5 baseline gets wrong; it is simply ranked too low to survive the cut.
-  # A cross-encoder scores the question against each passage jointly instead of
-  # comparing two independently produced vectors, which is what lets it reorder
-  # those results.
+  # cmd/diagnose shows that for a sizeable share of the questions the top-5
+  # baseline gets wrong, the answer-bearing article was retrieved but ranked
+  # too low to survive the cut - see \Diag<Set>RankedLowPct in
+  # paper/diagnosis-<set>.gen.tex for the current figure rather than a number
+  # copied here. A cross-encoder scores the question against each passage
+  # jointly instead of comparing two independently produced vectors, which is
+  # what lets it reorder those results.
   vllm-rerank:
     image: vllm/vllm-openai:v0.25.1
     container_name: vllm-rerank

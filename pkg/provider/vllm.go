@@ -212,6 +212,10 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 				Content string `json:"content"`
 			} `json:"message"`
 		} `json:"choices"`
+		Usage struct {
+			PromptTokens     int64 `json:"prompt_tokens"`
+			CompletionTokens int64 `json:"completion_tokens"`
+		} `json:"usage"`
 	}
 	if err := json.Unmarshal(raw, &out); err != nil {
 		return "", fmt.Errorf("decode chat completion response: %w", err)
@@ -219,5 +223,6 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 	if len(out.Choices) == 0 {
 		return "", fmt.Errorf("llm returned no choices")
 	}
+	recordUsage(ctx, out.Usage.PromptTokens, out.Usage.CompletionTokens)
 	return out.Choices[0].Message.Content, nil
 }

@@ -18,8 +18,9 @@ import (
 // 2WikiMultihopQA questions and 23% of MuSiQue's. CRAG adds the missing step -
 // judge the retrieval before using it, and act when it is bad.
 //
-// Two deviations from the paper, both deliberate and both worth stating in
-// writing:
+// This is not the full method and must not be labelled "CRAG" in a results
+// table. Call it "CRAG (offline, corpus-only)". Three deviations, all
+// deliberate:
 //
 //   - The paper trains a T5 retrieval evaluator. Here the generator itself
 //     judges relevance, which keeps the comparison against NaiveRAG and IRCoT
@@ -30,13 +31,33 @@ import (
 //     no web here - the corpus is fixed, which is what makes the comparison
 //     reproducible - so the correction is to rewrite the query and search the
 //     same corpus again. This is the standard offline substitution, and it
-//     bounds CRAG by what the corpus contains.
+//     bounds this variant by what the corpus contains.
+//   - The paper's knowledge refinement step, which decomposes each retrieved
+//     passage into strips and filters them, is absent entirely. Passages are
+//     used whole.
+//
+// The three branches of the paper's corrective step, recorded per question in
+// the Trace. Which one fires is the only thing that explains a CRAG result,
+// and it cannot be recovered from the passage count: "every passage relevant"
+// and "no passage relevant, retrieval replaced" both end with TopK passages.
+const (
+	BranchCorrect   = "correct"
+	BranchIncorrect = "incorrect"
+	BranchAmbiguous = "ambiguous"
+)
+
 type CRAG struct {
 	Store      storage.VectorStore
 	Collection string
 
 	Embedder  Embedder
 	Generator Generator
+
+	// Stepper grades the retrieval and rewrites the query. Separate from
+	// Generator for the same reason as in IRCoT: a query rewrite truncated at
+	// the answer's token cap is a broken query, and it is then searched with.
+	// Nil falls back to Generator.
+	Stepper Generator
 
 	TopK        int
 	MaxPassages int
@@ -75,17 +96,23 @@ func (r *CRAG) Query(ctx context.Context, question string) (answer string, retri
 		return "", nil, fmt.Errorf("grade retrieval: %w", err)
 	}
 
+	trace := TraceFrom(ctx)
+	trace.SetGrade(len(relevant))
+
 	var final []storage.Point
 	switch {
 	case len(relevant) == len(initial):
+		trace.SetBranch(BranchCorrect)
 		final = relevant
 	case len(relevant) == 0:
+		trace.SetBranch(BranchIncorrect)
 		corrected, err := r.correct(ctx, question)
 		if err != nil {
 			return "", nil, err
 		}
 		final = corrected
 	default:
+		trace.SetBranch(BranchAmbiguous)
 		corrected, err := r.correct(ctx, question)
 		if err != nil {
 			return "", nil, err
@@ -109,11 +136,12 @@ func (r *CRAG) Query(ctx context.Context, question string) (answer string, retri
 
 // correct rewrites the query and searches the same corpus again.
 func (r *CRAG) correct(ctx context.Context, question string) ([]storage.Point, error) {
-	rewritten, err := r.Generator.Generate(ctx, buildRewritePrompt(question))
+	rewritten, err := r.stepper().Generate(ctx, buildRewritePrompt(question))
 	if err != nil {
 		return nil, fmt.Errorf("rewrite query: %w", err)
 	}
 	rewritten = strings.TrimSpace(strings.Trim(strings.TrimSpace(rewritten), "\"'"))
+	TraceFrom(ctx).SetRewrittenQuery(rewritten)
 	if rewritten == "" {
 		return nil, nil
 	}
@@ -133,7 +161,7 @@ func (r *CRAG) grade(ctx context.Context, question string, points []storage.Poin
 		return nil, nil
 	}
 
-	verdict, err := r.Generator.Generate(ctx, buildGradePrompt(question, points))
+	verdict, err := r.stepper().Generate(ctx, buildGradePrompt(question, points))
 	if err != nil {
 		return nil, err
 	}
@@ -144,6 +172,14 @@ func (r *CRAG) grade(ctx context.Context, question string, points []storage.Poin
 		relevant = append(relevant, points[i])
 	}
 	return relevant, nil
+}
+
+// stepper returns the generator to use for an intermediate call.
+func (r *CRAG) stepper() Generator {
+	if r.Stepper != nil {
+		return r.Stepper
+	}
+	return r.Generator
 }
 
 func (r *CRAG) retrieve(ctx context.Context, query string) ([]storage.Point, error) {

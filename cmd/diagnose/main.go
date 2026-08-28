@@ -28,6 +28,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -45,7 +46,15 @@ type runRecord struct {
 	Question string   `json:"question"`
 	Gold     []string `json:"gold"`
 	EM       float64  `json:"em"`
-	InCtx    float64  `json:"answer_in_context"`
+
+	// InCtx is only meaningful where InCtxApplicable is set: a boolean
+	// question has no answer span in the supporting passage, so scoring one
+	// would send every yes/no question into the diagnosis as a retrieval
+	// failure it is not.
+	InCtx           float64 `json:"answer_in_context"`
+	InCtxApplicable bool    `json:"answer_in_context_applicable"`
+
+	Abstained bool `json:"abstained"`
 }
 
 type passage struct {
@@ -66,6 +75,8 @@ func main() {
 		collection = flag.String("collection", "ragbench", "Qdrant collection the run used")
 
 		sample = flag.Int("sample", 300, "how many failed questions to diagnose; 0 = all of them. Each one costs a deep search, so a sample keeps the tool quick while the reported counts stay in the .tex")
+		seed   = flag.Int64("seed", 42, "seed for the -sample draw. The sample is drawn at random rather than taken from the front of the file: these datasets are not shuffled and 2WikiMultihopQA in particular groups questions by type, so the first N failures can describe one question type only")
+		hnswEf = flag.Int("hnsw-ef", 1024, "size of the candidate list Qdrant keeps while walking the HNSW graph. It has to be at least -deep, or a gold article counted as \"not reachable by this query\" may only have been missed by the graph walk")
 		deep   = flag.Int("deep", 1000, "how far down the ranking to look for the gold article. Anything below this is reported as unreachable by this query")
 		topK   = flag.Int("top-k", 10, "ranking cut treated as \"the retriever did surface the article\"")
 
@@ -94,7 +105,7 @@ func main() {
 	// context, and the dataset annotates which articles it should have found.
 	var failed []runRecord
 	for _, r := range run {
-		if r.InCtx == 0 && len(goldTitles[r.Question]) > 0 {
+		if r.InCtxApplicable && r.InCtx == 0 && len(goldTitles[r.Question]) > 0 {
 			failed = append(failed, r)
 		}
 	}
@@ -103,14 +114,22 @@ func main() {
 	}
 	diagnosed := failed
 	if *sample > 0 && *sample < len(failed) {
-		diagnosed = failed[:*sample]
+		shuffled := append([]runRecord(nil), failed...)
+		rng := rand.New(rand.NewSource(*seed))
+		rng.Shuffle(len(shuffled), func(i, j int) { shuffled[i], shuffled[j] = shuffled[j], shuffled[i] })
+		diagnosed = shuffled[:*sample]
+		log.Printf("diagnosing a random sample of %d of them (seed=%d)", *sample, *seed)
 	}
 	log.Printf("retrieval failed on %d of %d annotated questions; diagnosing %d of them", len(failed), len(run), len(diagnosed))
 
+	// Titles are normalised on both sides, the same way cmd/bench scores
+	// Recall: the corpus and the datasets disagree on Unicode composition
+	// often enough that a byte comparison reports articles as absent from the
+	// corpus when they are in it.
 	wanted := make(map[string]struct{})
 	for _, r := range diagnosed {
 		for _, t := range goldTitles[r.Question] {
-			wanted[t] = struct{}{}
+			wanted[flashrag.NormalizeTitle(t)] = struct{}{}
 		}
 	}
 
@@ -124,6 +143,10 @@ func main() {
 	embedder := provider.NewVLLM(*embedURL, *embedModel)
 	embedder.TruncatePromptTokens = 512
 	store := storage.NewQdrant(*qdrantURL)
+	store.HNSWEf = *hnswEf
+	if *hnswEf > 0 && *hnswEf < *deep {
+		log.Printf("WARNING: -hnsw-ef %d is below -deep %d, so an article may be reported unreachable when the graph walk simply did not visit it", *hnswEf, *deep)
+	}
 
 	var (
 		notInCorpus, rankedLow, unreachable int
@@ -144,7 +167,7 @@ func main() {
 
 		for j, r := range batch {
 			var golds []passage
-			for _, t := range goldTitles[r.Question] {
+			for _, t := range flashrag.NormalizeTitles(goldTitles[r.Question]) {
 				golds = append(golds, byTitle[t]...)
 			}
 			if len(golds) == 0 {
@@ -172,7 +195,7 @@ func main() {
 			// Where does the answer-bearing article first appear? Any of its
 			// passages counts, because neighbour expansion pulls in the rest
 			// once one is retrieved.
-			article := holderArticles(holders, byTitle, goldTitles[r.Question])
+			article := holderArticles(holders, byTitle, flashrag.NormalizeTitles(goldTitles[r.Question]))
 			rank := 0
 			for k, h := range hits {
 				if _, ok := article[h.ID]; ok {
@@ -277,6 +300,7 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 
 	var foundN, missedN int
 	var foundRAG, foundCB, missedRAG, missedCB, oracleSum, ragSum, cbSum float64
+	var foundAbstain, missedAbstain, cbAbstain float64
 	var paired int
 	for _, r := range run {
 		c, ok := byQuestion[r.Question]
@@ -286,15 +310,18 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 		paired++
 		ragSum += r.EM
 		cbSum += c.EM
+		cbAbstain += boolean(c.Abstained)
 		oracleSum += max(r.EM, c.EM)
 		if r.InCtx == 1 {
 			foundN++
 			foundRAG += r.EM
 			foundCB += c.EM
+			foundAbstain += boolean(r.Abstained)
 		} else {
 			missedN++
 			missedRAG += r.EM
 			missedCB += c.EM
+			missedAbstain += boolean(r.Abstained)
 		}
 	}
 	if paired == 0 {
@@ -303,11 +330,18 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 	}
 
 	fmt.Printf("\n--- retrieval succeeded vs failed (paired with %s) ---\n", path)
-	fmt.Printf("%-22s %8s %10s %12s %10s\n", "", "n", "this run", "closed-book", "diff")
+	fmt.Printf("%-22s %8s %10s %12s %10s %12s\n", "", "n", "this run", "closed-book", "diff", "abstained")
 	fr, fc := foundRAG/float64(foundN), foundCB/float64(foundN)
 	mr, mc := missedRAG/float64(missedN), missedCB/float64(missedN)
-	fmt.Printf("%-22s %8d %10.4f %12.4f %+10.4f\n", "answer was retrieved", foundN, fr, fc, fr-fc)
-	fmt.Printf("%-22s %8d %10.4f %12.4f %+10.4f\n", "answer was not", missedN, mr, mc, mr-mc)
+	fa, ma := foundAbstain/float64(foundN), missedAbstain/float64(missedN)
+	fmt.Printf("%-22s %8d %10.4f %12.4f %+10.4f %12.4f\n", "answer was retrieved", foundN, fr, fc, fr-fc, fa)
+	fmt.Printf("%-22s %8d %10.4f %12.4f %+10.4f %12.4f\n", "answer was not", missedN, mr, mc, mr-mc, ma)
+	// The abstention columns are what stops the closed-book column from being
+	// misread. When retrieval fails, this run declines and scores Exact Match
+	// 0 while the closed-book system, having nothing to object to, guesses -
+	// and a guess is sometimes right. That is a difference in behaviour, not
+	// in knowledge.
+	fmt.Printf("%-22s %8d %10s %12.4f\n", "closed-book abstained", paired, "-", cbAbstain/float64(paired))
 
 	r, c, o := ragSum/float64(paired), cbSum/float64(paired), oracleSum/float64(paired)
 	fmt.Printf("\n--- ceiling of choosing per question ---\n")
@@ -318,16 +352,26 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 		"\\newcommand{\\%%sRetrievedN}{%d}\n"+
 		"\\newcommand{\\%%sRetrievedEM}{%.4f}\n"+
 		"\\newcommand{\\%%sRetrievedClosedBookEM}{%.4f}\n"+
+		"\\newcommand{\\%%sRetrievedAbstention}{%.4f}\n"+
 		"\\newcommand{\\%%sNotRetrievedN}{%d}\n"+
 		"\\newcommand{\\%%sNotRetrievedEM}{%.4f}\n"+
-		"\\newcommand{\\%%sNotRetrievedClosedBookEM}{%.4f}\n",
-		foundN, fr, fc, missedN, mr, mc)
+		"\\newcommand{\\%%sNotRetrievedClosedBookEM}{%.4f}\n"+
+		"\\newcommand{\\%%sNotRetrievedAbstention}{%.4f}\n"+
+		"\\newcommand{\\%%sClosedBookAbstention}{%.4f}\n",
+		foundN, fr, fc, fa, missedN, mr, mc, ma, cbAbstain/float64(paired))
 	oracle = fmt.Sprintf(""+
 		"\\newcommand{\\%%sClosedBookEM}{%.4f}\n"+
 		"\\newcommand{\\%%sOracleEM}{%.4f}\n"+
 		"\\newcommand{\\%%sOracleGain}{%.4f}\n",
 		c, o, o-max(r, c))
 	return split, oracle
+}
+
+func boolean(v bool) float64 {
+	if v {
+		return 1
+	}
+	return 0
 }
 
 // scanCorpus returns the passages of every wanted article title.
@@ -355,7 +399,7 @@ func scanCorpus(path string, wanted map[string]struct{}) (map[string][]passage, 
 		if err := json.Unmarshal(line, &cl); err != nil {
 			continue
 		}
-		title := flashrag.PassageTitle(cl.Contents)
+		title := flashrag.NormalizeTitle(flashrag.PassageTitle(cl.Contents))
 		if _, ok := wanted[title]; !ok {
 			continue
 		}
@@ -392,6 +436,23 @@ func loadGoldTitles(path string) (map[string][]string, error) {
 	return out, scanner.Err()
 }
 
+// checkSchema refuses a dump written before the metrics were fixed. Without
+// "answer_in_context_applicable" every record would look inapplicable, the
+// failure list would come out empty, and the tool would report that there is
+// nothing to diagnose rather than that the file is stale.
+func checkSchema(line []byte) error {
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(line, &fields); err != nil {
+		return fmt.Errorf("parse first record: %w", err)
+	}
+	for _, required := range []string{"abstained", "answer_in_context_applicable"} {
+		if _, ok := fields[required]; !ok {
+			return fmt.Errorf("this dump predates the current metrics (no %q field) - re-run cmd/bench to regenerate it", required)
+		}
+	}
+	return nil
+}
+
 func loadRun(path string) ([]runRecord, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -400,12 +461,19 @@ func loadRun(path string) ([]runRecord, error) {
 	defer f.Close()
 
 	var out []runRecord
+	checked := false
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(make([]byte, 0, 1024*1024), 16*1024*1024)
 	for scanner.Scan() {
 		line := scanner.Bytes()
 		if len(line) == 0 {
 			continue
+		}
+		if !checked {
+			if err := checkSchema(line); err != nil {
+				return nil, fmt.Errorf("%s: %w", path, err)
+			}
+			checked = true
 		}
 		var r runRecord
 		if err := json.Unmarshal(line, &r); err != nil {

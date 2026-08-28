@@ -3,9 +3,7 @@ package rag
 import (
 	"context"
 	"fmt"
-	"maps"
 	"strings"
-	"sync"
 
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
@@ -51,9 +49,6 @@ type AdaptiveRAG struct {
 	ClosedBook Pipeline
 	SingleHop  Pipeline
 	MultiHop   Pipeline
-
-	mu     sync.Mutex
-	routes map[string]int64
 }
 
 func NewAdaptiveRAG(generator Generator, closedBook, singleHop, multiHop Pipeline) *AdaptiveRAG {
@@ -62,7 +57,6 @@ func NewAdaptiveRAG(generator Generator, closedBook, singleHop, multiHop Pipelin
 		ClosedBook: closedBook,
 		SingleHop:  singleHop,
 		MultiHop:   multiHop,
-		routes:     make(map[string]int64),
 	}
 }
 
@@ -73,9 +67,7 @@ func (r *AdaptiveRAG) Query(ctx context.Context, question string) (answer string
 	}
 
 	route := parseRoute(verdict)
-	r.mu.Lock()
-	r.routes[route]++
-	r.mu.Unlock()
+	TraceFrom(ctx).SetRoute(route)
 
 	var branch Pipeline
 	switch route {
@@ -92,13 +84,6 @@ func (r *AdaptiveRAG) Query(ctx context.Context, question string) (answer string
 		return "", nil, fmt.Errorf("route %s: %w", route, err)
 	}
 	return answer, retrieved, nil
-}
-
-// Routes returns how many questions went down each branch.
-func (r *AdaptiveRAG) Routes() map[string]int64 {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	return maps.Clone(r.routes)
 }
 
 // parseRoute reads the classifier's reply as one of three labels. Anything

@@ -16,12 +16,13 @@ type Reranker interface {
 // RerankRAG retrieves a deep shortlist with the fast bi-encoder, reorders it
 // with a slow cross-encoder, and hands the generator the top few.
 //
-// It is aimed at one measured failure mode. cmd/diagnose shows that for the
-// questions NaiveRAG gets wrong, the article that actually states the answer
-// is already inside the retriever's top 100 in 15.7% (2WikiMultihopQA), 32.7%
-// (HotpotQA) and 17.3% (MuSiQue) of cases - found, but ranked below the cut.
-// Nothing that reasons over the top 5 can recover those; the fix has to change
-// which 5 are chosen.
+// It is aimed at one measured failure mode: for the questions where retrieval
+// failed, the article that actually states the answer is already in the
+// ranking, just below the cut. The figure is \Diag<Set>RankedLowPct in
+// paper/diagnosis-<set>.gen.tex, measured with -top-k 5 and -deep 1000; quote
+// it from there rather than from here, because it is regenerated whenever the
+// metrics or the sampling change. Nothing that reasons over the top 5 can
+// recover those passages; the fix has to change which 5 are chosen.
 //
 // Unlike IRCoT and CRAG this adds no generator calls, so the extra cost is one
 // cross-encoder pass rather than several LLM round-trips.

@@ -2,6 +2,7 @@
 * Setup
 * Health check the embedder
 * Ingest data
+* Measure corpus coverage
 * Run benchmark
 * Diagnose retrieval failures
 * Compare runs
@@ -12,6 +13,10 @@
 * RAG Measurements 
 * Generation Measurements
 * Bibliography
+
+> The `-dump` schema changed: it now records what was retrieved, what the
+> architecture decided and what it cost. Runs made before that are not readable
+> by `cmd/compare` and have to be regenerated.
 
 ## Setup
 
@@ -27,158 +32,100 @@ curl -s http://localhost:8001/v1/embeddings -H 'Content-Type: application/json' 
 
 ## Ingest data
 
-```sh
-# Approx 3h
-go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -provider vllm -embed-url http://localhost:8001 -embed-model bge-base-en-v1.5 -qdrant-url http://localhost:6333 -collection ragbench-wiki18 -batch-size 128 -concurrency 8 -max-tokens 512
+Two indexes over the same corpus and the same passage ids. They are separate
+collections so that adding lexical search never means re-embedding the 21M
+passages the dense one already holds.
 
-# Lexical BM25 index, approx 25 min, no GPU and no embedding server.
-# It is a separate collection over the same passage ids, so the dense one is
-# left untouched and the two are fused at query time.
-go run ./cmd/ingest -input dataset/wiki18_100w.jsonl -sparse -collection ragbench-wiki18-bm25 -total 21015324 -batch-size 512 -concurrency 8
+```sh
+make ingest          # ~3h, GPU: embeds the corpus into ragbench-wiki18
+make ingest-sparse   # ~25min, no GPU: BM25 index into ragbench-wiki18-bm25
 ```
+
+Both are restartable. An interrupted run prints the corpus line to resume from;
+re-run the command by hand with `-skip N`. Upserts are keyed by corpus id, so
+re-running an overlapping range is safe.
+
+## Measure corpus coverage
+
+A Recall figure is unreadable without the ceiling the corpus imposes. Only 72.6%
+of the gold articles 2WikiMultihopQA annotates exist in wiki18\_100w at all, so a
+perfect retriever would score 0.726 there and the measured 0.30 is 41% of what
+is achievable, not 30% of it.
+
+```sh
+make coverage        # ~4min, no GPU, can run while the card is busy
+```
+
+NaturalQuestions and TriviaQA annotate no gold documents, so there is no
+coverage to measure for them.
 
 ## Run benchmark
 
+Every run is a target, so there is one definition of each experiment and the
+paper's numbers cannot drift from the commands that produced them. Run one, or
+run the lot:
+
 ```sh
-# Smoke test, ~1 min
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -limit 200 -concurrency 8
-
-# Naive RAG
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-musique.jsonl -name NaiveRAGMuSiQue -tex-out paper/naive-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-hotpotqa.jsonl -name NaiveRAGHotpotQA -tex-out paper/naive-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-2wiki.jsonl -name NaiveRAGTwoWiki -tex-out paper/naive-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-nq.jsonl -name NaiveRAGNQ -tex-out paper/naive-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture naive -concurrency 48 -dump runs/naive-triviaqa.jsonl -name NaiveRAGTriviaQA -tex-out paper/naive-triviaqa.gen.tex
-
-# IRCoT RAG
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-musique.jsonl -name IRCoTMuSiQue -tex-out paper/ircot-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-hotpotqa.jsonl -name IRCoTHotpotQA -tex-out paper/ircot-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-2wiki.jsonl -name IRCoTTwoWiki -tex-out paper/ircot-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-nq.jsonl -name IRCoTNQ -tex-out paper/ircot-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-triviaqa.jsonl -name IRCoTTriviaQA -tex-out paper/ircot-triviaqa.gen.tex
-
-# CRAG RAG
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-musique.jsonl -name CRAGMuSiQue -tex-out paper/crag-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-hotpotqa.jsonl -name CRAGHotpotQA -tex-out paper/crag-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-2wiki.jsonl -name CRAGTwoWiki -tex-out paper/crag-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-nq.jsonl -name CRAGNQ -tex-out paper/crag-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture crag -concurrency 48 -dump runs/crag-triviaqa.jsonl -name CRAGTriviaQA -tex-out paper/crag-triviaqa.gen.tex
-
-# ClosedBook RAG
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-musique.jsonl -name ClosedBookMuSiQue -tex-out paper/closedbook-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-hotpotqa.jsonl -name ClosedBookHotpotQA -tex-out paper/closedbook-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-2wiki.jsonl -name ClosedBookTwoWiki -tex-out paper/closedbook-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-nq.jsonl -name ClosedBookNQ -tex-out paper/closedbook-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-triviaqa.jsonl -name ClosedBookTriviaQA -tex-out paper/closedbook-triviaqa.gen.tex
-
-# Naive RAG, 10 passages - the matched-budget control for IRCoT and CRAG
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-musique.jsonl -name NaiveRAGTopTenMuSiQue -tex-out paper/naive10-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-hotpotqa.jsonl -name NaiveRAGTopTenHotpotQA -tex-out paper/naive10-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-2wiki.jsonl -name NaiveRAGTopTenTwoWiki -tex-out paper/naive10-2wiki.gen.tex
-
-# CRAG, 10 passages
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-musique.jsonl -name CRAGTopTenMuSiQue -tex-out paper/crag10-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-hotpotqa.jsonl -name CRAGTopTenHotpotQA -tex-out paper/crag10-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-2wiki.jsonl -name CRAGTopTenTwoWiki -tex-out paper/crag10-2wiki.gen.tex
-
-# Rerank
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-musique.jsonl -name RerankMuSiQue -tex-out paper/rerank-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-hotpotqa.jsonl -name RerankHotpotQA -tex-out paper/rerank-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-2wiki.jsonl -name RerankTwoWiki -tex-out paper/rerank-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-nq.jsonl -name RerankNQ -tex-out paper/rerank-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-triviaqa.jsonl -name RerankTriviaQA -tex-out paper/rerank-triviaqa.gen.tex
-
-# HyDE - search with a drafted passage instead of the question.
-# One extra generation call per question.
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-musique.jsonl -name HyDEMuSiQue -tex-out paper/hyde-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-hotpotqa.jsonl -name HyDEHotpotQA -tex-out paper/hyde-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-2wiki.jsonl -name HyDETwoWiki -tex-out paper/hyde-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-nq.jsonl -name HyDENQ -tex-out paper/hyde-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture hyde -concurrency 48 -dump runs/hyde-triviaqa.jsonl -name HyDETriviaQA -tex-out paper/hyde-triviaqa.gen.tex
-
-# BM25 - lexical retrieval only, no embedding model in the loop.
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-musique.jsonl -name BMTwentyFiveMuSiQue -tex-out paper/bm25-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-hotpotqa.jsonl -name BMTwentyFiveHotpotQA -tex-out paper/bm25-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-2wiki.jsonl -name BMTwentyFiveTwoWiki -tex-out paper/bm25-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-nq.jsonl -name BMTwentyFiveNQ -tex-out paper/bm25-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -sparse-collection ragbench-wiki18-bm25 -architecture bm25 -concurrency 48 -dump runs/bm25-triviaqa.jsonl -name BMTwentyFiveTriviaQA -tex-out paper/bm25-triviaqa.gen.tex
-
-# Hybrid - dense and lexical fused by Reciprocal Rank Fusion.
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-musique.jsonl -name HybridMuSiQue -tex-out paper/hybrid-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-hotpotqa.jsonl -name HybridHotpotQA -tex-out paper/hybrid-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-2wiki.jsonl -name HybridTwoWiki -tex-out paper/hybrid-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-nq.jsonl -name HybridNQ -tex-out paper/hybrid-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hybrid -concurrency 48 -dump runs/hybrid-triviaqa.jsonl -name HybridTriviaQA -tex-out paper/hybrid-triviaqa.gen.tex
-
-# Adaptive - one classification call routes each question to closedbook, naive or ircot.
-# The generated .tex also carries the route distribution (\<Name>RouteClosedbook / RouteSingle / RouteMulti).
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-musique.jsonl -name AdaptiveMuSiQue -tex-out paper/adaptive-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-hotpotqa.jsonl -name AdaptiveHotpotQA -tex-out paper/adaptive-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-2wiki.jsonl -name AdaptiveTwoWiki -tex-out paper/adaptive-2wiki.gen.tex
-go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-nq.jsonl -name AdaptiveNQ -tex-out paper/adaptive-nq.gen.tex
-go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-triviaqa.jsonl -name AdaptiveTriviaQA -tex-out paper/adaptive-triviaqa.gen.tex
-
-# Neighbour expansion - each hit is joined by the passages next to it in the same article.
-# The first run builds dataset/wiki18_100w.titles.gob from the corpus (~1.5 min, 159 MB) and reuses it afterwards.
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-musique.jsonl -name NeighbourMuSiQue -tex-out paper/neighbour-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-hotpotqa.jsonl -name NeighbourHotpotQA -tex-out paper/neighbour-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture neighbour -concurrency 48 -dump runs/neighbour-2wiki.jsonl -name NeighbourTwoWiki -tex-out paper/neighbour-2wiki.gen.tex
-
-# Naive RAG, 12 passages - the matched-budget control for neighbour expansion,
-# which puts 11.7 passages in context on average. Without it the neighbour row
-# measures context size rather than chunking.
-go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-musique.jsonl -name NaiveRAGTopTwelveMuSiQue -tex-out paper/naive12-musique.gen.tex
-go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-hotpotqa.jsonl -name NaiveRAGTopTwelveHotpotQA -tex-out paper/naive12-hotpotqa.gen.tex
-go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 12 -concurrency 48 -dump runs/naive12-2wiki.jsonl -name NaiveRAGTopTwelveTwoWiki -tex-out paper/naive12-2wiki.gen.tex
+make bench           # every architecture below, cheapest first
+make naive-rag       # just this one, on all five question sets
 ```
+
+| target | architecture | question sets | cost per question |
+|---|---|---|---|
+| `closedbook` | no retrieval at all - the floor every other row is read against | all 5 | 1 LLM call |
+| `naive-rag` | one query, top 5 passages | all 5 | 1 |
+| `naive-rag-ten` | top 10 - matched-budget control for IRCoT and CRAG | multi-hop 3 | 1 |
+| `naive-rag-twelve` | top 12 - matched-budget control for neighbour expansion | multi-hop 3 | 1 |
+| `bm25` | lexical retrieval only, no embedding model in the loop | all 5 | 1 |
+| `hybrid` | dense + BM25 fused by Reciprocal Rank Fusion | all 5 | 1 |
+| `hyde` | search with a drafted passage instead of the question | all 5 | 2 |
+| `rerank` | 100 candidates reordered by a cross-encoder | all 5 | 1 + 1 cross-encoder pass |
+| `neighbour` | each hit joined by its neighbours in the same article | multi-hop 3 | 1 |
+| `crag` | grade the retrieval, rewrite and re-search when it is poor | all 5 | 3 |
+| `crag-ten` | the same at a 10-passage budget | multi-hop 3 | 3 |
+| `ircot` | interleave one sentence of reasoning with one retrieval | all 5 | 2-6 |
+| `adaptive` | one call routes to closedbook, naive or ircot | all 5 | 2-7 |
+
+Every recipe is a plain `go run` line, so a single question set can be run by
+copying the one line out of the Makefile and editing it - use a scratch `-dump`
+path if you add `-limit` for a smoke test, or the real files get overwritten
+with a sample.
 
 ## Diagnose retrieval failures
 
+Splits the naive baseline's retrieval failures into causes that call for
+different fixes - wrong slice of the right article, right article ranked too
+low, article unreachable by this query, no gold article stating the answer,
+article absent from the corpus - and reports what choosing per question between
+retrieval and closed-book would be worth.
+
 ```sh
-go run ./cmd/diagnose -dataset dataset/musique_dev.jsonl -run runs/naive-musique.jsonl -closedbook runs/closedbook-musique.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagMuSiQue -tex-out paper/diagnosis-musique.gen.tex
-go run ./cmd/diagnose -dataset dataset/hotpotqa_dev.jsonl -run runs/naive-hotpotqa.jsonl -closedbook runs/closedbook-hotpotqa.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagHotpotQA -tex-out paper/diagnosis-hotpotqa.gen.tex
-go run ./cmd/diagnose -dataset dataset/2wikimultihopqa_dev.jsonl -run runs/naive-2wiki.jsonl -closedbook runs/closedbook-2wiki.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagTwoWiki -tex-out paper/diagnosis-2wiki.gen.tex
+make diagnose
 ```
+
+It needs `runs/naive-<slug>.jsonl` and `runs/closedbook-<slug>.jsonl`, so run
+`make closedbook naive-rag` first.
 
 ## Compare runs
 
+Paired significance tests over the per-question dumps: McNemar on the binary
+metrics, Wilcoxon on the continuous ones, a paired bootstrap interval for the
+size of each difference, and a Holm adjustment across the family because a
+dozen tests on one pair of runs will produce a small p by chance alone.
+
 ```sh
-go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/ircot-musique.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTMuSiQue -tex-out paper/cmp-naive-ircot-musique.gen.tex
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTHotpotQA -tex-out paper/cmp-naive-ircot-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTTwoWiki -tex-out paper/cmp-naive-ircot-2wiki.gen.tex
-
-go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/crag-musique.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGMuSiQue -tex-out paper/cmp-naive-crag-musique.gen.tex
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/crag-hotpotqa.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGHotpotQA -tex-out paper/cmp-naive-crag-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/crag-2wiki.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGTwoWiki -tex-out paper/cmp-naive-crag-2wiki.gen.tex
-
-go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot-musique.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTMuSiQue -tex-out paper/cmp-naive10-ircot-musique.gen.tex
-go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTHotpotQA -tex-out paper/cmp-naive10-ircot-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTTwoWiki -tex-out paper/cmp-naive10-ircot-2wiki.gen.tex
-
-go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/crag10-musique.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenMuSiQue -tex-out paper/cmp-naive10-crag10-musique.gen.tex
-go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/crag10-hotpotqa.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenHotpotQA -tex-out paper/cmp-naive10-crag10-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/crag10-2wiki.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenTwoWiki -tex-out paper/cmp-naive10-crag10-2wiki.gen.tex
-
-go run ./cmd/compare -a runs/closedbook-musique.jsonl -b runs/naive-musique.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveMuSiQue -tex-out paper/cmp-closedbook-naive-musique.gen.tex
-go run ./cmd/compare -a runs/closedbook-hotpotqa.jsonl -b runs/naive-hotpotqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveHotpotQA -tex-out paper/cmp-closedbook-naive-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTwoWiki -tex-out paper/cmp-closedbook-naive-2wiki.gen.tex
-go run ./cmd/compare -a runs/closedbook-nq.jsonl -b runs/naive-nq.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveNQ -tex-out paper/cmp-closedbook-naive-nq.gen.tex
-go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTriviaQA -tex-out paper/cmp-closedbook-naive-triviaqa.gen.tex
-
-# Rerank and HyDE keep the baseline's 5-passage budget, so naive is the right control.
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/rerank-hotpotqa.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveVsRerankHotpotQA -tex-out paper/cmp-naive-rerank-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/hyde-hotpotqa.jsonl -name-a NaiveRAG -name-b HyDE -name NaiveVsHyDEHotpotQA -tex-out paper/cmp-naive-hyde-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/bm25-hotpotqa.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveHotpotQA -tex-out paper/cmp-naive-bm25-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/hybrid-hotpotqa.jsonl -name-a NaiveRAG -name-b Hybrid -name NaiveVsHybridHotpotQA -tex-out paper/cmp-naive-hybrid-hotpotqa.gen.tex
-
-# Neighbour expansion changes the context size, so it is read against naive12.
-go run ./cmd/compare -a runs/naive12-hotpotqa.jsonl -b runs/neighbour-hotpotqa.jsonl -name-a NaiveTwelve -name-b Neighbour -name NaiveTwelveVsNeighbourHotpotQA -tex-out paper/cmp-naive12-neighbour-hotpotqa.gen.tex
-
-# The adaptive router is the baseline for a routing architecture, so it is read
-# against the branches it picks between.
-go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/adaptive-hotpotqa.jsonl -name-a NaiveRAG -name-b Adaptive -name NaiveVsAdaptiveHotpotQA -tex-out paper/cmp-naive-adaptive-hotpotqa.gen.tex
-go run ./cmd/compare -a runs/ircot-hotpotqa.jsonl -b runs/adaptive-hotpotqa.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveHotpotQA -tex-out paper/cmp-ircot-adaptive-hotpotqa.gen.tex
+make compare
 ```
+
+| pair | why this control |
+|---|---|
+| closedbook vs naive | is retrieval worth anything at all on this dataset |
+| naive vs bm25, hybrid, hyde, rerank | all keep the 5-passage budget, so the difference is which passages were chosen |
+| naive10 vs ircot and crag10 | these put more passages in context, so the baseline is given the same number |
+| naive12 vs neighbour | neighbour puts ~11.7 passages in context |
+| naive vs adaptive, ircot vs adaptive | a router is only interesting against the branches it picks between |
+
+`make all` runs the benchmarks, the diagnosis and the comparisons in order.
 
 ## Check ingested data
 
@@ -226,17 +173,29 @@ curl -s -X DELETE http://localhost:6333/collections/ragbench-test
   * CQC-RAG
 
 ## RAG Measurements
-  * Recall@K: in how many cases does the model retrieve the correct document. Recall@5 = 0.8 means the model retrieved the correct document in 80% of top 5 retrieved documents.
-  * Precision@K: how many of the top K retrieved documents are relevant. Precision@5 = 0.8 means 80% of top 5 retrieved documents are relevant.
+  * Recall in context: the fraction of a question's gold articles that appear among the passages actually placed in the generator's context. Not "Recall@5": IRCoT accumulates passages over several rounds and puts more than `-top-k` in context, so the mean context size is reported beside it and the matched-budget runs (`-top-k 10`, `-top-k 12`) are the controls that make the comparison fair.
+  * Recall ceiling: the fraction of gold articles that exist in the corpus at all, measured by `cmd/coverage`. It is the maximum Recall in context can take, and it is well below 1 (0.726 on 2WikiMultihopQA, 0.899 on HotpotQA, 0.887 on MuSiQue).
   * MRR (Mean Reciprocal Rank): the average of the reciprocal ranks of the first relevant document for each query.
+  * Answer in context: whether a gold answer appears as a run of whole tokens in a retrieved passage. Skipped for yes/no questions, which have no answer span in the supporting text.
+  * Article titles are compared after Unicode normalisation; the corpus and the question sets disagree on whether an accented letter is stored precomposed, and a byte comparison loses 4.5% of 2WikiMultihopQA's gold articles to that alone.
 
 ## Generation Measurements
   * Exact Match (EM): does the response match the answer exactly.
   * F1 (token-level): the F1 score at the token level.
-  * Faithfulness/groundedness: how well the model's response is grounded in the retrieved documents. For instance, LLM as judge is used to score the response.
-  * Answer Relevance: how well the model's response is relevant to the query.
-  * Number of tokens: the number of tokens in the model's response.
-  * Latency: the time it takes for the model to generate a response.
+  * Abstention rate: how often the system declined instead of answering. Exact Match cannot tell a refusal from a wrong guess, and a reader holding irrelevant documents refuses while a closed-book reader guesses - which is what makes ClosedBook appear to beat NaiveRAG on 2WikiMultihopQA. EM is therefore also reported over the questions the system did not decline.
+  * LLM calls and tokens per question: the cost measure that is comparable across hardware, unlike latency.
+  * Latency: only meaningful at `-concurrency 1`; above it the per-question timing includes queueing, and the generated fragment omits the command entirely so a table cannot quote it by accident.
+  * Faithfulness/groundedness and Answer Relevance: not implemented.
+
+## A note on naming
+
+The `crag` architecture is not the full method and is labelled "CRAG (offline,
+corpus-only)" in the paper: there is no web search (a query rewrite over the
+same corpus replaces it, which bounds it by what the corpus contains) and no
+knowledge refinement step. The `adaptive` router likewise classifies with the
+generator instead of the paper's trained classifier. Both deviations keep the
+corpus, retriever and generator identical across architectures, which is what
+makes the comparison controlled - but they have to be named.
 
 ## Bibliography
 - Agentic Retrieval-Augmented Generation: A Survey — https://arxiv.org/abs/2501.09136

@@ -56,6 +56,16 @@ type Qdrant struct {
 	URL    string
 	Client *http.Client
 
+	// HNSWEf is the size of the candidate list Qdrant keeps while walking the
+	// HNSW graph. Left at 0 the server picks its own default, which makes the
+	// approximate search's own recall an unreported property of the
+	// experiment - and a load-bearing one: a rerank run asks for the top 100
+	// and cmd/diagnose for the top 1000, both far beyond the depth a default
+	// ef is tuned for, so a passage counted as "not reachable by this query"
+	// may only have been missed by the graph walk. Set it explicitly and
+	// report it.
+	HNSWEf int
+
 	// Wait makes every upsert block until the points are durably applied.
 	// This is what turns "the request returned 200" into "the points are in
 	// the collection", and it is also the backpressure that stops the ingest
@@ -265,6 +275,9 @@ func (q *Qdrant) Search(ctx context.Context, collection string, vector []float32
 		"vector":       vector,
 		"limit":        limit,
 		"with_payload": true,
+	}
+	if q.HNSWEf > 0 {
+		body["params"] = map[string]any{"hnsw_ef": q.HNSWEf}
 	}
 	raw, err := q.doJSON(ctx, http.MethodPost, q.URL+"/collections/"+collection+"/points/search", body)
 	if err != nil {

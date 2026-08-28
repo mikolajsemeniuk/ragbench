@@ -28,7 +28,9 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"slices"
+	"strings"
 )
 
 type record struct {
@@ -52,6 +54,8 @@ func main() {
 		nameB     = flag.String("name-b", "B", "label for the compared run")
 		resamples = flag.Int("bootstrap", 10000, "bootstrap resamples for the confidence interval of the difference")
 		seed      = flag.Int64("seed", 42, "bootstrap seed, so the reported interval is reproducible")
+		texOut    = flag.String("tex-out", "", "path of a .tex file to write the differences and their intervals to - optional")
+		name      = flag.String("name", "", "name used in the generated .tex commands (defaults to name-a vs name-b)")
 	)
 	flag.Parse()
 
@@ -95,6 +99,7 @@ func main() {
 	rng := rand.New(rand.NewSource(*seed))
 	fmt.Printf("%-20s %10s %10s %10s   %-24s %s\n", "metric", *nameA, *nameB, "diff", "95% CI of diff", "paired test")
 
+	var tex strings.Builder
 	report := func(name string, get func(record) float64, gated bool, test string) {
 		var va, vb []float64
 		for i := range pa {
@@ -124,6 +129,14 @@ func main() {
 			verdict = wilcoxon(diffs)
 		}
 		fmt.Printf("%-20s %10.4f %10.4f %+10.4f   [%+.4f, %+.4f]   %s\n", name, ma, mb, mb-ma, lo, hi, verdict)
+
+		key := texSafeID(name)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sA}{%.4f}\n", key, ma)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sB}{%.4f}\n", key, mb)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sDiff}{%+.4f}\n", key, mb-ma)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sCILow}{%+.4f}\n", key, lo)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sCIHigh}{%+.4f}\n", key, hi)
+		fmt.Fprintf(&tex, "\\newcommand{\\%%[1]s%sP}{%s}\n", key, extractP(verdict))
 	}
 
 	report("Exact Match", func(r record) float64 { return r.EM }, false, "mcnemar")
@@ -136,6 +149,52 @@ func main() {
 
 	fmt.Printf("\nA 95%% CI of the difference that excludes 0 means the gap survives resampling.\n")
 	fmt.Printf("Paired tests use only the questions where the two systems disagree.\n")
+
+	if *texOut != "" {
+		label := *name
+		if label == "" {
+			label = *nameA + "Vs" + *nameB
+		}
+		id := texSafeID(label)
+		body := "%% generated automatically by cmd/compare - do not edit by hand\n" +
+			fmt.Sprintf("\\newcommand{\\%sPaired}{%d}\n", id, len(pa)) +
+			fmt.Sprintf(tex.String(), id)
+		if dir := filepath.Dir(*texOut); dir != "." {
+			if err := os.MkdirAll(dir, 0o755); err != nil {
+				log.Fatalf("create dir: %v", err)
+			}
+		}
+		if err := os.WriteFile(*texOut, []byte(body), 0o644); err != nil {
+			log.Fatalf("writing tex: %v", err)
+		}
+		log.Printf("written to %s", *texOut)
+	}
+}
+
+// texSafeID drops every character outside [A-Za-z], because a LaTeX
+// \newcommand name may contain letters only.
+func texSafeID(name string) string {
+	var b strings.Builder
+	for _, r := range name {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+// extractP pulls the bare p-value out of a verdict line, so the .tex carries
+// the number rather than the prose around it.
+func extractP(verdict string) string {
+	i := strings.Index(verdict, "p=")
+	if i < 0 {
+		return "n/a"
+	}
+	rest := verdict[i+2:]
+	if j := strings.IndexAny(rest, " ("); j >= 0 {
+		rest = rest[:j]
+	}
+	return rest
 }
 
 func load(path string) ([]record, error) {

@@ -17,85 +17,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/flashrag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/metrics"
 	"github.com/mikolajsemeniuk/ragbench/pkg/provider"
 	"github.com/mikolajsemeniuk/ragbench/pkg/rag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
 
-// datasetLine mirrors the FlashRAG question-set format. Metadata is kept raw
-// because its shape differs between datasets - see extractGoldTitles.
-type datasetLine struct {
-	Question      string          `json:"question"`
-	GoldenAnswers []string        `json:"golden_answers"`
-	Metadata      json.RawMessage `json:"metadata"`
-}
-
-// datasetMetadata covers the two shapes of gold-document annotation found in
-// the FlashRAG datasets:
-//   - HotpotQA / 2WikiMultihopQA: metadata.supporting_facts.title
-//   - MuSiQue: metadata.question_decomposition[].support_paragraph.title
-//
-// NaturalQuestions and TriviaQA carry no such annotation (open-domain QA with
-// no designated gold passages), so Recall@K/MRR cannot be computed for them -
-// only answer-in-context.
-type datasetMetadata struct {
-	SupportingFacts struct {
-		Title []string `json:"title"`
-	} `json:"supporting_facts"`
-	QuestionDecomposition []struct {
-		SupportParagraph struct {
-			Title string `json:"title"`
-		} `json:"support_paragraph"`
-	} `json:"question_decomposition"`
-}
-
-// extractGoldTitles returns the unique gold document titles for a question if
-// the dataset annotates them, and nil otherwise.
-func extractGoldTitles(raw json.RawMessage) []string {
-	if len(raw) == 0 {
-		return nil
-	}
-
-	var m datasetMetadata
-	if err := json.Unmarshal(raw, &m); err != nil {
-		return nil
-	}
-
-	seen := make(map[string]struct{})
-	var titles []string
-	add := func(t string) {
-		if t == "" {
-			return
-		}
-		if _, ok := seen[t]; ok {
-			return
-		}
-		seen[t] = struct{}{}
-		titles = append(titles, t)
-	}
-
-	for _, t := range m.SupportingFacts.Title {
-		add(t)
-	}
-	for _, qd := range m.QuestionDecomposition {
-		add(qd.SupportParagraph.Title)
-	}
-	return titles
-}
-
-// extractTitle pulls the article title out of a FlashRAG passage, whose first
-// line is the quoted title, e.g. "\"Title\"\nText...".
-//
-// This is what lets the retrieval metrics be computed from the retrieved
-// passages alone. The alternative - loading the whole 21M-passage corpus to
-// build a title->ID index in memory just to translate gold titles into gold
-// IDs - costs gigabytes of RAM and a full pass over a 14GB file on every run,
-// to answer a question the five retrieved payloads already answer.
-func extractTitle(contents string) string {
-	line, _, _ := strings.Cut(contents, "\n")
-	return strings.Trim(line, "\"")
-}
+// datasetLine is the FlashRAG question record; the format lives in
+// pkg/flashrag so that cmd/diagnose reads the gold annotation exactly the same
+// way this command scores it.
+type datasetLine = flashrag.Question
 
 type Embedder interface {
 	Embed(ctx context.Context, texts []string) ([][]float32, error)
@@ -431,7 +363,7 @@ func evaluate(ctx context.Context, pipeline Pipeline, item datasetLine, topK int
 	titles := make([]string, len(passages))
 	for i, p := range passages {
 		texts[i] = p.Text
-		titles[i] = extractTitle(p.Text)
+		titles[i] = flashrag.PassageTitle(p.Text)
 	}
 
 	r := result{
@@ -443,7 +375,7 @@ func evaluate(ctx context.Context, pipeline Pipeline, item datasetLine, topK int
 		inCtx:    metrics.AnswerInContext(texts, item.GoldenAnswers),
 		latency:  latency,
 	}
-	if gold := extractGoldTitles(item.Metadata); len(gold) > 0 {
+	if gold := flashrag.GoldTitles(item.Metadata); len(gold) > 0 {
 		r.hasGold = true
 		// Scored over every passage placed in the generator's context, not
 		// over the first topK. An architecture that accumulates passages

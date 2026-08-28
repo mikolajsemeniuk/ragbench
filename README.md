@@ -79,6 +79,11 @@ curl -s http://localhost:6333/collections/ragbench-test | jq '.result.points_cou
 curl -s -X DELETE http://localhost:6333/collections/ragbench-test
 ```
 
+## Foundation
+* Get the nearest pieces the same article (28–42% improvement). If the search result is an article, also include the piece before and after.
+* Add keyword search (12–25% improvement). Cases where search is found by exact keyword match catch other results.
+* Divide the question into steps (improves 11–26%). The impossible cases like "mother of the dicector of movie X". This is what IRCoT does so it wins
+
 ## Dataset
 [RUC-NLPIR/FlashRAG_datasets](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/retrieval-corpus)
 [Natural Questions (nq)](https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/nq)

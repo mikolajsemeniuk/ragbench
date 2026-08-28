@@ -3,6 +3,8 @@
 * Health check the embedder
 * Ingest data
 * Run benchmark
+* Diagnose retrieval failures
+* Compare runs
 * Check ingested data
 * Clean collection
 * Dataset
@@ -14,7 +16,7 @@
 ## Setup
 
 ```sh
-docker compose up -d qdrant vllm-embed vllm-llm
+docker compose up -d qdrant vllm-embed vllm-llm vllm-rerank
 ```
 
 ## Health check the embedder
@@ -64,18 +66,56 @@ go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragben
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-nq.jsonl -name ClosedBookNQ -tex-out paper/closedbook-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-triviaqa.jsonl -name ClosedBookTriviaQA -tex-out paper/closedbook-triviaqa.gen.tex
 
+# Naive RAG, 10 passages - the matched-budget control for IRCoT and CRAG
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-musique.jsonl -name NaiveRAGTopTenMuSiQue -tex-out paper/naive10-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-hotpotqa.jsonl -name NaiveRAGTopTenHotpotQA -tex-out paper/naive10-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture naive -top-k 10 -concurrency 48 -dump runs/naive10-2wiki.jsonl -name NaiveRAGTopTenTwoWiki -tex-out paper/naive10-2wiki.gen.tex
+
+# CRAG, 10 passages
+go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-musique.jsonl -name CRAGTopTenMuSiQue -tex-out paper/crag10-musique.gen.tex
+go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-hotpotqa.jsonl -name CRAGTopTenHotpotQA -tex-out paper/crag10-hotpotqa.gen.tex
+go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture crag -top-k 10 -crag-max-passages 10 -concurrency 48 -dump runs/crag10-2wiki.jsonl -name CRAGTopTenTwoWiki -tex-out paper/crag10-2wiki.gen.tex
+
 # Rerank
 go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-musique.jsonl -name RerankMuSiQue -tex-out paper/rerank-musique.gen.tex
 go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-hotpotqa.jsonl -name RerankHotpotQA -tex-out paper/rerank-hotpotqa.gen.tex
 go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-2wiki.jsonl -name RerankTwoWiki -tex-out paper/rerank-2wiki.gen.tex
 go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-nq.jsonl -name RerankNQ -tex-out paper/rerank-nq.gen.tex
 go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture rerank -concurrency 48 -dump runs/rerank-triviaqa.jsonl -name RerankTriviaQA -tex-out paper/rerank-triviaqa.gen.tex
+```
 
-go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot-musique.jsonl -name-a Naive10 -name-b IRCoT
-go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a Naive10 -name-b IRCoT
-go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a Naive10 -name-b IRCoT
-go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG
-go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG
+## Diagnose retrieval failures
+
+```sh
+go run ./cmd/diagnose -dataset dataset/musique_dev.jsonl -run runs/naive-musique.jsonl -closedbook runs/closedbook-musique.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagMuSiQue -tex-out paper/diagnosis-musique.gen.tex
+go run ./cmd/diagnose -dataset dataset/hotpotqa_dev.jsonl -run runs/naive-hotpotqa.jsonl -closedbook runs/closedbook-hotpotqa.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagHotpotQA -tex-out paper/diagnosis-hotpotqa.gen.tex
+go run ./cmd/diagnose -dataset dataset/2wikimultihopqa_dev.jsonl -run runs/naive-2wiki.jsonl -closedbook runs/closedbook-2wiki.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagTwoWiki -tex-out paper/diagnosis-2wiki.gen.tex
+```
+
+## Compare runs
+
+```sh
+go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/ircot-musique.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTMuSiQue -tex-out paper/cmp-naive-ircot-musique.gen.tex
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTHotpotQA -tex-out paper/cmp-naive-ircot-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a NaiveRAG -name-b IRCoT -name NaiveVsIRCoTTwoWiki -tex-out paper/cmp-naive-ircot-2wiki.gen.tex
+
+go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/crag-musique.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGMuSiQue -tex-out paper/cmp-naive-crag-musique.gen.tex
+go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/crag-hotpotqa.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGHotpotQA -tex-out paper/cmp-naive-crag-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/crag-2wiki.jsonl -name-a NaiveRAG -name-b CRAG -name NaiveVsCRAGTwoWiki -tex-out paper/cmp-naive-crag-2wiki.gen.tex
+
+go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot-musique.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTMuSiQue -tex-out paper/cmp-naive10-ircot-musique.gen.tex
+go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot-hotpotqa.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTHotpotQA -tex-out paper/cmp-naive10-ircot-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/ircot-2wiki.jsonl -name-a NaiveTen -name-b IRCoT -name NaiveTenVsIRCoTTwoWiki -tex-out paper/cmp-naive10-ircot-2wiki.gen.tex
+
+go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/crag10-musique.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenMuSiQue -tex-out paper/cmp-naive10-crag10-musique.gen.tex
+go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/crag10-hotpotqa.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenHotpotQA -tex-out paper/cmp-naive10-crag10-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/crag10-2wiki.jsonl -name-a NaiveTen -name-b CRAGTen -name NaiveTenVsCRAGTenTwoWiki -tex-out paper/cmp-naive10-crag10-2wiki.gen.tex
+
+go run ./cmd/compare -a runs/closedbook-musique.jsonl -b runs/naive-musique.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveMuSiQue -tex-out paper/cmp-closedbook-naive-musique.gen.tex
+go run ./cmd/compare -a runs/closedbook-hotpotqa.jsonl -b runs/naive-hotpotqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveHotpotQA -tex-out paper/cmp-closedbook-naive-hotpotqa.gen.tex
+go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTwoWiki -tex-out paper/cmp-closedbook-naive-2wiki.gen.tex
+go run ./cmd/compare -a runs/closedbook-nq.jsonl -b runs/naive-nq.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveNQ -tex-out paper/cmp-closedbook-naive-nq.gen.tex
+go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTriviaQA -tex-out paper/cmp-closedbook-naive-triviaqa.gen.tex
 ```
 
 ## Check ingested data

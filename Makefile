@@ -5,7 +5,7 @@
 	naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag \
 	crag-ten ircot adaptive diagnose compare
 
-all: bench diagnose compare
+all: bench diagnose compare coverage
 
 # Approx 3h on the GPU. An interrupted run prints the line to resume from;
 # re-run it by hand with -skip N.
@@ -126,6 +126,8 @@ compare:
 	go run ./cmd/compare -a runs/closedbook-musique.jsonl -b runs/naive-musique.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveMuSiQue -tex-out paper/cmp-closedbook-naive-musique.gen.tex
 	go run ./cmd/compare -a runs/closedbook-hotpotqa.jsonl -b runs/naive-hotpotqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveHotpotQA -tex-out paper/cmp-closedbook-naive-hotpotqa.gen.tex
 	go run ./cmd/compare -a runs/closedbook-2wiki.jsonl -b runs/naive-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTwoWiki -tex-out paper/cmp-closedbook-naive-2wiki.gen.tex
+	go run ./cmd/compare -a runs/closedbook-nq.jsonl -b runs/naive-nq.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveNQ -tex-out paper/cmp-closedbook-naive-nq.gen.tex
+	go run ./cmd/compare -a runs/closedbook-triviaqa.jsonl -b runs/naive-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveTriviaQA -tex-out paper/cmp-closedbook-naive-triviaqa.gen.tex
 	go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/bm25-musique.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveMuSiQue -tex-out paper/cmp-naive-bm25-musique.gen.tex
 	go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/bm25-hotpotqa.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveHotpotQA -tex-out paper/cmp-naive-bm25-hotpotqa.gen.tex
 	go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/bm25-2wiki.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveTwoWiki -tex-out paper/cmp-naive-bm25-2wiki.gen.tex

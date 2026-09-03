@@ -155,3 +155,15 @@ compare:
 	go run ./cmd/compare -a runs/ircot-musique.jsonl -b runs/adaptive-musique.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveMuSiQue -tex-out paper/cmp-ircot-adaptive-musique.gen.tex
 	go run ./cmd/compare -a runs/ircot-hotpotqa.jsonl -b runs/adaptive-hotpotqa.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveHotpotQA -tex-out paper/cmp-ircot-adaptive-hotpotqa.gen.tex
 	go run ./cmd/compare -a runs/ircot-2wiki.jsonl -b runs/adaptive-2wiki.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveTwoWiki -tex-out paper/cmp-ircot-adaptive-2wiki.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/bm25-nq.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveNQ -tex-out paper/cmp-naive-bm25-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/bm25-triviaqa.jsonl -name-a NaiveRAG -name-b BMTwentyFive -name NaiveVsBMTwentyFiveTriviaQA -tex-out paper/cmp-naive-bm25-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/hybrid-nq.jsonl -name-a NaiveRAG -name-b Hybrid -name NaiveVsHybridNQ -tex-out paper/cmp-naive-hybrid-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/hybrid-triviaqa.jsonl -name-a NaiveRAG -name-b Hybrid -name NaiveVsHybridTriviaQA -tex-out paper/cmp-naive-hybrid-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/hyde-nq.jsonl -name-a NaiveRAG -name-b HyDE -name NaiveVsHyDENQ -tex-out paper/cmp-naive-hyde-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/hyde-triviaqa.jsonl -name-a NaiveRAG -name-b HyDE -name NaiveVsHyDETriviaQA -tex-out paper/cmp-naive-hyde-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/rerank-nq.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveVsRerankNQ -tex-out paper/cmp-naive-rerank-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/rerank-triviaqa.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveVsRerankTriviaQA -tex-out paper/cmp-naive-rerank-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/adaptive-nq.jsonl -name-a NaiveRAG -name-b Adaptive -name NaiveVsAdaptiveNQ -tex-out paper/cmp-naive-adaptive-nq.gen.tex
+	go run ./cmd/compare -a runs/ircot-nq.jsonl -b runs/adaptive-nq.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveNQ -tex-out paper/cmp-ircot-adaptive-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/adaptive-triviaqa.jsonl -name-a NaiveRAG -name-b Adaptive -name NaiveVsAdaptiveTriviaQA -tex-out paper/cmp-naive-adaptive-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/ircot-triviaqa.jsonl -b runs/adaptive-triviaqa.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveTriviaQA -tex-out paper/cmp-ircot-adaptive-triviaqa.gen.tex

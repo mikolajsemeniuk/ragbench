@@ -1,7 +1,0 @@
-{"id": "test_0", "question": "Who invented the Solvane Engine?", "golden_answers": ["Kestrel Vance"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["Solvane Engine"], "sent_id": [0]}}}
-{"id": "test_1", "question": "In what year was the planet Virel Prime discovered?", "golden_answers": ["2031"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["Virel Prime"], "sent_id": [0]}}}
-{"id": "test_2", "question": "What star does the planet discovered by Talia Nord orbit?", "golden_answers": ["Corvexa"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["Talia Nord", "Virel Prime"], "sent_id": [0, 0]}}}
-{"id": "test_3", "question": "In which city was the inventor of the Solvane Engine born?", "golden_answers": ["Duskhaven"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["Solvane Engine", "Kestrel Vance"], "sent_id": [0, 0]}}}
-{"id": "test_4", "question": "Were Kestrel Vance and Orlen Hask born in the same city?", "golden_answers": ["yes"], "metadata": {"type": "comparison", "supporting_facts": {"title": ["Kestrel Vance", "Orlen Hask"], "sent_id": [0, 0]}}}
-{"id": "test_5", "question": "Which nation is Duskhaven the capital of?", "golden_answers": ["Ashmere Republic"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["Duskhaven"], "sent_id": [0]}}}
-{"id": "test_6", "question": "Who wrote The Glass Meridian?", "golden_answers": ["Orlen Hask"], "metadata": {"type": "bridge", "supporting_facts": {"title": ["The Glass Meridian"], "sent_id": [0]}}}

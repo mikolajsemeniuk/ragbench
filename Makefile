@@ -3,7 +3,7 @@
 
 .PHONY: all ingest ingest-sparse coverage bench closedbook naive-rag \
 	naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag \
-	crag-ten ircot adaptive diagnose compare
+	crag-ten ircot adaptive fused cascade cascade-rerank diagnose compare
 
 all: bench diagnose compare coverage
 
@@ -25,7 +25,7 @@ coverage:
 	go run ./cmd/coverage -dataset dataset/2wikimultihopqa_dev.jsonl -name CoverageTwoWiki -tex-out paper/coverage-2wiki.gen.tex
 
 # Cheapest first, so a broken stack fails in minutes rather than hours.
-bench: closedbook naive-rag naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag crag-ten ircot adaptive
+bench: closedbook naive-rag naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag crag-ten ircot adaptive cascade
 
 closedbook:
 	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture closedbook -concurrency 48 -dump runs/closedbook-musique.jsonl -name ClosedBookMuSiQue -tex-out paper/closedbook-musique.gen.tex
@@ -114,6 +114,52 @@ adaptive:
 	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-nq.jsonl -name AdaptiveNQ -tex-out paper/adaptive-nq.gen.tex
 	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-triviaqa.jsonl -name AdaptiveTriviaQA -tex-out paper/adaptive-triviaqa.gen.tex
 
+# ABLATIONS. Not part of `make bench` - the architecture is `cascade`.
+#
+# Its Exact Match ablation needs no run at all: in the cascade, stage 1 answers
+# every question, and every escalated question is one where stage 1 abstained,
+# which scores Exact Match 0 by construction. So stage-1 EM is recoverable from
+# runs/cascade-*.jsonl by summing EM over the rows whose "stage" is the first
+# stage. Run this target only for the metrics that are NOT recoverable that way
+# - Recall, MRR and answer-in-context of stage 1 on its own.
+fused:
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-musique.jsonl -name FusedMuSiQue -tex-out paper/fused-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-hotpotqa.jsonl -name FusedHotpotQA -tex-out paper/fused-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-2wiki.jsonl -name FusedTwoWiki -tex-out paper/fused-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-nq.jsonl -name FusedNQ -tex-out paper/fused-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-triviaqa.jsonl -name FusedTriviaQA -tex-out paper/fused-triviaqa.gen.tex
+
+# The proposed architecture: fused retrieval, escalating only the questions the
+# reader itself declined to answer. Its Recall and MRR are NOT comparable with
+# a pure retrieval system's - questions that reach the closed-book stage end
+# with no passages at all - so compare it on Exact Match.
+cascade:
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-musique.jsonl -name CascadeMuSiQue -tex-out paper/cascade-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-hotpotqa.jsonl -name CascadeHotpotQA -tex-out paper/cascade-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-2wiki.jsonl -name CascadeTwoWiki -tex-out paper/cascade-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-nq.jsonl -name CascadeNQ -tex-out paper/cascade-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-triviaqa.jsonl -name CascadeTriviaQA -tex-out paper/cascade-triviaqa.gen.tex
+
+	go run ./cmd/compare -a runs/rerank-musique.jsonl -b runs/fused-musique.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedMuSiQue -tex-out paper/cmp-rerank-fused-musique.gen.tex
+	go run ./cmd/compare -a runs/fused-musique.jsonl -b runs/cascade-musique.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeMuSiQue -tex-out paper/cmp-fused-cascade-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-hotpotqa.jsonl -b runs/fused-hotpotqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedHotpotQA -tex-out paper/cmp-rerank-fused-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/fused-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeHotpotQA -tex-out paper/cmp-fused-cascade-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-2wiki.jsonl -b runs/fused-2wiki.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTwoWiki -tex-out paper/cmp-rerank-fused-2wiki.gen.tex
+	go run ./cmd/compare -a runs/fused-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTwoWiki -tex-out paper/cmp-fused-cascade-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-nq.jsonl -b runs/fused-nq.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedNQ -tex-out paper/cmp-rerank-fused-nq.gen.tex
+	go run ./cmd/compare -a runs/fused-nq.jsonl -b runs/cascade-nq.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeNQ -tex-out paper/cmp-fused-cascade-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-triviaqa.jsonl -b runs/fused-triviaqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTriviaQA -tex-out paper/cmp-rerank-fused-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/fused-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTriviaQA -tex-out paper/cmp-fused-cascade-triviaqa.gen.tex
+
+# Isolates what the fusion contributes: the same cascade with plain reranking
+# as stage 1.
+cascade-rerank:
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-stages rerank,hyde,closedbook -concurrency 48 -dump runs/cascade-rr-musique.jsonl -name CascadeRerankMuSiQue -tex-out paper/cascade-rr-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-stages rerank,hyde,closedbook -concurrency 48 -dump runs/cascade-rr-hotpotqa.jsonl -name CascadeRerankHotpotQA -tex-out paper/cascade-rr-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-stages rerank,hyde,closedbook -concurrency 48 -dump runs/cascade-rr-2wiki.jsonl -name CascadeRerankTwoWiki -tex-out paper/cascade-rr-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-stages rerank,hyde,closedbook -concurrency 48 -dump runs/cascade-rr-nq.jsonl -name CascadeRerankNQ -tex-out paper/cascade-rr-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-stages rerank,hyde,closedbook -concurrency 48 -dump runs/cascade-rr-triviaqa.jsonl -name CascadeRerankTriviaQA -tex-out paper/cascade-rr-triviaqa.gen.tex
+
 # Needs the naive and closedbook runs.
 diagnose:
 	go run ./cmd/diagnose -dataset dataset/musique_dev.jsonl -run runs/naive-musique.jsonl -closedbook runs/closedbook-musique.jsonl -collection ragbench-wiki18 -top-k 5 -name DiagMuSiQue -tex-out paper/diagnosis-musique.gen.tex
@@ -167,3 +213,13 @@ compare:
 	go run ./cmd/compare -a runs/ircot-nq.jsonl -b runs/adaptive-nq.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveNQ -tex-out paper/cmp-ircot-adaptive-nq.gen.tex
 	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/adaptive-triviaqa.jsonl -name-a NaiveRAG -name-b Adaptive -name NaiveVsAdaptiveTriviaQA -tex-out paper/cmp-naive-adaptive-triviaqa.gen.tex
 	go run ./cmd/compare -a runs/ircot-triviaqa.jsonl -b runs/adaptive-triviaqa.jsonl -name-a IRCoT -name-b Adaptive -name IRCoTVsAdaptiveTriviaQA -tex-out paper/cmp-ircot-adaptive-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-musique.jsonl -b runs/cascade-musique.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascadeMuSiQue -tex-out paper/cmp-rerank-cascade-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascadeHotpotQA -tex-out paper/cmp-rerank-cascade-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascadeTwoWiki -tex-out paper/cmp-rerank-cascade-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-nq.jsonl -b runs/cascade-nq.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascadeNQ -tex-out paper/cmp-rerank-cascade-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascadeTriviaQA -tex-out paper/cmp-rerank-cascade-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/cascade-musique.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveVsCascadeMuSiQue -tex-out paper/cmp-naive-cascade-musique.gen.tex
+	go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveVsCascadeHotpotQA -tex-out paper/cmp-naive-cascade-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveVsCascadeTwoWiki -tex-out paper/cmp-naive-cascade-2wiki.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/cascade-nq.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveVsCascadeNQ -tex-out paper/cmp-naive-cascade-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveVsCascadeTriviaQA -tex-out paper/cmp-naive-cascade-triviaqa.gen.tex

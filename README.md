@@ -4,6 +4,7 @@
 * Ingest data
 * Measure corpus coverage
 * Run benchmark
+* The proposed architecture
 * Diagnose retrieval failures
 * Compare runs
 * Check ingested data
@@ -85,11 +86,68 @@ make naive-rag       # just this one, on all five question sets
 | `crag-ten` | the same at a 10-passage budget | multi-hop 3 | 3 |
 | `ircot` | interleave one sentence of reasoning with one retrieval | all 5 | 2-6 |
 | `adaptive` | one call routes to closedbook, naive or ircot | all 5 | 2-7 |
+| `cascade` | **the proposed architecture** - see below | all 5 | ~1.3 |
 
 Every recipe is a plain `go run` line, so a single question set can be run by
 copying the one line out of the Makefile and editing it - use a scratch `-dump`
 path if you add `-limit` for a smoke test, or the real files get overwritten
 with a sample.
+
+## The proposed architecture
+
+`cascade` is what the measurements above argue for, in two parts.
+
+**Fused retrieval.** Cross-encoder reranking is the strongest single retrieval
+improvement measured here (+0.0510 Exact Match on HotpotQA, +0.0388 on
+2WikiMultihopQA) and it also fails catastrophically on NaturalQuestions
+(-0.1001, answer-in-context 0.7367 -> 0.5327). The cause is that a
+cross-encoder matches what a question is *asking for* while a bi-encoder
+matches what it is *asking about*: for "where is the tv show the curse of oak
+island filmed" it promotes the passages that state a filming location - for
+Stake Land, The Island and Come Outside - and pushes out the one naming the
+right show. Fusing the dense, lexical and cross-encoder rankings with RRF keeps
+both signals, at the cost of one extra lexical search on the CPU.
+
+**Abstention-triggered escalation.** When the reader declines to answer, it has
+already seen the retrieved passages and reported that they do not support an
+answer - a *posterior* signal, unlike `adaptive`, which asks the generator to
+predict difficulty from the question alone and gains +0.0004 Exact Match for it.
+The refusal is also lossless: across all 298,096 (question, architecture) pairs
+measured here there is no case where an abstention scores Exact Match 1, because
+an abstention is a sentence and the gold answers are short spans. Escalating a
+declined question therefore cannot discard a correct answer. Only the declined
+questions pay for the next stage, which is why the whole thing runs at about
+1.3 generation calls per question against 3.0 for CRAG and 2.3 for IRCoT.
+
+### Ablations
+
+The architecture is one target, `cascade`. Two ablations sit outside `make bench`
+because neither is a competing method:
+
+```sh
+make fused           # stage 1 alone: the fused retrieval, no escalation
+make cascade-rerank  # the same cascade with plain reranking as stage 1
+```
+
+`make fused` is optional even for the ablation table. Stage 1 answers every
+question in the cascade, and every escalated question is one where stage 1
+abstained - which scores Exact Match 0 by construction. Stage-1 Exact Match is
+therefore recoverable exactly from `runs/cascade-*.jsonl` by summing over the
+rows whose `stage` field names the first stage. Run the target only for the
+metrics that are not recoverable that way: stage 1's own Recall, MRR and
+answer-in-context.
+
+### Reading its row
+
+Two things to keep in mind:
+
+- **Compare it on Exact Match, not on Recall or MRR.** Questions that reach the
+  closed-book stage end with no passages in context at all, so its retrieval
+  metrics are averages over a mixture and are not comparable with a pure
+  retrieval system's.
+- The losslessness of the trigger is exact for Exact Match and only approximate
+  for token-level F1, where an abstention averages 0.0487 and exceeds 0.5 for
+  0.09% of questions.
 
 ## Diagnose retrieval failures
 
@@ -124,6 +182,8 @@ make compare
 | naive10 vs ircot and crag10 | these put more passages in context, so the baseline is given the same number |
 | naive12 vs neighbour | neighbour puts ~11.7 passages in context |
 | naive vs adaptive, ircot vs adaptive | a router is only interesting against the branches it picks between |
+| rerank vs cascade | the proposed architecture against the strongest single baseline |
+| naive vs cascade | the proposed architecture against the standard baseline |
 
 `make all` runs the benchmarks, the diagnosis and the comparisons in order.
 

@@ -124,6 +124,8 @@ type dumpRecord struct {
 	GradedKept     int    `json:"graded_kept,omitempty"`
 	RewrittenQuery string `json:"rewritten_query,omitempty"`
 	ReasoningSteps int    `json:"reasoning_steps,omitempty"`
+	Stage          string `json:"stage,omitempty"`
+	StagesRun      int    `json:"stages_run,omitempty"`
 
 	LatencyS float64 `json:"latency_seconds"`
 }
@@ -138,7 +140,7 @@ func main() {
 
 		qdrantURL    = flag.String("qdrant-url", "http://localhost:6333", "Qdrant URL")
 		collection   = flag.String("collection", "ragbench", "Qdrant collection name - it must already exist and have been filled by cmd/ingest")
-		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | adaptive | neighbour")
+		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | fused | adaptive | neighbour | cascade")
 		ircotSteps   = flag.Int("ircot-steps", 4, "ircot only: maximum reasoning/retrieval rounds per question")
 		ircotMaxDocs = flag.Int("ircot-max-passages", 15, "ircot only: cap on the accumulated passage set")
 		cragMaxDocs  = flag.Int("crag-max-passages", 10, "crag only: cap on the passage set after correction")
@@ -149,8 +151,10 @@ func main() {
 
 		hnswEf = flag.Int("hnsw-ef", 256, "size of the candidate list Qdrant keeps while walking the HNSW graph. 0 leaves the server's default, which makes the approximate search's own recall an unreported property of the run. It has to be at least -candidates for a deep shortlist to be meaningful")
 
-		sparseColl = flag.String("sparse-collection", "ragbench-wiki18-bm25", "bm25/hybrid only: Qdrant collection holding the lexical index - it must already exist and have been filled by cmd/ingest -sparse")
-		rrfK       = flag.Int("rrf-k", 60, "hybrid only: the k of Reciprocal Rank Fusion. Larger values flatten the influence of the top positions; 60 is the value the RRF paper proposes and what every implementation uses")
+		sparseColl    = flag.String("sparse-collection", "ragbench-wiki18-bm25", "bm25/hybrid only: Qdrant collection holding the lexical index - it must already exist and have been filled by cmd/ingest -sparse")
+		cascadeStages = flag.String("cascade-stages", "fused,hyde,closedbook", "cascade only: comma-separated architectures to try in order. A stage's answer is kept unless it declines to answer, in which case the next stage runs. The refusal is a posterior signal - the reader has already seen the retrieved passages - and it is lossless under Exact Match, so escalating cannot discard a correct answer")
+
+		rrfK = flag.Int("rrf-k", 60, "hybrid only: the k of Reciprocal Rank Fusion. Larger values flatten the influence of the top positions; 60 is the value the RRF paper proposes and what every implementation uses")
 
 		neighbourRadius  = flag.Int("neighbour-radius", 1, "neighbour only: how many passages to either side of each hit to pull in from the same article")
 		neighbourMaxDocs = flag.Int("neighbour-max-passages", 15, "neighbour only: cap on the expanded passage set. Compare the run against a naive run with a matching -top-k, not against the 5-passage baseline")
@@ -246,73 +250,92 @@ func main() {
 		return p
 	}
 
-	var pipeline Pipeline
-	switch *architecture {
-	case "closedbook":
-		pipeline = rag.NewClosedBook(generator)
-		log.Printf("architecture: closedbook (no retrieval - measures what the generator knows on its own)")
-	case "naive":
-		pipeline = newNaive()
-	case "hyde":
-		p := rag.NewHyDE(store, *collection, embedder, generator, drafter)
-		p.TopK = *topK
-		p.QueryPrefix = resolvedPrefix
-		p.DocumentPrefix = rag.ResolvePrefix(rag.PrefixAuto, *embedModel, false)
-		pipeline = p
-		log.Printf("architecture: hyde (search with a drafted passage of up to %d tokens, averaged with the question)", *maxStep)
-	case "bm25":
-		p := rag.NewBM25RAG(store, *sparseColl, generator)
-		p.TopK = *topK
-		p.Candidates = *candidates
-		pipeline = p
-		log.Printf("architecture: bm25 (lexical only, collection %q)", *sparseColl)
-	case "hybrid":
-		p := rag.NewHybridRAG(store, store, *collection, *sparseColl, embedder, generator)
-		p.TopK = *topK
-		p.Candidates = *candidates
-		p.RRFK = *rrfK
-		p.QueryPrefix = resolvedPrefix
-		pipeline = p
-		log.Printf("architecture: hybrid (dense %q + lexical %q, top %d of each fused by RRF k=%d, top %d kept)", *collection, *sparseColl, *candidates, *rrfK, *topK)
-	case "neighbour":
-		started := time.Now()
-		index, err := flashrag.OpenTitleIndex(*titleIndexPath, *corpusPath)
-		if err != nil {
-			log.Fatalf("title index: %v", err)
+	// build is recursive because the cascade is assembled from the other
+	// architectures rather than reimplementing them, which is what keeps its
+	// stages comparable with the rows they appear next to in the table.
+	var build func(string) Pipeline
+	build = func(arch string) Pipeline {
+		switch arch {
+		case "closedbook":
+			return rag.NewClosedBook(generator)
+		case "naive":
+			return newNaive()
+		case "hyde":
+			p := rag.NewHyDE(store, *collection, embedder, generator, drafter)
+			p.TopK = *topK
+			p.QueryPrefix = resolvedPrefix
+			p.DocumentPrefix = rag.ResolvePrefix(rag.PrefixAuto, *embedModel, false)
+			return p
+		case "bm25":
+			p := rag.NewBM25RAG(store, *sparseColl, generator)
+			p.TopK = *topK
+			p.Candidates = *candidates
+			return p
+		case "hybrid":
+			p := rag.NewHybridRAG(store, store, *collection, *sparseColl, embedder, generator)
+			p.TopK = *topK
+			p.Candidates = *candidates
+			p.RRFK = *rrfK
+			p.QueryPrefix = resolvedPrefix
+			return p
+		case "fused":
+			rr := provider.NewVLLM(*rerankURL, *rerankModel)
+			p := rag.NewFusedRAG(store, store, *collection, *sparseColl, embedder, rr, generator)
+			p.TopK = *topK
+			p.Candidates = *candidates
+			p.RRFK = *rrfK
+			p.QueryPrefix = resolvedPrefix
+			p.DocumentPrefix = rag.ResolvePrefix(rag.PrefixAuto, *embedModel, false)
+			return p
+		case "neighbour":
+			started := time.Now()
+			index, err := flashrag.OpenTitleIndex(*titleIndexPath, *corpusPath)
+			if err != nil {
+				log.Fatalf("title index: %v", err)
+			}
+			log.Printf("title index: %d articles, %d passages (%s)", len(index.ByTitle), index.Passages(), time.Since(started).Round(time.Second))
+			p := rag.NewNeighbourRAG(store, store, *collection, embedder, generator, index)
+			p.TopK = *topK
+			p.Radius = *neighbourRadius
+			p.MaxPassages = *neighbourMaxDocs
+			p.QueryPrefix = resolvedPrefix
+			return p
+		case "adaptive":
+			return rag.NewAdaptiveRAG(generator, rag.NewClosedBook(generator), newNaive(), newIRCoT())
+		case "ircot":
+			return newIRCoT()
+		case "rerank":
+			rr := provider.NewVLLM(*rerankURL, *rerankModel)
+			p := rag.NewRerankRAG(store, *collection, embedder, rr, generator)
+			p.TopK = *topK
+			p.Candidates = *candidates
+			p.QueryPrefix = resolvedPrefix
+			return p
+		case "crag":
+			p := rag.NewCRAG(store, *collection, embedder, generator)
+			p.Stepper = drafter
+			p.TopK = *topK
+			p.MaxPassages = *cragMaxDocs
+			p.QueryPrefix = resolvedPrefix
+			return p
+		case "cascade":
+			names := strings.Split(*cascadeStages, ",")
+			stages := make([]Pipeline, 0, len(names))
+			for i, n := range names {
+				names[i] = strings.TrimSpace(n)
+				if names[i] == "cascade" {
+					log.Fatalf("-cascade-stages may not contain \"cascade\"")
+				}
+				stages = append(stages, build(names[i]))
+			}
+			log.Printf("architecture: cascade (%s; a stage answers unless it declines, in which case the next one runs)", strings.Join(names, " -> "))
+			return rag.NewCascadeRAG(names, stages, *abstentionWords)
 		}
-		log.Printf("title index: %d articles, %d passages (%s)", len(index.ByTitle), index.Passages(), time.Since(started).Round(time.Second))
-		p := rag.NewNeighbourRAG(store, store, *collection, embedder, generator, index)
-		p.TopK = *topK
-		p.Radius = *neighbourRadius
-		p.MaxPassages = *neighbourMaxDocs
-		p.QueryPrefix = resolvedPrefix
-		pipeline = p
-		log.Printf("architecture: neighbour (top %d expanded by +/-%d passages of the same article, up to %d)", *topK, *neighbourRadius, *neighbourMaxDocs)
-	case "adaptive":
-		pipeline = rag.NewAdaptiveRAG(generator, rag.NewClosedBook(generator), newNaive(), newIRCoT())
-		log.Printf("architecture: adaptive (one classification call routes to closedbook | naive | ircot)")
-	case "ircot":
-		pipeline = newIRCoT()
-		log.Printf("architecture: ircot (max %d reasoning rounds, up to %d passages accumulated)", *ircotSteps, *ircotMaxDocs)
-	case "rerank":
-		rr := provider.NewVLLM(*rerankURL, *rerankModel)
-		p := rag.NewRerankRAG(store, *collection, embedder, rr, generator)
-		p.TopK = *topK
-		p.Candidates = *candidates
-		p.QueryPrefix = resolvedPrefix
-		pipeline = p
-		log.Printf("architecture: rerank (%d candidates reordered by %s, top %d kept)", *candidates, *rerankModel, *topK)
-	case "crag":
-		p := rag.NewCRAG(store, *collection, embedder, generator)
-		p.Stepper = drafter
-		p.TopK = *topK
-		p.MaxPassages = *cragMaxDocs
-		p.QueryPrefix = resolvedPrefix
-		pipeline = p
-		log.Printf("architecture: crag (grade retrieval, rewrite and re-search when it is poor, up to %d passages)", *cragMaxDocs)
-	default:
-		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | adaptive | neighbour)", *architecture)
+		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | fused | adaptive | neighbour | cascade)", arch)
+		return nil
 	}
+	pipeline := build(*architecture)
+	log.Printf("architecture: %s (top-k %d, %d candidates)", *architecture, *topK, *candidates)
 
 	// The query instruction materially changes retrieval, so it is reported
 	// rather than applied silently - a run's numbers are only comparable with
@@ -434,6 +457,11 @@ func main() {
 	if len(sum.branches) > 0 {
 		fmt.Printf("crag branches:     ")
 		printDistribution(sum.branches)
+	}
+	if len(sum.stages) > 0 {
+		fmt.Printf("answered by stage: ")
+		printDistribution(sum.stages)
+		fmt.Printf("stages run:         %.2f per question\n", sum.meanStagesRun)
 	}
 
 	if *texOut != "" {
@@ -561,8 +589,10 @@ type summary struct {
 	llmCalls               float64
 	latency                time.Duration
 
-	routes   map[string]int64
-	branches map[string]int64
+	routes        map[string]int64
+	branches      map[string]int64
+	stages        map[string]int64
+	meanStagesRun float64
 
 	emVals, f1Vals, abstainVals, inCtxVals, recallVals, rrVals []float64
 }
@@ -574,7 +604,8 @@ type summary struct {
 // is averaged over the questions it applies to rather than over all of them,
 // which is why the counts are reported next to the values.
 func aggregate(results []result) summary {
-	s := summary{routes: map[string]int64{}, branches: map[string]int64{}}
+	s := summary{routes: map[string]int64{}, branches: map[string]int64{}, stages: map[string]int64{}}
+	var sumStagesRun float64
 
 	var sumEM, sumF1, sumAbstain, sumInCtx, sumRecall, sumRR, sumPassages float64
 	var sumEMAnswered, sumF1Answered float64
@@ -625,6 +656,10 @@ func aggregate(results []result) summary {
 		if r.trace.Branch != "" {
 			s.branches[r.trace.Branch]++
 		}
+		if r.trace.Stage != "" {
+			s.stages[r.trace.Stage]++
+			sumStagesRun += float64(r.trace.StagesRun)
+		}
 	}
 	if s.answered == 0 {
 		return s
@@ -649,6 +684,9 @@ func aggregate(results []result) summary {
 	if s.goldN > 0 {
 		s.recall = sumRecall / float64(s.goldN)
 		s.mrr = sumRR / float64(s.goldN)
+	}
+	if len(s.stages) > 0 {
+		s.meanStagesRun = sumStagesRun / n
 	}
 	return s
 }
@@ -717,6 +755,12 @@ func writeTex(path string, s summary) error {
 	}
 	for _, key := range slices.Sorted(maps.Keys(s.branches)) {
 		fmt.Fprintf(&b, "\\newcommand{\\%sBranch%s}{%d}\n", id, texSafeID(capitalise(key)), s.branches[key])
+	}
+	for _, key := range slices.Sorted(maps.Keys(s.stages)) {
+		fmt.Fprintf(&b, "\\newcommand{\\%sStage%s}{%d}\n", id, texSafeID(capitalise(key)), s.stages[key])
+	}
+	if len(s.stages) > 0 {
+		fmt.Fprintf(&b, "\\newcommand{\\%sStagesRun}{%.2f}\n", id, s.meanStagesRun)
 	}
 
 	return os.WriteFile(path, []byte(b.String()), 0o644)
@@ -810,6 +854,8 @@ func writeDump(path string, results []result) error {
 			GradedKept:       r.trace.GradedKept,
 			RewrittenQuery:   r.trace.RewrittenQuery,
 			ReasoningSteps:   r.trace.Steps,
+			Stage:            r.trace.Stage,
+			StagesRun:        r.trace.StagesRun,
 			LatencyS:         r.latency.Seconds(),
 		}); err != nil {
 			return err

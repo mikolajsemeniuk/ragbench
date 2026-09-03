@@ -40,6 +40,13 @@ type TraceData struct {
 	// and Reasoning the sentences it produced.
 	Steps     int
 	Reasoning []string
+
+	// Stage is the name of the cascade stage whose answer was kept, and
+	// StagesRun how many stages had to run to get it. Together they are the
+	// cascade's cost profile: a stage that never fires costs nothing, and a
+	// stage that always fires is not a cascade.
+	Stage     string
+	StagesRun int
 }
 
 type traceKey struct{}
@@ -91,6 +98,16 @@ func (t *Trace) SetRewrittenQuery(query string) {
 	}
 	t.mu.Lock()
 	t.RewrittenQuery = query
+	t.mu.Unlock()
+}
+
+func (t *Trace) SetStage(name string, run int) {
+	if t == nil {
+		return
+	}
+	t.mu.Lock()
+	t.Stage = name
+	t.StagesRun = run
 	t.mu.Unlock()
 }
 

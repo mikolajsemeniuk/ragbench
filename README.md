@@ -50,8 +50,8 @@ re-running an overlapping range is safe.
 
 A Recall figure is unreadable without the ceiling the corpus imposes. Only 72.6%
 of the gold articles 2WikiMultihopQA annotates exist in wiki18\_100w at all, so a
-perfect retriever would score 0.726 there and the measured 0.30 is 41% of what
-is achievable, not 30% of it.
+perfect retriever would score 0.726 there and NaiveRAG's measured 0.354 is 49%
+of what is achievable, not 35% of it.
 
 ```sh
 make coverage        # ~4min, no GPU, can run while the card is busy
@@ -100,24 +100,44 @@ with a sample.
 **Fused retrieval.** Cross-encoder reranking is the strongest single retrieval
 improvement measured here (+0.0510 Exact Match on HotpotQA, +0.0388 on
 2WikiMultihopQA) and it also fails catastrophically on NaturalQuestions
-(-0.1001, answer-in-context 0.7367 -> 0.5327). The cause is that a
+(-0.1001, answer-in-context 0.7267 -> 0.5097). The cause is that a
 cross-encoder matches what a question is *asking for* while a bi-encoder
 matches what it is *asking about*: for "where is the tv show the curse of oak
 island filmed" it promotes the passages that state a filming location - for
 Stake Land, The Island and Come Outside - and pushes out the one naming the
 right show. Fusing the dense, lexical and cross-encoder rankings with RRF keeps
-both signals, at the cost of one extra lexical search on the CPU.
+both signals, at the cost of one extra lexical search on the CPU. Measured, the
+fusion is a compromise rather than a free lunch. Stage 1 on its own (recovered
+from `runs/cascade-*.jsonl`, see Ablations) scores 0.3253 Exact Match on
+NaturalQuestions against rerank's 0.2352 and naive's 0.3353, and 0.3514 on
+HotpotQA against rerank's 0.3757 and naive's 0.3249: it avoids the collapse but
+gives back part of the gain.
 
 **Abstention-triggered escalation.** When the reader declines to answer, it has
 already seen the retrieved passages and reported that they do not support an
 answer - a *posterior* signal, unlike `adaptive`, which asks the generator to
-predict difficulty from the question alone and gains +0.0004 Exact Match for it.
-The refusal is also lossless: across all 298,096 (question, architecture) pairs
-measured here there is no case where an abstention scores Exact Match 1, because
+predict difficulty from the question alone and gains +0.0004 Exact Match for it
+on 2WikiMultihopQA. The refusal is also lossless: across all 462,654 (question,
+architecture) pairs measured here there is no case where an abstention scores
+Exact Match 1, because
 an abstention is a sentence and the gold answers are short spans. Escalating a
 declined question therefore cannot discard a correct answer. Only the declined
 questions pay for the next stage, which is why the whole thing runs at about
 1.3 generation calls per question against 3.0 for CRAG and 2.3 for IRCoT.
+
+### Generating and comparing its runs
+
+`cascade` is part of `make bench`, so `make bench` (or `make cascade` alone)
+produces `runs/cascade-<set>.jsonl` and `paper/cascade-<set>.gen.tex`. It needs
+both collections - the dense one and the BM25 one - and the reranker
+container, because stage 1 fuses all three. The fragment carries, on top of the
+usual metrics, how many questions each stage answered
+(`\Cascade<Set>StageFused`, `StageHyde`, `StageClosedbook`) and the mean
+number of stages run. `make compare` then writes the two paired tests the
+paper reads it from, `paper/cmp-rerank-cascade-<set>.gen.tex` and
+`paper/cmp-naive-cascade-<set>.gen.tex`. Every cascade row in the per-question
+dump names the stage that answered, so per-stage Exact Match is a one-line
+aggregation over `stage`.
 
 ### Ablations
 
@@ -129,6 +149,10 @@ make fused           # stage 1 alone: the fused retrieval, no escalation
 make cascade-rerank  # the same cascade with plain reranking as stage 1
 ```
 
+`make fused` also runs the Rerank-vs-Fused and Fused-vs-Cascade comparisons,
+so it has to come after `make cascade`. `make cascade-rerank` writes
+`runs/cascade-rr-<set>.jsonl`; it has no comparison line of its own yet.
+
 `make fused` is optional even for the ablation table. Stage 1 answers every
 question in the cascade, and every escalated question is one where stage 1
 abstained - which scores Exact Match 0 by construction. Stage-1 Exact Match is
@@ -139,15 +163,40 @@ answer-in-context.
 
 ### Reading its row
 
-Two things to keep in mind:
+Three things to keep in mind:
 
 - **Compare it on Exact Match, not on Recall or MRR.** Questions that reach the
   closed-book stage end with no passages in context at all, so its retrieval
   metrics are averages over a mixture and are not comparable with a pure
   retrieval system's.
 - The losslessness of the trigger is exact for Exact Match and only approximate
-  for token-level F1, where an abstention averages 0.0487 and exceeds 0.5 for
+  for token-level F1, where an abstention averages 0.0495 and exceeds 0.5 for
   0.09% of questions.
+- **Its abstention rate is the last stage's.** Against a single-stage system
+  the "EM (both answered)" row of `cmd/compare` is therefore computed over a
+  different population, and on four of the five sets it is at or below zero
+  against rerank. The cascade's gain is in the questions the baseline declined,
+  not in the questions both answered - which is what the design predicts, and
+  what the paper has to say.
+
+### Where it stands
+
+Paired Exact Match differences from `paper/cmp-*-cascade-*.gen.tex` (Holm-adjusted
+p on the primary endpoint), generation calls per question in brackets:
+
+| set | vs NaiveRAG [1.0] | vs Rerank [1.0] | cascade calls |
+|---|---|---|---|
+| NaturalQuestions | +0.0064 (n.s.) | +0.1066 | 1.44 |
+| TriviaQA | +0.0333 | +0.0071 (p=0.09) | 1.16 |
+| HotpotQA | +0.0334 | **-0.0174** | 1.22 |
+| 2WikiMultihopQA | +0.0497 | +0.0108 | 1.32 |
+| MuSiQue | +0.0244 | +0.0029 (n.s.) | 1.58 |
+
+It is not the best system on every set: HyDE beats it on NaturalQuestions
+(0.3476 against 0.3417 at 2.0 calls), rerank on HotpotQA, and CRAG at a
+10-passage budget on MuSiQue (0.0877 at 3.0 calls). What it is is the only
+architecture measured here that is never worse than NaiveRAG and never
+catastrophic, at 1.2-1.6 calls.
 
 ## Diagnose retrieval failures
 
@@ -180,10 +229,11 @@ make compare
 | closedbook vs naive | is retrieval worth anything at all on this dataset |
 | naive vs bm25, hybrid, hyde, rerank | all keep the 5-passage budget, so the difference is which passages were chosen |
 | naive10 vs ircot and crag10 | these put more passages in context, so the baseline is given the same number |
-| naive12 vs neighbour | neighbour puts ~11.7 passages in context |
+| naive12 vs neighbour | neighbour puts 10.7-12.3 passages in context |
 | naive vs adaptive, ircot vs adaptive | a router is only interesting against the branches it picks between |
 | rerank vs cascade | the proposed architecture against the strongest single baseline |
 | naive vs cascade | the proposed architecture against the standard baseline |
+| rerank vs fused, fused vs cascade | the ablations; run by `make fused`, not by `make compare` |
 
 `make all` runs the benchmarks, the diagnosis and the comparisons in order.
 

@@ -122,12 +122,26 @@ adaptive:
 # runs/cascade-*.jsonl by summing EM over the rows whose "stage" is the first
 # stage. Run this target only for the metrics that are NOT recoverable that way
 # - Recall, MRR and answer-in-context of stage 1 on its own.
+#
+# The two comparisons that need these runs (Rerank vs Fused, Fused vs Cascade)
+# live here rather than in `cascade` or `compare`, so that `make bench` and
+# `make all` do not fail on a run they never produce. Run `make cascade` first.
 fused:
 	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-musique.jsonl -name FusedMuSiQue -tex-out paper/fused-musique.gen.tex
 	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-hotpotqa.jsonl -name FusedHotpotQA -tex-out paper/fused-hotpotqa.gen.tex
 	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-2wiki.jsonl -name FusedTwoWiki -tex-out paper/fused-2wiki.gen.tex
 	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-nq.jsonl -name FusedNQ -tex-out paper/fused-nq.gen.tex
 	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -concurrency 48 -dump runs/fused-triviaqa.jsonl -name FusedTriviaQA -tex-out paper/fused-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-musique.jsonl -b runs/fused-musique.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedMuSiQue -tex-out paper/cmp-rerank-fused-musique.gen.tex
+	go run ./cmd/compare -a runs/fused-musique.jsonl -b runs/cascade-musique.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeMuSiQue -tex-out paper/cmp-fused-cascade-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-hotpotqa.jsonl -b runs/fused-hotpotqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedHotpotQA -tex-out paper/cmp-rerank-fused-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/fused-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeHotpotQA -tex-out paper/cmp-fused-cascade-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-2wiki.jsonl -b runs/fused-2wiki.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTwoWiki -tex-out paper/cmp-rerank-fused-2wiki.gen.tex
+	go run ./cmd/compare -a runs/fused-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTwoWiki -tex-out paper/cmp-fused-cascade-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-nq.jsonl -b runs/fused-nq.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedNQ -tex-out paper/cmp-rerank-fused-nq.gen.tex
+	go run ./cmd/compare -a runs/fused-nq.jsonl -b runs/cascade-nq.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeNQ -tex-out paper/cmp-fused-cascade-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-triviaqa.jsonl -b runs/fused-triviaqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTriviaQA -tex-out paper/cmp-rerank-fused-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/fused-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTriviaQA -tex-out paper/cmp-fused-cascade-triviaqa.gen.tex
 
 # The proposed architecture: fused retrieval, escalating only the questions the
 # reader itself declined to answer. Its Recall and MRR are NOT comparable with
@@ -139,17 +153,6 @@ cascade:
 	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-2wiki.jsonl -name CascadeTwoWiki -tex-out paper/cascade-2wiki.gen.tex
 	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-nq.jsonl -name CascadeNQ -tex-out paper/cascade-nq.gen.tex
 	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -concurrency 48 -dump runs/cascade-triviaqa.jsonl -name CascadeTriviaQA -tex-out paper/cascade-triviaqa.gen.tex
-
-	go run ./cmd/compare -a runs/rerank-musique.jsonl -b runs/fused-musique.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedMuSiQue -tex-out paper/cmp-rerank-fused-musique.gen.tex
-	go run ./cmd/compare -a runs/fused-musique.jsonl -b runs/cascade-musique.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeMuSiQue -tex-out paper/cmp-fused-cascade-musique.gen.tex
-	go run ./cmd/compare -a runs/rerank-hotpotqa.jsonl -b runs/fused-hotpotqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedHotpotQA -tex-out paper/cmp-rerank-fused-hotpotqa.gen.tex
-	go run ./cmd/compare -a runs/fused-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeHotpotQA -tex-out paper/cmp-fused-cascade-hotpotqa.gen.tex
-	go run ./cmd/compare -a runs/rerank-2wiki.jsonl -b runs/fused-2wiki.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTwoWiki -tex-out paper/cmp-rerank-fused-2wiki.gen.tex
-	go run ./cmd/compare -a runs/fused-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTwoWiki -tex-out paper/cmp-fused-cascade-2wiki.gen.tex
-	go run ./cmd/compare -a runs/rerank-nq.jsonl -b runs/fused-nq.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedNQ -tex-out paper/cmp-rerank-fused-nq.gen.tex
-	go run ./cmd/compare -a runs/fused-nq.jsonl -b runs/cascade-nq.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeNQ -tex-out paper/cmp-fused-cascade-nq.gen.tex
-	go run ./cmd/compare -a runs/rerank-triviaqa.jsonl -b runs/fused-triviaqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFusedTriviaQA -tex-out paper/cmp-rerank-fused-triviaqa.gen.tex
-	go run ./cmd/compare -a runs/fused-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascadeTriviaQA -tex-out paper/cmp-fused-cascade-triviaqa.gen.tex
 
 # Isolates what the fusion contributes: the same cascade with plain reranking
 # as stage 1.

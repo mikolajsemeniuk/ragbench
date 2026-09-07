@@ -141,25 +141,40 @@ aggregation over `stage`.
 
 ### Ablations
 
-The architecture is one target, `cascade`. Two ablations sit outside `make bench`
-because neither is a competing method:
+The architecture is one target, `cascade`, and one row in the main table. The
+ablations are one more target, outside `make bench` because none of them is a
+competing method. Every line in it is the same loop (`pkg/rag/cascade.go`)
+with one element switched through `-cascade-stages`; the fused retriever
+itself lives in `pkg/rag/fused.go`.
 
 ```sh
-make fused           # stage 1 alone: the fused retrieval, no escalation
-make cascade-rerank  # the same cascade with plain reranking as stage 1
+make cascade-ablations   # after make cascade; ~4 benchmark runs per set plus comparisons
 ```
 
-`make fused` also runs the Rerank-vs-Fused and Fused-vs-Cascade comparisons,
-so it has to come after `make cascade`. `make cascade-rerank` writes
-`runs/cascade-rr-<set>.jsonl`; it has no comparison line of its own yet.
+| run | stages | answers |
+|---|---|---|
+| `fused` | fused only, no escalation | what the escalation adds |
+| `cascade-rr` | rerank -> hyde -> closedbook | what the fusion adds |
+| `cascade-naive` | naive -> hyde -> closedbook | the cheapest possible cascade |
+| `cascade-hybrid` | hybrid -> hyde -> closedbook | fusion without the cross-encoder |
 
-`make fused` is optional even for the ablation table. Stage 1 answers every
-question in the cascade, and every escalated question is one where stage 1
-abstained - which scores Exact Match 0 by construction. Stage-1 Exact Match is
-therefore recoverable exactly from `runs/cascade-*.jsonl` by summing over the
-rows whose `stage` field names the first stage. Run the target only for the
-metrics that are not recoverable that way: stage 1's own Recall, MRR and
-answer-in-context.
+The target ends with the paired comparisons of each variant against `cascade`
+(`paper/cmp-<variant>-cascade-<set>.gen.tex`) and of `fused` against `rerank`.
+
+The `fused` run is optional for Exact Match. Stage 1 answers every question in
+the cascade, and every escalated question is one where stage 1 abstained -
+which scores Exact Match 0 by construction - so stage-1 Exact Match is exactly
+the sum over the rows of `runs/cascade-*.jsonl` whose `stage` is `fused`. The
+run exists for the metrics that are not recoverable that way: stage 1's own
+Recall, MRR and answer-in-context.
+
+What the dumps already say about these variants, before the runs exist:
+composing standalone runs question by question reproduces the cascade's later
+stages on 95-100% of questions, and that composition puts rerank-first ahead
+on HotpotQA (+0.021), level on TriviaQA, 2WikiMultihopQA and MuSiQue, and
+-0.052 behind on NaturalQuestions, where reranking answers wrongly rather than
+declining. No first stage wins everywhere; fused has the best mean and the
+smallest worst-case loss, which is its case.
 
 ### Reading its row
 
@@ -233,7 +248,7 @@ make compare
 | naive vs adaptive, ircot vs adaptive | a router is only interesting against the branches it picks between |
 | rerank vs cascade | the proposed architecture against the strongest single baseline |
 | naive vs cascade | the proposed architecture against the standard baseline |
-| rerank vs fused, fused vs cascade | the ablations; run by `make fused`, not by `make compare` |
+| each ablation vs cascade, rerank vs fused | run by `make cascade-ablations`, not by `make compare` |
 
 `make all` runs the benchmarks, the diagnosis and the comparisons in order.
 

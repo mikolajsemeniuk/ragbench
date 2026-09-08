@@ -3,8 +3,10 @@ package rag
 import (
 	"context"
 	"fmt"
+	"math"
 
 	"github.com/mikolajsemeniuk/ragbench/pkg/metrics"
+	"github.com/mikolajsemeniuk/ragbench/pkg/provider"
 	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
 
@@ -41,6 +43,19 @@ import (
 // while which first stage is best depends on the question set. See fused.go
 // for why the default is the fused one.
 //
+// The abstention is blind to the other failure, a wrong answer given without
+// hesitation, and that is where the remaining headroom is: an oracle choosing
+// per question between naive retrieval, reranking and closed-book scores 0.403
+// on 2WikiMultihopQA against the cascade's 0.278, and the abstention trigger
+// collects 1.6 points of that gap. MinLogprob adds a second, continuous
+// posterior signal for it: the mean log-probability of the answer's tokens,
+// which the generator reports for free (provider.Confidence). A stage's
+// answer is then also escalated when its mean log-probability falls below the
+// threshold. Unlike the abstention this is NOT lossless - a correct answer
+// given with low confidence is discarded, and only sometimes recovered by a
+// later stage - so the threshold has to be chosen on held-out questions
+// (cmd/sweep over the train splits) and the discard rate reported.
+//
 // Three caveats belong in any write-up. The property is exact for Exact Match
 // and only approximate for token-level F1, where an abstention averages 0.0495
 // and exceeds 0.5 for 0.09% of questions. The gain sits in the questions the
@@ -58,10 +73,29 @@ type CascadeRAG struct {
 	// AbstentionMaxWords is passed to metrics.IsAbstention. 0 leaves only the
 	// explicit refusal phrases and disables the length signal.
 	AbstentionMaxWords int
+
+	// MinLogprob escalates an answer whose mean token log-probability is
+	// below it, on top of the abstention trigger. Mean log-probabilities are
+	// at most 0, so -Inf (the default) disables the signal and leaves the
+	// lossless trigger alone. A provider that reports no log-probabilities
+	// is treated the same way.
+	MinLogprob float64
 }
 
 func NewCascadeRAG(names []string, stages []Pipeline, abstentionMaxWords int) *CascadeRAG {
-	return &CascadeRAG{Stages: stages, Names: names, AbstentionMaxWords: abstentionMaxWords}
+	return &CascadeRAG{Stages: stages, Names: names, AbstentionMaxWords: abstentionMaxWords, MinLogprob: math.Inf(-1)}
+}
+
+// escalate reports whether a stage's answer should be handed to the next
+// stage, and why: "abstained", "low-confidence", or "" to keep it.
+func (r *CascadeRAG) escalate(ctx context.Context, answer string) string {
+	if metrics.IsAbstention(answer, r.AbstentionMaxWords) {
+		return "abstained"
+	}
+	if mean, ok := provider.ConfidenceFrom(ctx).Last(); ok && mean < r.MinLogprob {
+		return "low-confidence"
+	}
+	return ""
 }
 
 func (r *CascadeRAG) Query(ctx context.Context, question string) (answer string, retrieved []storage.Point, err error) {
@@ -77,10 +111,16 @@ func (r *CascadeRAG) Query(ctx context.Context, question string) (answer string,
 		// The last stage is kept whatever it says: there is nothing left to
 		// escalate to, and a refusal is still the most honest answer
 		// available.
-		if i == len(r.Stages)-1 || !metrics.IsAbstention(answer, r.AbstentionMaxWords) {
+		if i == len(r.Stages)-1 {
 			TraceFrom(ctx).SetStage(r.Names[i], i+1)
 			return answer, retrieved, nil
 		}
+		reason := r.escalate(ctx, answer)
+		if reason == "" {
+			TraceFrom(ctx).SetStage(r.Names[i], i+1)
+			return answer, retrieved, nil
+		}
+		TraceFrom(ctx).AddEscalation(reason)
 	}
 	return answer, retrieved, nil
 }

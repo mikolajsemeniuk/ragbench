@@ -88,6 +88,7 @@
 \useresults{coverage-hotpotqa}
 \useresults{diagnosis-2wiki}
 \useresults{coverage-2wiki}
+\useresults{result}
 
 \begin{document}
 
@@ -215,5 +216,15 @@ failures out of \DiagTwoWikiFailed{} (\DiagTwoWikiFailedPct\% of the run):
 \DiagTwoWikiNotInCorpusPct\% are not in the corpus. Choosing per question between
 closed-book and this run would be worth \DiagTwoWikiOracleGain{} Exact Match over
 the better single system.
+
+\subsection*{The proposed architecture against every baseline}
+
+Each cell is the paired Exact Match difference, Cascade minus the baseline,
+over the questions both answered; bold marks a significant gain and underline
+a significant loss under McNemar's test with a Holm adjustment over all
+\ResultPairs{} cells. Cascade wins \ResultWins{}, loses \ResultLosses{} and ties
+\ResultTies{}.
+
+\ResultTable
 
 \end{document}

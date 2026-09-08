@@ -47,6 +47,11 @@ type TraceData struct {
 	// stage that always fires is not a cascade.
 	Stage     string
 	StagesRun int
+
+	// Escalations is why each stage before the answering one was left:
+	// "abstained" or "low-confidence". It is what separates the two
+	// triggers' contributions in a cascade that uses both.
+	Escalations []string
 }
 
 type traceKey struct{}
@@ -111,6 +116,15 @@ func (t *Trace) SetStage(name string, run int) {
 	t.mu.Unlock()
 }
 
+func (t *Trace) AddEscalation(reason string) {
+	if t == nil {
+		return
+	}
+	t.mu.Lock()
+	t.Escalations = append(t.Escalations, reason)
+	t.mu.Unlock()
+}
+
 func (t *Trace) AddReasoning(sentence string) {
 	if t == nil {
 		return
@@ -130,5 +144,6 @@ func (t *Trace) Snapshot() TraceData {
 	defer t.mu.Unlock()
 	data := t.TraceData
 	data.Reasoning = append([]string(nil), t.Reasoning...)
+	data.Escalations = append([]string(nil), t.Escalations...)
 	return data
 }

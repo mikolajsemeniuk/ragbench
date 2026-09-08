@@ -139,6 +139,47 @@ paper reads it from, `paper/cmp-rerank-cascade-<set>.gen.tex` and
 dump names the stage that answered, so per-stage Exact Match is a one-line
 aggregation over `stage`.
 
+### The confidence trigger
+
+The abstention trigger is lossless but blind to a wrong answer given without
+hesitation, and that is where the remaining headroom is: an oracle choosing
+per question between naive, rerank and closed-book scores 0.403 on
+2WikiMultihopQA against the cascade's 0.278, of which the abstention collects
+1.6 points. The second signal is the generator's own certainty - the mean
+log-probability of the answer's tokens, which vLLM reports for free and every
+run now records as `mean_logprob` in the dump. With `-cascade-min-logprob`
+the cascade also escalates an answer below that threshold.
+
+It is not lossless: a correct answer given with low confidence is discarded
+and only sometimes recovered. So the threshold is a hyperparameter, and it is
+chosen on held-out questions, never on the test sets:
+
+```sh
+make cascade-tune                 # ~1h: stage runs on 1000 train questions per set, then the offline sweep
+make cascade-logprob TAU=-0.5     # the test-set run at the chosen threshold, its comparisons, its result table
+```
+
+`cascade-tune` runs `fused`, `hyde` and `closedbook` on the same 1000 sampled
+questions of each train split and then `cmd/sweep` composes them question by
+question at every threshold, printing Exact Match, calls per question, how
+many stage-1 answers were escalated, how many of those were correct
+(discarded) and how many a later stage did not get back (missed). One value
+is chosen for all sets; put it in `TAU`. The test run writes
+`runs/cascade-lp-<set>.jsonl` and is compared with the abstention-only
+cascade, naive and rerank, and rendered as its own summary table
+(`paper/result-lp.gen.tex`).
+
+### The summary table
+
+`make result` renders `paper/result.gen.tex`: the proposed architecture against
+every baseline on every set, one cell per pair, each cell the paired Exact
+Match difference marked as a win (bold), a loss (underlined) or a tie (plain).
+The test is McNemar's, as in `cmd/compare`, but Holm-adjusted over every cell
+of the table at once, because the sentence the table supports - "wins W,
+loses L, ties T of P pairs" - is one family of tests. That is stricter than
+the per-pair figures in `paper/cmp-*.gen.tex`, and a few narrow wins there
+are ties here.
+
 ### Ablations
 
 The architecture is one target, `cascade`, and one row in the main table. The
@@ -250,7 +291,8 @@ make compare
 | naive vs cascade | the proposed architecture against the standard baseline |
 | each ablation vs cascade, rerank vs fused | run by `make cascade-ablations`, not by `make compare` |
 
-`make all` runs the benchmarks, the diagnosis and the comparisons in order.
+`make all` runs the benchmarks, the diagnosis, the comparisons, the coverage
+and the summary table in order.
 
 ## Check ingested data
 

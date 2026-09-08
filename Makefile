@@ -3,9 +3,10 @@
 
 .PHONY: all ingest ingest-sparse coverage bench closedbook naive-rag \
 	naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag \
-	crag-ten ircot adaptive cascade cascade-ablations diagnose compare
+	crag-ten ircot adaptive cascade cascade-ablations cascade-tune cascade-logprob \
+	result diagnose compare
 
-all: bench diagnose compare coverage
+all: bench diagnose compare coverage result
 
 # Approx 3h on the GPU. An interrupted run prints the line to resume from;
 # re-run it by hand with -skip N.
@@ -186,6 +187,63 @@ cascade-ablations:
 	go run ./cmd/compare -a runs/cascade-hybrid-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a CascadeHybrid -name-b Cascade -name CascadeHybridVsCascadeTwoWiki -tex-out paper/cmp-cascade-hybrid-cascade-2wiki.gen.tex
 	go run ./cmd/compare -a runs/cascade-hybrid-nq.jsonl -b runs/cascade-nq.jsonl -name-a CascadeHybrid -name-b Cascade -name CascadeHybridVsCascadeNQ -tex-out paper/cmp-cascade-hybrid-cascade-nq.gen.tex
 	go run ./cmd/compare -a runs/cascade-hybrid-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a CascadeHybrid -name-b Cascade -name CascadeHybridVsCascadeTriviaQA -tex-out paper/cmp-cascade-hybrid-cascade-triviaqa.gen.tex
+
+# CONFIDENCE TRIGGER. The cascade can also escalate an answer whose mean token
+# log-probability is below a threshold - the free signal for a wrong answer
+# given without hesitation, which the abstention trigger cannot see. The
+# threshold is chosen on 1000 sampled questions from each TRAIN split, never on
+# the test sets the tables report, by composing the three stages offline
+# (cmd/sweep). Same -limit and -seed on all three runs, so they see the same
+# questions. Approx 1h.
+cascade-tune:
+	go run ./cmd/bench -dataset dataset/musique_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-fused-musique.jsonl -name TuneFusedMuSiQue
+	go run ./cmd/bench -dataset dataset/hotpotqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-fused-hotpotqa.jsonl -name TuneFusedHotpotQA
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-fused-2wiki.jsonl -name TuneFusedTwoWiki
+	go run ./cmd/bench -dataset dataset/naturalquestions_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-fused-nq.jsonl -name TuneFusedNQ
+	go run ./cmd/bench -dataset dataset/triviaqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-fused-triviaqa.jsonl -name TuneFusedTriviaQA
+	go run ./cmd/bench -dataset dataset/musique_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hyde -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-hyde-musique.jsonl -name TuneHydeMuSiQue
+	go run ./cmd/bench -dataset dataset/hotpotqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hyde -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-hyde-hotpotqa.jsonl -name TuneHydeHotpotQA
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hyde -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-hyde-2wiki.jsonl -name TuneHydeTwoWiki
+	go run ./cmd/bench -dataset dataset/naturalquestions_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hyde -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-hyde-nq.jsonl -name TuneHydeNQ
+	go run ./cmd/bench -dataset dataset/triviaqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture hyde -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-hyde-triviaqa.jsonl -name TuneHydeTriviaQA
+	go run ./cmd/bench -dataset dataset/musique_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-closedbook-musique.jsonl -name TuneClosedbookMuSiQue
+	go run ./cmd/bench -dataset dataset/hotpotqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-closedbook-hotpotqa.jsonl -name TuneClosedbookHotpotQA
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-closedbook-2wiki.jsonl -name TuneClosedbookTwoWiki
+	go run ./cmd/bench -dataset dataset/naturalquestions_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-closedbook-nq.jsonl -name TuneClosedbookNQ
+	go run ./cmd/bench -dataset dataset/triviaqa_train.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook -limit 1000 -seed 42 -concurrency 48 -dump runs/tune-closedbook-triviaqa.jsonl -name TuneClosedbookTriviaQA
+	go run ./cmd/sweep -stage1 runs/tune-fused-musique.jsonl,runs/tune-fused-hotpotqa.jsonl,runs/tune-fused-2wiki.jsonl,runs/tune-fused-nq.jsonl,runs/tune-fused-triviaqa.jsonl -stage2 runs/tune-hyde-musique.jsonl,runs/tune-hyde-hotpotqa.jsonl,runs/tune-hyde-2wiki.jsonl,runs/tune-hyde-nq.jsonl,runs/tune-hyde-triviaqa.jsonl -last runs/tune-closedbook-musique.jsonl,runs/tune-closedbook-hotpotqa.jsonl,runs/tune-closedbook-2wiki.jsonl,runs/tune-closedbook-nq.jsonl,runs/tune-closedbook-triviaqa.jsonl -name Sweep -tex-out paper/sweep.gen.tex
+
+# The test-set run at the chosen threshold, as its own row next to the
+# abstention-only cascade. Usage: make cascade-logprob TAU=-0.5
+cascade-logprob:
+	@test -n "$(TAU)" || (echo "set the threshold: make cascade-logprob TAU=<value from make cascade-tune>"; exit 1)
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-min-logprob $(TAU) -concurrency 48 -dump runs/cascade-lp-musique.jsonl -name CascadeLogprobMuSiQue -tex-out paper/cascade-lp-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-min-logprob $(TAU) -concurrency 48 -dump runs/cascade-lp-hotpotqa.jsonl -name CascadeLogprobHotpotQA -tex-out paper/cascade-lp-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-min-logprob $(TAU) -concurrency 48 -dump runs/cascade-lp-2wiki.jsonl -name CascadeLogprobTwoWiki -tex-out paper/cascade-lp-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-min-logprob $(TAU) -concurrency 48 -dump runs/cascade-lp-nq.jsonl -name CascadeLogprobNQ -tex-out paper/cascade-lp-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade -cascade-min-logprob $(TAU) -concurrency 48 -dump runs/cascade-lp-triviaqa.jsonl -name CascadeLogprobTriviaQA -tex-out paper/cascade-lp-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/cascade-musique.jsonl -b runs/cascade-lp-musique.jsonl -name-a Cascade -name-b CascadeLogprob -name CascadeVsCascadeLogprobMuSiQue -tex-out paper/cmp-cascade-cascade-lp-musique.gen.tex
+	go run ./cmd/compare -a runs/cascade-hotpotqa.jsonl -b runs/cascade-lp-hotpotqa.jsonl -name-a Cascade -name-b CascadeLogprob -name CascadeVsCascadeLogprobHotpotQA -tex-out paper/cmp-cascade-cascade-lp-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/cascade-2wiki.jsonl -b runs/cascade-lp-2wiki.jsonl -name-a Cascade -name-b CascadeLogprob -name CascadeVsCascadeLogprobTwoWiki -tex-out paper/cmp-cascade-cascade-lp-2wiki.gen.tex
+	go run ./cmd/compare -a runs/cascade-nq.jsonl -b runs/cascade-lp-nq.jsonl -name-a Cascade -name-b CascadeLogprob -name CascadeVsCascadeLogprobNQ -tex-out paper/cmp-cascade-cascade-lp-nq.gen.tex
+	go run ./cmd/compare -a runs/cascade-triviaqa.jsonl -b runs/cascade-lp-triviaqa.jsonl -name-a Cascade -name-b CascadeLogprob -name CascadeVsCascadeLogprobTriviaQA -tex-out paper/cmp-cascade-cascade-lp-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-musique.jsonl -b runs/cascade-lp-musique.jsonl -name-a NaiveRAG -name-b CascadeLogprob -name NaiveRAGVsCascadeLogprobMuSiQue -tex-out paper/cmp-naive-cascade-lp-musique.gen.tex
+	go run ./cmd/compare -a runs/naive-hotpotqa.jsonl -b runs/cascade-lp-hotpotqa.jsonl -name-a NaiveRAG -name-b CascadeLogprob -name NaiveRAGVsCascadeLogprobHotpotQA -tex-out paper/cmp-naive-cascade-lp-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/naive-2wiki.jsonl -b runs/cascade-lp-2wiki.jsonl -name-a NaiveRAG -name-b CascadeLogprob -name NaiveRAGVsCascadeLogprobTwoWiki -tex-out paper/cmp-naive-cascade-lp-2wiki.gen.tex
+	go run ./cmd/compare -a runs/naive-nq.jsonl -b runs/cascade-lp-nq.jsonl -name-a NaiveRAG -name-b CascadeLogprob -name NaiveRAGVsCascadeLogprobNQ -tex-out paper/cmp-naive-cascade-lp-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-triviaqa.jsonl -b runs/cascade-lp-triviaqa.jsonl -name-a NaiveRAG -name-b CascadeLogprob -name NaiveRAGVsCascadeLogprobTriviaQA -tex-out paper/cmp-naive-cascade-lp-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-musique.jsonl -b runs/cascade-lp-musique.jsonl -name-a Rerank -name-b CascadeLogprob -name RerankVsCascadeLogprobMuSiQue -tex-out paper/cmp-rerank-cascade-lp-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-hotpotqa.jsonl -b runs/cascade-lp-hotpotqa.jsonl -name-a Rerank -name-b CascadeLogprob -name RerankVsCascadeLogprobHotpotQA -tex-out paper/cmp-rerank-cascade-lp-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-2wiki.jsonl -b runs/cascade-lp-2wiki.jsonl -name-a Rerank -name-b CascadeLogprob -name RerankVsCascadeLogprobTwoWiki -tex-out paper/cmp-rerank-cascade-lp-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-nq.jsonl -b runs/cascade-lp-nq.jsonl -name-a Rerank -name-b CascadeLogprob -name RerankVsCascadeLogprobNQ -tex-out paper/cmp-rerank-cascade-lp-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-triviaqa.jsonl -b runs/cascade-lp-triviaqa.jsonl -name-a Rerank -name-b CascadeLogprob -name RerankVsCascadeLogprobTriviaQA -tex-out paper/cmp-rerank-cascade-lp-triviaqa.gen.tex
+	go run ./cmd/result -proposed cascade-lp -name ResultLogprob -tex-out paper/result-lp.gen.tex
+
+# The summary table: the proposed architecture against every baseline on every
+# set, each cell a paired Exact Match difference marked win / loss / tie, with
+# Holm over the whole table. Reads runs/, so it comes after bench.
+result:
+	go run ./cmd/result -tex-out paper/result.gen.tex
 
 # Needs the naive and closedbook runs.
 diagnose:

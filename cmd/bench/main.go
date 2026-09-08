@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"log"
 	"maps"
+	"math"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -81,6 +82,8 @@ type result struct {
 	llmCalls         int64
 
 	trace rag.TraceData
+
+	meanLogprob *float64
 }
 
 // dumpRecord is one line of the -dump file: the per-question detail that
@@ -119,13 +122,20 @@ type dumpRecord struct {
 
 	// The architecture's own decisions, present only for the architectures
 	// that make them.
-	Route          string `json:"route,omitempty"`
-	Branch         string `json:"branch,omitempty"`
-	GradedKept     int    `json:"graded_kept,omitempty"`
-	RewrittenQuery string `json:"rewritten_query,omitempty"`
-	ReasoningSteps int    `json:"reasoning_steps,omitempty"`
-	Stage          string `json:"stage,omitempty"`
-	StagesRun      int    `json:"stages_run,omitempty"`
+	Route          string   `json:"route,omitempty"`
+	Branch         string   `json:"branch,omitempty"`
+	GradedKept     int      `json:"graded_kept,omitempty"`
+	RewrittenQuery string   `json:"rewritten_query,omitempty"`
+	ReasoningSteps int      `json:"reasoning_steps,omitempty"`
+	Stage          string   `json:"stage,omitempty"`
+	StagesRun      int      `json:"stages_run,omitempty"`
+	Escalations    []string `json:"escalations,omitempty"`
+
+	// MeanLogprob is the generator's confidence in the final answer: the mean
+	// log-probability of its tokens. Absent when the provider reports none.
+	// It is recorded for every architecture so that a confidence threshold
+	// can be swept offline (cmd/sweep) instead of re-running the GPU.
+	MeanLogprob *float64 `json:"mean_logprob,omitempty"`
 
 	LatencyS float64 `json:"latency_seconds"`
 }
@@ -152,6 +162,7 @@ func main() {
 		hnswEf = flag.Int("hnsw-ef", 256, "size of the candidate list Qdrant keeps while walking the HNSW graph. 0 leaves the server's default, which makes the approximate search's own recall an unreported property of the run. It has to be at least -candidates for a deep shortlist to be meaningful")
 
 		sparseColl    = flag.String("sparse-collection", "ragbench-wiki18-bm25", "bm25/hybrid only: Qdrant collection holding the lexical index - it must already exist and have been filled by cmd/ingest -sparse")
+		cascadeMinLP  = flag.Float64("cascade-min-logprob", math.Inf(-1), "cascade only: also escalate an answer whose mean token log-probability is below this. -Inf (the default) leaves the lossless abstention trigger alone. Choose the value with cmd/sweep on the train splits, never on the test sets the table reports")
 		cascadeStages = flag.String("cascade-stages", "fused,hyde,closedbook", "cascade only: comma-separated architectures to try in order. A stage's answer is kept unless it declines to answer, in which case the next stage runs. The refusal is a posterior signal - the reader has already seen the retrieved passages - and it is lossless under Exact Match, so escalating cannot discard a correct answer")
 
 		rrfK = flag.Int("rrf-k", 60, "hybrid only: the k of Reciprocal Rank Fusion. Larger values flatten the influence of the top positions; 60 is the value the RRF paper proposes and what every implementation uses")
@@ -329,7 +340,12 @@ func main() {
 				stages = append(stages, build(names[i]))
 			}
 			log.Printf("architecture: cascade (%s; a stage answers unless it declines, in which case the next one runs)", strings.Join(names, " -> "))
-			return rag.NewCascadeRAG(names, stages, *abstentionWords)
+			c := rag.NewCascadeRAG(names, stages, *abstentionWords)
+			c.MinLogprob = *cascadeMinLP
+			if !math.IsInf(*cascadeMinLP, -1) {
+				log.Printf("cascade: also escalating answers with mean logprob < %.3f", *cascadeMinLP)
+			}
+			return c
 		}
 		log.Fatalf("unknown architecture: %s (expected closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | fused | adaptive | neighbour | cascade)", arch)
 		return nil
@@ -501,6 +517,7 @@ func evaluate(ctx context.Context, pipeline Pipeline, item datasetLine, abstenti
 	// knows nothing about measurement still reports its true cost.
 	ctx, usage := provider.WithUsage(ctx)
 	ctx, trace := rag.WithTrace(ctx)
+	ctx, confidence := provider.WithConfidence(ctx)
 
 	start := time.Now()
 	answer, passages, err := pipeline.Query(ctx, item.Question)
@@ -535,6 +552,9 @@ func evaluate(ctx context.Context, pipeline Pipeline, item datasetLine, abstenti
 		completionTokens: usage.CompletionTokens.Load(),
 		llmCalls:         usage.Calls.Load(),
 		trace:            trace.Snapshot(),
+	}
+	if mean, ok := confidence.Last(); ok {
+		r.meanLogprob = &mean
 	}
 
 	if metrics.AnswerInContextApplicable(item.GoldenAnswers) {
@@ -856,6 +876,8 @@ func writeDump(path string, results []result) error {
 			ReasoningSteps:   r.trace.Steps,
 			Stage:            r.trace.Stage,
 			StagesRun:        r.trace.StagesRun,
+			Escalations:      r.trace.Escalations,
+			MeanLogprob:      r.meanLogprob,
 			LatencyS:         r.latency.Seconds(),
 		}); err != nil {
 			return err

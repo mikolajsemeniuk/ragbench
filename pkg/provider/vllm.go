@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -197,6 +198,10 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 			{"role": "user", "content": prompt},
 		},
 		"temperature": v.Temperature,
+		// Per-token log-probabilities of the generated answer, the free
+		// confidence signal Confidence records. They cost nothing extra to
+		// produce and only a few bytes to transfer.
+		"logprobs": true,
 	}
 	if v.MaxTokens > 0 {
 		body["max_tokens"] = v.MaxTokens
@@ -211,6 +216,12 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 			Message struct {
 				Content string `json:"content"`
 			} `json:"message"`
+			Logprobs struct {
+				Content []struct {
+					Token   string  `json:"token"`
+					Logprob float64 `json:"logprob"`
+				} `json:"content"`
+			} `json:"logprobs"`
 		} `json:"choices"`
 		Usage struct {
 			PromptTokens     int64 `json:"prompt_tokens"`
@@ -224,5 +235,16 @@ func (v *VLLM) Generate(ctx context.Context, prompt string) (string, error) {
 		return "", fmt.Errorf("llm returned no choices")
 	}
 	recordUsage(ctx, out.Usage.PromptTokens, out.Usage.CompletionTokens)
+	logprobs := make([]float64, 0, len(out.Choices[0].Logprobs.Content))
+	for _, t := range out.Choices[0].Logprobs.Content {
+		// The end-of-turn token (<|im_end|> and the like) is emitted with
+		// probability ~1 after every answer and would only pull the mean
+		// towards zero by an amount that depends on the answer's length.
+		if strings.HasPrefix(t.Token, "<|") {
+			continue
+		}
+		logprobs = append(logprobs, t.Logprob)
+	}
+	recordConfidence(ctx, logprobs)
 	return out.Choices[0].Message.Content, nil
 }

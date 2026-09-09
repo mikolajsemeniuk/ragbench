@@ -169,6 +169,17 @@ is chosen for all sets; put it in `TAU`. The test run writes
 cascade, naive and rerank, and rendered as its own summary table
 (`paper/result-lp.gen.tex`).
 
+Measured, it does not pay. The sweep over 4,988 train questions put the best
+threshold at -0.15 for +0.0018 Exact Match (McNemar p = 0.42) at +0.25 calls.
+On the test sets at that threshold the trigger fires on 9-15% of questions and
+the paired difference against the abstention-only cascade is -0.0008 on
+NaturalQuestions, +0.0021 on TriviaQA, -0.0020 on HotpotQA, -0.0037 on
+2WikiMultihopQA (the one significant difference, a loss) and 0.0000 on
+MuSiQue, at 0.2-0.36 more generation calls per question. The greedy reader is
+nearly as confident when wrong as when right, so its log-probability carries
+almost no information the abstention did not already carry. `cascade` stays
+the proposed row; `cascade-lp` is the ablation that says so.
+
 ### The summary table
 
 `make result` renders `paper/result.gen.tex`: the proposed architecture against

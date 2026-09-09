@@ -85,6 +85,7 @@ make naive-rag       # just this one, on all five question sets
 | `crag` | grade the retrieval, rewrite and re-search when it is poor | all 5 | 3 |
 | `crag-ten` | the same at a 10-passage budget | multi-hop 3 | 3 |
 | `ircot` | interleave one sentence of reasoning with one retrieval | all 5 | 2-6 |
+| `ircot-oneshot` | the same with one worked example in the prompt, as FlashRAG runs it - outside `make bench`, see below | all 5 | 2-6 |
 | `adaptive` | one call routes to closedbook, naive or ircot | all 5 | 2-7 |
 | `cascade` | **the proposed architecture** - see below | all 5 | ~1.3 |
 
@@ -265,6 +266,51 @@ It is not the best system on every set: HyDE beats it on NaturalQuestions
 architecture measured here that is never worse than NaiveRAG and never
 catastrophic, at 1.2-1.6 calls.
 
+## Is the IRCoT baseline under-prompted
+
+FlashRAG runs IRCoT with one worked example in the prompt and two iterations,
+and reports it gaining +6.2 F1 over standard RAG on HotpotQA and +11.4 on
+2WikiMultihopQA. The zero-shot loop here gains +1.8 and +1.9. A reviewer will
+ask whether the baseline the cascade is read against was handicapped, so the
+one-shot variant is its own row:
+
+```sh
+make ircot-oneshot   # runs/ircot1-<set>.jsonl, compared with ircot, naive10 and cascade
+```
+
+The example is one hand-written two-hop question (`rag.IRCoTDemonstration`),
+identical for every set. The dumps already say where the small gain comes
+from: the `reasoning_steps` field shows the zero-shot loop declaring it can
+answer after the first round - five passages, the same context as NaiveRAG -
+on 80.4% of HotpotQA questions, 70.3% of 2WikiMultihopQA and 67.1% of MuSiQue.
+Whatever the example does to the score, it has to do it by changing that
+fraction. If the row beats the zero-shot one it becomes the IRCoT baseline and
+`adaptive`, which uses IRCoT as its multi-hop branch, has to be re-run.
+
+## A second reader
+
+Everything the cascade claims rests on how the reader behaves when the
+passages are irrelevant - it declines, and the decline is what triggers the
+escalation. One model is not evidence that readers in general do that, so the
+rows the claims stand on are repeated with Llama-3.1-8B-Instruct, which is
+also the generator FlashRAG's published numbers use. The index and the
+questions stay the same; only the generator changes.
+
+```sh
+docker compose stop vllm-llm && docker compose up -d vllm-llm-llama   # both do not fit on the card at once
+make reader                                                           # ~20h: closedbook, naive, rerank, fused, cascade on all 5 sets
+docker compose stop vllm-llm-llama && docker compose up -d vllm-llm   # back to the main reader
+```
+
+The model is gated on Hugging Face: accept the licence and put `HF_TOKEN=...`
+in `.env`, or point the service at the ungated mirror
+`NousResearch/Meta-Llama-3.1-8B-Instruct` (identical weights). The runs are
+written as `runs/<architecture>-llama-<set>.jsonl`, their fragments as
+`paper/<architecture>-llama-<set>.gen.tex` with `Llama` in the command names,
+the six comparisons that matter as `paper/cmp-*-llama-*.gen.tex`, and the
+summary table as `paper/result-llama.gen.tex`. Another model is
+`make reader READER_MODEL=... READER_URL=... READER_TAG=... READER_NAME=...`.
+
 ## Diagnose retrieval failures
 
 Splits the naive baseline's retrieval failures into causes that call for
@@ -298,6 +344,7 @@ make compare
 | naive10 vs ircot and crag10 | these put more passages in context, so the baseline is given the same number |
 | naive12 vs neighbour | neighbour puts 10.7-12.3 passages in context |
 | naive vs adaptive, ircot vs adaptive | a router is only interesting against the branches it picks between |
+| ircot vs ircot-oneshot, naive10 vs ircot-oneshot, ircot-oneshot vs cascade | is the zero-shot IRCoT under-prompted; run by `make ircot-oneshot` |
 | rerank vs cascade | the proposed architecture against the strongest single baseline |
 | naive vs cascade | the proposed architecture against the standard baseline |
 | each ablation vs cascade, rerank vs fused | run by `make cascade-ablations`, not by `make compare` |

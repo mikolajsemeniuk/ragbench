@@ -3,8 +3,8 @@
 
 .PHONY: all ingest ingest-sparse coverage bench closedbook naive-rag \
 	naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag \
-	crag-ten ircot adaptive cascade cascade-ablations cascade-tune cascade-logprob \
-	result diagnose compare
+	crag-ten ircot ircot-oneshot adaptive cascade cascade-ablations cascade-tune \
+	cascade-logprob reader result diagnose compare
 
 all: bench diagnose compare coverage result
 
@@ -107,6 +107,30 @@ ircot:
 	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-2wiki.jsonl -name IRCoTTwoWiki -tex-out paper/ircot-2wiki.gen.tex
 	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-nq.jsonl -name IRCoTNQ -tex-out paper/ircot-nq.gen.tex
 	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture ircot -concurrency 48 -dump runs/ircot-triviaqa.jsonl -name IRCoTTriviaQA -tex-out paper/ircot-triviaqa.gen.tex
+
+# The one-shot IRCoT, as a separate row. FlashRAG prompts IRCoT with one worked
+# example and reports a far larger gain over standard RAG than the zero-shot
+# loop above; this run settles whether the baseline was under-prompted. It is
+# compared with the zero-shot run, the matched-budget control and the cascade.
+ircot-oneshot:
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture ircot -ircot-demo -concurrency 48 -dump runs/ircot1-musique.jsonl -name IRCoTOneShotMuSiQue -tex-out paper/ircot1-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -ircot-demo -concurrency 48 -dump runs/ircot1-hotpotqa.jsonl -name IRCoTOneShotHotpotQA -tex-out paper/ircot1-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -architecture ircot -ircot-demo -concurrency 48 -dump runs/ircot1-2wiki.jsonl -name IRCoTOneShotTwoWiki -tex-out paper/ircot1-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -architecture ircot -ircot-demo -concurrency 48 -dump runs/ircot1-nq.jsonl -name IRCoTOneShotNQ -tex-out paper/ircot1-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -architecture ircot -ircot-demo -concurrency 48 -dump runs/ircot1-triviaqa.jsonl -name IRCoTOneShotTriviaQA -tex-out paper/ircot1-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/ircot-musique.jsonl -b runs/ircot1-musique.jsonl -name-a IRCoT -name-b IRCoTOneShot -name IRCoTVsIRCoTOneShotMuSiQue -tex-out paper/cmp-ircot-ircot1-musique.gen.tex
+	go run ./cmd/compare -a runs/ircot-hotpotqa.jsonl -b runs/ircot1-hotpotqa.jsonl -name-a IRCoT -name-b IRCoTOneShot -name IRCoTVsIRCoTOneShotHotpotQA -tex-out paper/cmp-ircot-ircot1-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/ircot-2wiki.jsonl -b runs/ircot1-2wiki.jsonl -name-a IRCoT -name-b IRCoTOneShot -name IRCoTVsIRCoTOneShotTwoWiki -tex-out paper/cmp-ircot-ircot1-2wiki.gen.tex
+	go run ./cmd/compare -a runs/ircot-nq.jsonl -b runs/ircot1-nq.jsonl -name-a IRCoT -name-b IRCoTOneShot -name IRCoTVsIRCoTOneShotNQ -tex-out paper/cmp-ircot-ircot1-nq.gen.tex
+	go run ./cmd/compare -a runs/ircot-triviaqa.jsonl -b runs/ircot1-triviaqa.jsonl -name-a IRCoT -name-b IRCoTOneShot -name IRCoTVsIRCoTOneShotTriviaQA -tex-out paper/cmp-ircot-ircot1-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive10-musique.jsonl -b runs/ircot1-musique.jsonl -name-a NaiveTen -name-b IRCoTOneShot -name NaiveTenVsIRCoTOneShotMuSiQue -tex-out paper/cmp-naive10-ircot1-musique.gen.tex
+	go run ./cmd/compare -a runs/naive10-hotpotqa.jsonl -b runs/ircot1-hotpotqa.jsonl -name-a NaiveTen -name-b IRCoTOneShot -name NaiveTenVsIRCoTOneShotHotpotQA -tex-out paper/cmp-naive10-ircot1-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/naive10-2wiki.jsonl -b runs/ircot1-2wiki.jsonl -name-a NaiveTen -name-b IRCoTOneShot -name NaiveTenVsIRCoTOneShotTwoWiki -tex-out paper/cmp-naive10-ircot1-2wiki.gen.tex
+	go run ./cmd/compare -a runs/ircot1-musique.jsonl -b runs/cascade-musique.jsonl -name-a IRCoTOneShot -name-b Cascade -name IRCoTOneShotVsCascadeMuSiQue -tex-out paper/cmp-ircot1-cascade-musique.gen.tex
+	go run ./cmd/compare -a runs/ircot1-hotpotqa.jsonl -b runs/cascade-hotpotqa.jsonl -name-a IRCoTOneShot -name-b Cascade -name IRCoTOneShotVsCascadeHotpotQA -tex-out paper/cmp-ircot1-cascade-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/ircot1-2wiki.jsonl -b runs/cascade-2wiki.jsonl -name-a IRCoTOneShot -name-b Cascade -name IRCoTOneShotVsCascadeTwoWiki -tex-out paper/cmp-ircot1-cascade-2wiki.gen.tex
+	go run ./cmd/compare -a runs/ircot1-nq.jsonl -b runs/cascade-nq.jsonl -name-a IRCoTOneShot -name-b Cascade -name IRCoTOneShotVsCascadeNQ -tex-out paper/cmp-ircot1-cascade-nq.gen.tex
+	go run ./cmd/compare -a runs/ircot1-triviaqa.jsonl -b runs/cascade-triviaqa.jsonl -name-a IRCoTOneShot -name-b Cascade -name IRCoTOneShotVsCascadeTriviaQA -tex-out paper/cmp-ircot1-cascade-triviaqa.gen.tex
 
 adaptive:
 	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -architecture adaptive -concurrency 48 -dump runs/adaptive-musique.jsonl -name AdaptiveMuSiQue -tex-out paper/adaptive-musique.gen.tex
@@ -244,6 +268,80 @@ cascade-logprob:
 # Holm over the whole table. Reads runs/, so it comes after bench.
 result:
 	go run ./cmd/result -tex-out paper/result.gen.tex
+
+# A SECOND READER. Everything the cascade claims rests on how the reader
+# behaves with irrelevant passages, so the rows the claims stand on are
+# repeated with another generator: closed-book, naive, rerank, fused and the
+# cascade. Same index, same questions; only the generator changes. The runs
+# get a tag in their file names so nothing of the main table is overwritten.
+#
+#   docker compose stop vllm-llm && docker compose up -d vllm-llm-llama
+#   make reader
+#
+# Another model: make reader READER_MODEL=... READER_URL=... READER_TAG=... READER_NAME=...
+# READER_NAME is the CamelCase infix of the generated LaTeX commands (letters only).
+READER_MODEL ?= llama-3.1-8b-instruct
+READER_URL   ?= http://localhost:8003
+READER_TAG   ?= llama
+READER_NAME  ?= Llama
+READER_FLAGS  = -llm-model $(READER_MODEL) -provider-url $(READER_URL)
+reader:
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook $(READER_FLAGS) -concurrency 48 -dump runs/closedbook-$(READER_TAG)-musique.jsonl -name ClosedBook$(READER_NAME)MuSiQue -tex-out paper/closedbook-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook $(READER_FLAGS) -concurrency 48 -dump runs/closedbook-$(READER_TAG)-hotpotqa.jsonl -name ClosedBook$(READER_NAME)HotpotQA -tex-out paper/closedbook-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook $(READER_FLAGS) -concurrency 48 -dump runs/closedbook-$(READER_TAG)-2wiki.jsonl -name ClosedBook$(READER_NAME)TwoWiki -tex-out paper/closedbook-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook $(READER_FLAGS) -concurrency 48 -dump runs/closedbook-$(READER_TAG)-nq.jsonl -name ClosedBook$(READER_NAME)NQ -tex-out paper/closedbook-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture closedbook $(READER_FLAGS) -concurrency 48 -dump runs/closedbook-$(READER_TAG)-triviaqa.jsonl -name ClosedBook$(READER_NAME)TriviaQA -tex-out paper/closedbook-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture naive $(READER_FLAGS) -concurrency 48 -dump runs/naive-$(READER_TAG)-musique.jsonl -name NaiveRAG$(READER_NAME)MuSiQue -tex-out paper/naive-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture naive $(READER_FLAGS) -concurrency 48 -dump runs/naive-$(READER_TAG)-hotpotqa.jsonl -name NaiveRAG$(READER_NAME)HotpotQA -tex-out paper/naive-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture naive $(READER_FLAGS) -concurrency 48 -dump runs/naive-$(READER_TAG)-2wiki.jsonl -name NaiveRAG$(READER_NAME)TwoWiki -tex-out paper/naive-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture naive $(READER_FLAGS) -concurrency 48 -dump runs/naive-$(READER_TAG)-nq.jsonl -name NaiveRAG$(READER_NAME)NQ -tex-out paper/naive-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture naive $(READER_FLAGS) -concurrency 48 -dump runs/naive-$(READER_TAG)-triviaqa.jsonl -name NaiveRAG$(READER_NAME)TriviaQA -tex-out paper/naive-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture rerank $(READER_FLAGS) -concurrency 48 -dump runs/rerank-$(READER_TAG)-musique.jsonl -name Rerank$(READER_NAME)MuSiQue -tex-out paper/rerank-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture rerank $(READER_FLAGS) -concurrency 48 -dump runs/rerank-$(READER_TAG)-hotpotqa.jsonl -name Rerank$(READER_NAME)HotpotQA -tex-out paper/rerank-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture rerank $(READER_FLAGS) -concurrency 48 -dump runs/rerank-$(READER_TAG)-2wiki.jsonl -name Rerank$(READER_NAME)TwoWiki -tex-out paper/rerank-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture rerank $(READER_FLAGS) -concurrency 48 -dump runs/rerank-$(READER_TAG)-nq.jsonl -name Rerank$(READER_NAME)NQ -tex-out paper/rerank-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture rerank $(READER_FLAGS) -concurrency 48 -dump runs/rerank-$(READER_TAG)-triviaqa.jsonl -name Rerank$(READER_NAME)TriviaQA -tex-out paper/rerank-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused $(READER_FLAGS) -concurrency 48 -dump runs/fused-$(READER_TAG)-musique.jsonl -name Fused$(READER_NAME)MuSiQue -tex-out paper/fused-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused $(READER_FLAGS) -concurrency 48 -dump runs/fused-$(READER_TAG)-hotpotqa.jsonl -name Fused$(READER_NAME)HotpotQA -tex-out paper/fused-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused $(READER_FLAGS) -concurrency 48 -dump runs/fused-$(READER_TAG)-2wiki.jsonl -name Fused$(READER_NAME)TwoWiki -tex-out paper/fused-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused $(READER_FLAGS) -concurrency 48 -dump runs/fused-$(READER_TAG)-nq.jsonl -name Fused$(READER_NAME)NQ -tex-out paper/fused-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture fused $(READER_FLAGS) -concurrency 48 -dump runs/fused-$(READER_TAG)-triviaqa.jsonl -name Fused$(READER_NAME)TriviaQA -tex-out paper/fused-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/bench -dataset dataset/musique_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade $(READER_FLAGS) -concurrency 48 -dump runs/cascade-$(READER_TAG)-musique.jsonl -name Cascade$(READER_NAME)MuSiQue -tex-out paper/cascade-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/bench -dataset dataset/hotpotqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade $(READER_FLAGS) -concurrency 48 -dump runs/cascade-$(READER_TAG)-hotpotqa.jsonl -name Cascade$(READER_NAME)HotpotQA -tex-out paper/cascade-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/bench -dataset dataset/2wikimultihopqa_dev.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade $(READER_FLAGS) -concurrency 48 -dump runs/cascade-$(READER_TAG)-2wiki.jsonl -name Cascade$(READER_NAME)TwoWiki -tex-out paper/cascade-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/bench -dataset dataset/naturalquestions_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade $(READER_FLAGS) -concurrency 48 -dump runs/cascade-$(READER_TAG)-nq.jsonl -name Cascade$(READER_NAME)NQ -tex-out paper/cascade-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/bench -dataset dataset/triviaqa_test.jsonl -collection ragbench-wiki18 -sparse-collection ragbench-wiki18-bm25 -architecture cascade $(READER_FLAGS) -concurrency 48 -dump runs/cascade-$(READER_TAG)-triviaqa.jsonl -name Cascade$(READER_NAME)TriviaQA -tex-out paper/cascade-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/closedbook-$(READER_TAG)-musique.jsonl -b runs/naive-$(READER_TAG)-musique.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveRAG$(READER_NAME)MuSiQue -tex-out paper/cmp-closedbook-naive-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/closedbook-$(READER_TAG)-hotpotqa.jsonl -b runs/naive-$(READER_TAG)-hotpotqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveRAG$(READER_NAME)HotpotQA -tex-out paper/cmp-closedbook-naive-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/closedbook-$(READER_TAG)-2wiki.jsonl -b runs/naive-$(READER_TAG)-2wiki.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveRAG$(READER_NAME)TwoWiki -tex-out paper/cmp-closedbook-naive-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/closedbook-$(READER_TAG)-nq.jsonl -b runs/naive-$(READER_TAG)-nq.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveRAG$(READER_NAME)NQ -tex-out paper/cmp-closedbook-naive-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/closedbook-$(READER_TAG)-triviaqa.jsonl -b runs/naive-$(READER_TAG)-triviaqa.jsonl -name-a ClosedBook -name-b NaiveRAG -name ClosedBookVsNaiveRAG$(READER_NAME)TriviaQA -tex-out paper/cmp-closedbook-naive-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-musique.jsonl -b runs/rerank-$(READER_TAG)-musique.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveRAGVsRerank$(READER_NAME)MuSiQue -tex-out paper/cmp-naive-rerank-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-hotpotqa.jsonl -b runs/rerank-$(READER_TAG)-hotpotqa.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveRAGVsRerank$(READER_NAME)HotpotQA -tex-out paper/cmp-naive-rerank-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-2wiki.jsonl -b runs/rerank-$(READER_TAG)-2wiki.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveRAGVsRerank$(READER_NAME)TwoWiki -tex-out paper/cmp-naive-rerank-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-nq.jsonl -b runs/rerank-$(READER_TAG)-nq.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveRAGVsRerank$(READER_NAME)NQ -tex-out paper/cmp-naive-rerank-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-triviaqa.jsonl -b runs/rerank-$(READER_TAG)-triviaqa.jsonl -name-a NaiveRAG -name-b Rerank -name NaiveRAGVsRerank$(READER_NAME)TriviaQA -tex-out paper/cmp-naive-rerank-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-musique.jsonl -b runs/fused-$(READER_TAG)-musique.jsonl -name-a Rerank -name-b Fused -name RerankVsFused$(READER_NAME)MuSiQue -tex-out paper/cmp-rerank-fused-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-hotpotqa.jsonl -b runs/fused-$(READER_TAG)-hotpotqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFused$(READER_NAME)HotpotQA -tex-out paper/cmp-rerank-fused-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-2wiki.jsonl -b runs/fused-$(READER_TAG)-2wiki.jsonl -name-a Rerank -name-b Fused -name RerankVsFused$(READER_NAME)TwoWiki -tex-out paper/cmp-rerank-fused-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-nq.jsonl -b runs/fused-$(READER_TAG)-nq.jsonl -name-a Rerank -name-b Fused -name RerankVsFused$(READER_NAME)NQ -tex-out paper/cmp-rerank-fused-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-triviaqa.jsonl -b runs/fused-$(READER_TAG)-triviaqa.jsonl -name-a Rerank -name-b Fused -name RerankVsFused$(READER_NAME)TriviaQA -tex-out paper/cmp-rerank-fused-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/fused-$(READER_TAG)-musique.jsonl -b runs/cascade-$(READER_TAG)-musique.jsonl -name-a Fused -name-b Cascade -name FusedVsCascade$(READER_NAME)MuSiQue -tex-out paper/cmp-fused-cascade-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/fused-$(READER_TAG)-hotpotqa.jsonl -b runs/cascade-$(READER_TAG)-hotpotqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascade$(READER_NAME)HotpotQA -tex-out paper/cmp-fused-cascade-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/fused-$(READER_TAG)-2wiki.jsonl -b runs/cascade-$(READER_TAG)-2wiki.jsonl -name-a Fused -name-b Cascade -name FusedVsCascade$(READER_NAME)TwoWiki -tex-out paper/cmp-fused-cascade-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/fused-$(READER_TAG)-nq.jsonl -b runs/cascade-$(READER_TAG)-nq.jsonl -name-a Fused -name-b Cascade -name FusedVsCascade$(READER_NAME)NQ -tex-out paper/cmp-fused-cascade-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/fused-$(READER_TAG)-triviaqa.jsonl -b runs/cascade-$(READER_TAG)-triviaqa.jsonl -name-a Fused -name-b Cascade -name FusedVsCascade$(READER_NAME)TriviaQA -tex-out paper/cmp-fused-cascade-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-musique.jsonl -b runs/cascade-$(READER_TAG)-musique.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveRAGVsCascade$(READER_NAME)MuSiQue -tex-out paper/cmp-naive-cascade-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-hotpotqa.jsonl -b runs/cascade-$(READER_TAG)-hotpotqa.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveRAGVsCascade$(READER_NAME)HotpotQA -tex-out paper/cmp-naive-cascade-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-2wiki.jsonl -b runs/cascade-$(READER_TAG)-2wiki.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveRAGVsCascade$(READER_NAME)TwoWiki -tex-out paper/cmp-naive-cascade-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-nq.jsonl -b runs/cascade-$(READER_TAG)-nq.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveRAGVsCascade$(READER_NAME)NQ -tex-out paper/cmp-naive-cascade-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/naive-$(READER_TAG)-triviaqa.jsonl -b runs/cascade-$(READER_TAG)-triviaqa.jsonl -name-a NaiveRAG -name-b Cascade -name NaiveRAGVsCascade$(READER_NAME)TriviaQA -tex-out paper/cmp-naive-cascade-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-musique.jsonl -b runs/cascade-$(READER_TAG)-musique.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)MuSiQue -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-musique.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-hotpotqa.jsonl -b runs/cascade-$(READER_TAG)-hotpotqa.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)HotpotQA -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-hotpotqa.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-2wiki.jsonl -b runs/cascade-$(READER_TAG)-2wiki.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)TwoWiki -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-2wiki.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-nq.jsonl -b runs/cascade-$(READER_TAG)-nq.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)NQ -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-nq.gen.tex
+	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-triviaqa.jsonl -b runs/cascade-$(READER_TAG)-triviaqa.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)TriviaQA -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-triviaqa.gen.tex
+	go run ./cmd/result -suffix $(READER_TAG) -baselines closedbook,naive,rerank,fused -name Result$(READER_NAME) -tex-out paper/result-$(READER_TAG).gen.tex
 
 # Needs the naive and closedbook runs.
 diagnose:

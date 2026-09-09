@@ -132,6 +132,44 @@ services:
               device_ids: ["0"]
               capabilities: [gpu]
 
+  # A second reader, for the check that the abstention behaviour the cascade
+  # relies on is not a property of one model. Same budget as vllm-llm, so the
+  # two cannot run at once: `docker compose stop vllm-llm` first. The model is
+  # gated on Hugging Face - put HF_TOKEN=... in .env after accepting the
+  # licence, or swap in the ungated mirror NousResearch/Meta-Llama-3.1-8B-Instruct
+  # (identical weights).
+  vllm-llm-llama:
+    image: vllm/vllm-openai:v0.25.1
+    container_name: vllm-llm-llama
+    ports:
+      - "8003:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN:-}
+    command: >
+      --model meta-llama/Llama-3.1-8B-Instruct
+      --served-model-name llama-3.1-8b-instruct
+      --max-model-len 8192
+      --gpu-memory-utilization 0.55
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 600s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+
   qdrant:
     image: qdrant/qdrant:v1.19.0
     container_name: qdrant

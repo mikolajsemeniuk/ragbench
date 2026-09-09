@@ -153,6 +153,7 @@ func main() {
 		architecture = flag.String("architecture", "naive", "RAG architecture to evaluate: closedbook | naive | ircot | crag | rerank | hyde | bm25 | hybrid | fused | adaptive | neighbour | cascade")
 		ircotSteps   = flag.Int("ircot-steps", 4, "ircot only: maximum reasoning/retrieval rounds per question")
 		ircotMaxDocs = flag.Int("ircot-max-passages", 15, "ircot only: cap on the accumulated passage set")
+		ircotDemo    = flag.Bool("ircot-demo", false, "ircot only: prepend one worked example to the reasoning prompt, as the original method and FlashRAG do. Off by default so that the zero-shot runs stay reproducible; the one-shot run is a separate row")
 		cragMaxDocs  = flag.Int("crag-max-passages", 10, "crag only: cap on the passage set after correction")
 		rerankURL    = flag.String("rerank-url", "http://localhost:8002", "rerank only: cross-encoder provider URL")
 		rerankModel  = flag.String("rerank-model", "bge-reranker-base", "rerank only: cross-encoder model name")
@@ -257,6 +258,9 @@ func main() {
 		p.TopK = *topK
 		p.MaxSteps = *ircotSteps
 		p.MaxPassages = *ircotMaxDocs
+		if *ircotDemo {
+			p.Demonstration = rag.IRCoTDemonstration
+		}
 		p.QueryPrefix = resolvedPrefix
 		return p
 	}

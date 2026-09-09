@@ -45,21 +45,25 @@ type cell struct {
 
 // Display names. A baseline that is not listed is shown under its slug.
 var baselineNames = map[string]string{
-	"closedbook": "ClosedBook (no retrieval)",
-	"bm25":       "BM25",
-	"naive":      "NaiveRAG, 5 passages",
-	"naive10":    "NaiveRAG, 10 passages",
-	"naive12":    "NaiveRAG, 12 passages",
-	"hybrid":     "Hybrid (dense + BM25)",
-	"hyde":       "HyDE",
-	"rerank":     "Rerank (cross-encoder)",
-	"neighbour":  "Neighbour expansion",
-	"crag":       "CRAG (offline), 5 passages",
-	"crag10":     "CRAG (offline), 10 passages",
-	"ircot":      "IRCoT",
-	"adaptive":   "Adaptive-RAG",
-	"cascade":    "Cascade",
-	"cascade-lp": "Cascade + confidence",
+	"closedbook":     "ClosedBook (no retrieval)",
+	"bm25":           "BM25",
+	"naive":          "NaiveRAG, 5 passages",
+	"naive10":        "NaiveRAG, 10 passages",
+	"naive12":        "NaiveRAG, 12 passages",
+	"hybrid":         "Hybrid (dense + BM25)",
+	"hyde":           "HyDE",
+	"rerank":         "Rerank (cross-encoder)",
+	"neighbour":      "Neighbour expansion",
+	"crag":           "CRAG (offline), 5 passages",
+	"crag10":         "CRAG (offline), 10 passages",
+	"ircot":          "IRCoT",
+	"adaptive":       "Adaptive-RAG",
+	"cascade":        "Cascade",
+	"cascade-lp":     "Cascade + confidence",
+	"fused":          "Fused retrieval (stage 1 alone)",
+	"cascade-rr":     "Cascade, rerank first",
+	"cascade-naive":  "Cascade, naive first",
+	"cascade-hybrid": "Cascade, hybrid first",
 }
 
 var setNames = map[string]string{
@@ -74,6 +78,7 @@ func main() {
 	var (
 		runsDir   = flag.String("runs", "runs", "directory holding the -dump files, named <architecture>-<set>.jsonl")
 		proposed  = flag.String("proposed", "cascade", "architecture slug of the proposed system")
+		suffix    = flag.String("suffix", "", "tag inserted after every architecture slug in the file names, e.g. \"llama\" reads naive-llama-<set>.jsonl - for a table over runs made with another reader")
 		baselines = flag.String("baselines", "closedbook,bm25,naive,naive10,naive12,hybrid,hyde,rerank,neighbour,crag,crag10,ircot,adaptive", "comma-separated baseline slugs, in table order")
 		sets      = flag.String("sets", "nq,triviaqa,hotpotqa,2wiki,musique", "comma-separated question-set slugs, in column order")
 		alpha     = flag.Float64("alpha", 0.05, "significance level after the Holm adjustment")
@@ -90,8 +95,12 @@ func main() {
 		for _, s := range strings.Split(*sets, ",") {
 			c := &cell{baseline: strings.TrimSpace(b), set: strings.TrimSpace(s)}
 			cells = append(cells, c)
-			a, okA := load(filepath.Join(*runsDir, c.baseline+"-"+c.set+".jsonl"))
-			p, okB := load(filepath.Join(*runsDir, *proposed+"-"+c.set+".jsonl"))
+			tag := ""
+			if *suffix != "" {
+				tag = "-" + *suffix
+			}
+			a, okA := load(filepath.Join(*runsDir, c.baseline+tag+"-"+c.set+".jsonl"))
+			p, okB := load(filepath.Join(*runsDir, *proposed+tag+"-"+c.set+".jsonl"))
 			if !okA || !okB {
 				c.missing = true
 				continue

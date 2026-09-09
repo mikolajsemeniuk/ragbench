@@ -52,6 +52,15 @@ type IRCoT struct {
 	MaxSteps    int
 	MaxPassages int
 
+	// Demonstration is a worked example placed before the reasoning
+	// instruction, as the original method and FlashRAG's reimplementation do.
+	// Empty means zero-shot. It exists because a reviewer can otherwise ask
+	// whether the baseline is under-prompted: FlashRAG reports IRCoT gaining
+	// +6.2 F1 over standard RAG on HotpotQA and +11.4 on 2WikiMultihopQA with a
+	// one-shot prompt and two iterations; the zero-shot loop here gains +1.8
+	// and +1.9. Set it to IRCoTDemonstration to run the one-shot variant.
+	Demonstration string
+
 	QueryPrefix    string
 	DocumentPrefix string
 }
@@ -104,7 +113,7 @@ func (r *IRCoT) Query(ctx context.Context, question string) (answer string, retr
 			break
 		}
 
-		sentence, err := r.stepper().Generate(ctx, buildReasoningPrompt(question, passages, reasoning))
+		sentence, err := r.stepper().Generate(ctx, buildReasoningPrompt(question, passages, reasoning, r.Demonstration))
 		if err != nil {
 			return "", nil, fmt.Errorf("reasoning step: %w", err)
 		}
@@ -166,9 +175,13 @@ func (r *IRCoT) retrieve(ctx context.Context, query string) ([]storage.Point, er
 // than a full chain, is what makes the loop work: each sentence becomes the
 // next retrieval query, so a long chain would blur several hops into a single
 // query and lose the very specificity that lets the second hop be found.
-func buildReasoningPrompt(question string, contexts []storage.Point, reasoning []string) string {
+func buildReasoningPrompt(question string, contexts []storage.Point, reasoning []string, demonstration string) string {
 	var b strings.Builder
 	b.WriteString("You are answering a question step by step using the documents below.\n\n")
+	if demonstration != "" {
+		b.WriteString(demonstration)
+		b.WriteString("\n\nNow the actual task.\n\n")
+	}
 	b.WriteString("Documents:\n")
 	for i, c := range contexts {
 		fmt.Fprintf(&b, "[%d] %s\n", i+1, c.Text)
@@ -182,3 +195,22 @@ func buildReasoningPrompt(question string, contexts []storage.Point, reasoning [
 	b.WriteString("If the documents already answer the question, write \"So the answer is: <answer>\".")
 	return b.String()
 }
+
+// IRCoTDemonstration is the one worked example the one-shot variant prepends
+// to every reasoning prompt. It is hand-written in the style of the original
+// IRCoT demonstrations - a two-hop question, one sentence of reasoning per
+// hop, and the "So the answer is" line the loop stops on - and it is the same
+// for every question set, so that it cannot leak dataset-specific phrasing
+// into one set's score and not another's.
+const IRCoTDemonstration = `Example:
+
+Documents:
+[1] "Beat Girl" Beat Girl is a 1960 British film directed by Edmond T. Gréville. It stars David Farrar, Noëlle Adam and Christopher Lee.
+[2] "Edmond T. Gréville" Edmond T. Gréville (20 June 1906 - 26 May 1966) was a French film director and screenwriter. He was born in Nice and died in Nice.
+
+Question: Where did the director of the film Beat Girl die?
+
+Reasoning:
+The film Beat Girl was directed by Edmond T. Gréville.
+Edmond T. Gréville died in Nice.
+So the answer is: Nice.`

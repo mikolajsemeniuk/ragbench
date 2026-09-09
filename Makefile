@@ -4,9 +4,9 @@
 .PHONY: all ingest ingest-sparse coverage bench closedbook naive-rag \
 	naive-rag-ten naive-rag-twelve bm25 hybrid hyde rerank neighbour crag \
 	crag-ten ircot ircot-oneshot adaptive cascade cascade-ablations cascade-tune \
-	cascade-logprob reader result diagnose compare
+	cascade-logprob reader result cost diagnose compare
 
-all: bench diagnose compare coverage result
+all: bench diagnose compare coverage result cost
 
 # Approx 3h on the GPU. An interrupted run prints the line to resume from;
 # re-run it by hand with -skip N.
@@ -269,6 +269,12 @@ cascade-logprob:
 result:
 	go run ./cmd/result -tex-out paper/result.gen.tex
 
+# The cost table: generation calls, prompt and completion tokens and passages
+# per question for every architecture, from the dumps. Tokens rather than
+# seconds, because a latency at -concurrency 48 measures the queue.
+cost:
+	go run ./cmd/cost -tex-out paper/cost.gen.tex
+
 # A SECOND READER. Everything the cascade claims rests on how the reader
 # behaves with irrelevant passages, so the rows the claims stand on are
 # repeated with another generator: closed-book, naive, rerank, fused and the
@@ -342,6 +348,7 @@ reader:
 	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-nq.jsonl -b runs/cascade-$(READER_TAG)-nq.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)NQ -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-nq.gen.tex
 	go run ./cmd/compare -a runs/rerank-$(READER_TAG)-triviaqa.jsonl -b runs/cascade-$(READER_TAG)-triviaqa.jsonl -name-a Rerank -name-b Cascade -name RerankVsCascade$(READER_NAME)TriviaQA -tex-out paper/cmp-rerank-cascade-$(READER_TAG)-triviaqa.gen.tex
 	go run ./cmd/result -suffix $(READER_TAG) -baselines closedbook,naive,rerank,fused -name Result$(READER_NAME) -tex-out paper/result-$(READER_TAG).gen.tex
+	go run ./cmd/cost -suffix $(READER_TAG) -architectures closedbook,naive,rerank,fused,cascade -name Cost$(READER_NAME) -tex-out paper/cost-$(READER_TAG).gen.tex
 
 # Needs the naive and closedbook runs.
 diagnose:

@@ -22,6 +22,8 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+
+	"github.com/mikolajsemeniuk/ragbench/pkg/report"
 )
 
 type record struct {
@@ -41,37 +43,6 @@ type cell struct {
 	callsA, callsB float64
 	verdict        string // win | loss | tie
 	missing        bool
-}
-
-// Display names. A baseline that is not listed is shown under its slug.
-var baselineNames = map[string]string{
-	"closedbook":     "ClosedBook (no retrieval)",
-	"bm25":           "BM25",
-	"naive":          "NaiveRAG, 5 passages",
-	"naive10":        "NaiveRAG, 10 passages",
-	"naive12":        "NaiveRAG, 12 passages",
-	"hybrid":         "Hybrid (dense + BM25)",
-	"hyde":           "HyDE",
-	"rerank":         "Rerank (cross-encoder)",
-	"neighbour":      "Neighbour expansion",
-	"crag":           "CRAG (offline), 5 passages",
-	"crag10":         "CRAG (offline), 10 passages",
-	"ircot":          "IRCoT",
-	"adaptive":       "Adaptive-RAG",
-	"cascade":        "Cascade",
-	"cascade-lp":     "Cascade + confidence",
-	"fused":          "Fused retrieval (stage 1 alone)",
-	"cascade-rr":     "Cascade, rerank first",
-	"cascade-naive":  "Cascade, naive first",
-	"cascade-hybrid": "Cascade, hybrid first",
-}
-
-var setNames = map[string]string{
-	"nq":       "NQ",
-	"triviaqa": "TriviaQA",
-	"hotpotqa": "HotpotQA",
-	"2wiki":    "2Wiki",
-	"musique":  "MuSiQue",
 }
 
 func main() {
@@ -130,12 +101,12 @@ func main() {
 	setList := strings.Split(*sets, ",")
 	fmt.Printf("%-28s", "baseline (calls/q)")
 	for _, s := range setList {
-		fmt.Printf("%22s", setNames[s])
+		fmt.Printf("%22s", report.SetName(s))
 	}
 	fmt.Println()
 	for _, b := range strings.Split(*baselines, ",") {
 		row := rowCells(cells, b)
-		fmt.Printf("%-28s", fmt.Sprintf("%s (%s)", baselineNames[b], callsLabel(row, true)))
+		fmt.Printf("%-28s", fmt.Sprintf("%s (%s)", report.ArchitectureName(b), callsLabel(row, true)))
 		for _, c := range row {
 			if c.missing {
 				fmt.Printf("%22s", "-")
@@ -145,7 +116,7 @@ func main() {
 		}
 		fmt.Println()
 	}
-	fmt.Printf("%-28s", fmt.Sprintf("%s calls/q", baselineNames[*proposed]))
+	fmt.Printf("%-28s", fmt.Sprintf("%s calls/q", report.ArchitectureName(*proposed)))
 	for _, s := range setList {
 		fmt.Printf("%22s", proposedCalls(cells, s))
 	}
@@ -257,7 +228,7 @@ func writeTex(path, name, proposed string, baselines, sets []string, cells []*ce
 	id := texSafeID(name)
 	var b strings.Builder
 	fmt.Fprintf(&b, "%% generated automatically by cmd/result - do not edit by hand\n")
-	fmt.Fprintf(&b, "%% A cell is the paired Exact Match difference (%s minus baseline). Bold: %s is significantly better;\n", baselineNames[proposed], baselineNames[proposed])
+	fmt.Fprintf(&b, "%% A cell is the paired Exact Match difference (%s minus baseline). Bold: %s is significantly better;\n", report.ArchitectureName(proposed), report.ArchitectureName(proposed))
 	fmt.Fprintf(&b, "%% underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell.\n")
 	fmt.Fprintf(&b, "\\newcommand{\\%sPairs}{%d}\n", id, wins+losses+ties)
 	fmt.Fprintf(&b, "\\newcommand{\\%sWins}{%d}\n", id, wins)
@@ -267,12 +238,12 @@ func writeTex(path, name, proposed string, baselines, sets []string, cells []*ce
 	fmt.Fprintf(&b, "\\begin{tabular}{l%s}\n\\toprule\n", strings.Repeat("r", len(sets)))
 	fmt.Fprintf(&b, "Baseline (calls/q)")
 	for _, s := range sets {
-		fmt.Fprintf(&b, " & %s", setNames[s])
+		fmt.Fprintf(&b, " & %s", report.SetName(s))
 	}
 	fmt.Fprintf(&b, " \\\\\n\\midrule\n")
 	for _, bl := range baselines {
 		row := rowCells(cells, bl)
-		fmt.Fprintf(&b, "%s (%s)", baselineNames[bl], callsLabel(row, true))
+		fmt.Fprintf(&b, "%s (%s)", report.ArchitectureName(bl), callsLabel(row, true))
 		for _, c := range row {
 			switch {
 			case c.missing:
@@ -287,7 +258,7 @@ func writeTex(path, name, proposed string, baselines, sets []string, cells []*ce
 		}
 		fmt.Fprintf(&b, " \\\\\n")
 	}
-	fmt.Fprintf(&b, "\\midrule\n%s calls/q", baselineNames[proposed])
+	fmt.Fprintf(&b, "\\midrule\n%s calls/q", report.ArchitectureName(proposed))
 	for _, s := range sets {
 		fmt.Fprintf(&b, " & %s", proposedCalls(cells, s))
 	}

@@ -89,6 +89,7 @@
 \useresults{diagnosis-2wiki}
 \useresults{coverage-2wiki}
 \useresults{result}
+\useresults{cost}
 
 \begin{document}
 
@@ -226,5 +227,14 @@ a significant loss under McNemar's test with a Holm adjustment over all
 \ResultTies{}.
 
 \ResultTable
+
+\subsection*{Cost per question}
+
+Generation calls and tokens per question, averaged over the sets each
+architecture ran on; the last column is the prompt-token cost relative to
+\CostRelativeTo. Latency is not reported: at the concurrency the runs used it
+measures queueing, and tokens are the figure that transfers between machines.
+
+\CostTable
 
 \end{document}

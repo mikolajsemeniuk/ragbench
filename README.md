@@ -192,6 +192,20 @@ loses L, ties T of P pairs" - is one family of tests. That is stricter than
 the per-pair figures in `paper/cmp-*.gen.tex`, and a few narrow wins there
 are ties here.
 
+### The cost table
+
+`make cost` renders `paper/cost.gen.tex`: generation calls, prompt tokens,
+completion tokens and passages per question for every architecture, averaged
+over the sets it ran on, plus the prompt-token ratio to NaiveRAG. It reads the
+dumps, so it is tokens and calls only - the comparable cost. The throughput in
+the per-run fragments is not in it on purpose: at `-concurrency 48` it
+measures the queue, and runs made at different times against a shared card
+differ by a factor of two at identical token counts. What the table also does
+not count is the work outside the generator - the cross-encoder pass over 100
+candidates (rerank, fused, cascade) and the BM25 search over 21M passages on
+the CPU (bm25, hybrid, fused, cascade) - which is why hybrid runs a third
+slower than naive at the same token cost.
+
 ### Ablations
 
 The architecture is one target, `cascade`, and one row in the main table. The
@@ -349,8 +363,8 @@ make compare
 | naive vs cascade | the proposed architecture against the standard baseline |
 | each ablation vs cascade, rerank vs fused | run by `make cascade-ablations`, not by `make compare` |
 
-`make all` runs the benchmarks, the diagnosis, the comparisons, the coverage
-and the summary table in order.
+`make all` runs the benchmarks, the diagnosis, the comparisons, the coverage,
+the summary table and the cost table in order.
 
 ## Check ingested data
 

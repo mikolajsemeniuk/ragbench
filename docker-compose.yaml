@@ -134,10 +134,10 @@ services:
 
   # A second reader, for the check that the abstention behaviour the cascade
   # relies on is not a property of one model. Same budget as vllm-llm, so the
-  # two cannot run at once: `docker compose stop vllm-llm` first. The model is
-  # gated on Hugging Face - put HF_TOKEN=... in .env after accepting the
-  # licence, or swap in the ungated mirror NousResearch/Meta-Llama-3.1-8B-Instruct
-  # (identical weights).
+  # two cannot run at once: `docker compose stop vllm-llm` first. The
+  # NousResearch repository is a byte-identical mirror of
+  # meta-llama/Llama-3.1-8B-Instruct without the Hugging Face gate, so no
+  # token is needed; cite the Meta model in the paper.
   vllm-llm-llama:
     image: vllm/vllm-openai:v0.25.1
     container_name: vllm-llm-llama
@@ -145,10 +145,8 @@ services:
       - "8003:8000"
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
-    environment:
-      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN:-}
     command: >
-      --model meta-llama/Llama-3.1-8B-Instruct
+      --model NousResearch/Meta-Llama-3.1-8B-Instruct
       --served-model-name llama-3.1-8b-instruct
       --max-model-len 8192
       --gpu-memory-utilization 0.55

@@ -302,9 +302,9 @@ make reader                                                           # ~20h: cl
 docker compose stop vllm-llm-llama && docker compose up -d vllm-llm   # back to the main reader
 ```
 
-The model is gated on Hugging Face: accept the licence and put `HF_TOKEN=...`
-in `.env`, or point the service at the ungated mirror
-`NousResearch/Meta-Llama-3.1-8B-Instruct` (identical weights). The runs are
+The service pulls `NousResearch/Meta-Llama-3.1-8B-Instruct`, a byte-identical
+mirror of Meta's gated repository, so no Hugging Face token is needed; cite
+the Meta model in the paper. The runs are
 written as `runs/<architecture>-llama-<set>.jsonl`, their fragments as
 `paper/<architecture>-llama-<set>.gen.tex` with `Llama` in the command names,
 the six comparisons that matter as `paper/cmp-*-llama-*.gen.tex`, and the

@@ -118,7 +118,7 @@ gives back part of the gain.
 already seen the retrieved passages and reported that they do not support an
 answer - a *posterior* signal, unlike `adaptive`, which asks the generator to
 predict difficulty from the question alone and gains +0.0004 Exact Match for it
-on 2WikiMultihopQA. The refusal is also lossless: across all 462,654 (question,
+on 2WikiMultihopQA. The refusal is also lossless: across all 887,917 (question,
 architecture) pairs measured here there is no case where an abstention scores
 Exact Match 1, because
 an abstention is a sentence and the gold answers are short spans. Escalating a

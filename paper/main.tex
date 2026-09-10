@@ -82,6 +82,11 @@
 \useresults{adaptive-2wiki}
 \useresults{adaptive-nq}
 \useresults{adaptive-triviaqa}
+\useresults{cascade-musique}
+\useresults{cascade-hotpotqa}
+\useresults{cascade-2wiki}
+\useresults{cascade-nq}
+\useresults{cascade-triviaqa}
 \useresults{diagnosis-musique}
 \useresults{coverage-musique}
 \useresults{diagnosis-hotpotqa}
@@ -90,6 +95,64 @@
 \useresults{coverage-2wiki}
 \useresults{result}
 \useresults{cost}
+\useresults{sweep}
+\useresults{fused-musique}
+\useresults{cascade-rr-musique}
+\useresults{cascade-naive-musique}
+\useresults{cascade-hybrid-musique}
+\useresults{cascade-lp-musique}
+\useresults{ircot1-musique}
+\useresults{closedbook-llama-musique}
+\useresults{naive-llama-musique}
+\useresults{rerank-llama-musique}
+\useresults{fused-llama-musique}
+\useresults{cascade-llama-musique}
+\useresults{fused-hotpotqa}
+\useresults{cascade-rr-hotpotqa}
+\useresults{cascade-naive-hotpotqa}
+\useresults{cascade-hybrid-hotpotqa}
+\useresults{cascade-lp-hotpotqa}
+\useresults{ircot1-hotpotqa}
+\useresults{closedbook-llama-hotpotqa}
+\useresults{naive-llama-hotpotqa}
+\useresults{rerank-llama-hotpotqa}
+\useresults{fused-llama-hotpotqa}
+\useresults{cascade-llama-hotpotqa}
+\useresults{fused-2wiki}
+\useresults{cascade-rr-2wiki}
+\useresults{cascade-naive-2wiki}
+\useresults{cascade-hybrid-2wiki}
+\useresults{cascade-lp-2wiki}
+\useresults{ircot1-2wiki}
+\useresults{closedbook-llama-2wiki}
+\useresults{naive-llama-2wiki}
+\useresults{rerank-llama-2wiki}
+\useresults{fused-llama-2wiki}
+\useresults{cascade-llama-2wiki}
+\useresults{fused-nq}
+\useresults{cascade-rr-nq}
+\useresults{cascade-naive-nq}
+\useresults{cascade-hybrid-nq}
+\useresults{cascade-lp-nq}
+\useresults{ircot1-nq}
+\useresults{closedbook-llama-nq}
+\useresults{naive-llama-nq}
+\useresults{rerank-llama-nq}
+\useresults{fused-llama-nq}
+\useresults{cascade-llama-nq}
+\useresults{fused-triviaqa}
+\useresults{cascade-rr-triviaqa}
+\useresults{cascade-naive-triviaqa}
+\useresults{cascade-hybrid-triviaqa}
+\useresults{cascade-lp-triviaqa}
+\useresults{ircot1-triviaqa}
+\useresults{closedbook-llama-triviaqa}
+\useresults{naive-llama-triviaqa}
+\useresults{rerank-llama-triviaqa}
+\useresults{fused-llama-triviaqa}
+\useresults{cascade-llama-triviaqa}
+\useresults{result-llama}
+\useresults{cost-llama}
 
 \begin{document}
 
@@ -122,6 +185,8 @@ CRAG (offline), 5 passages & \CRAGMuSiQueEM & \CRAGMuSiQueFOne & \CRAGMuSiQueAbs
 CRAG (offline), 10 passages & \CRAGTopTenMuSiQueEM & \CRAGTopTenMuSiQueFOne & \CRAGTopTenMuSiQueAbstentionRate & \CRAGTopTenMuSiQueEMAnswered & \CRAGTopTenMuSiQueRecallInContext & \CRAGTopTenMuSiQueMeanPassagesInContext & \CRAGTopTenMuSiQueLLMCalls \\
 IRCoT & \IRCoTMuSiQueEM & \IRCoTMuSiQueFOne & \IRCoTMuSiQueAbstentionRate & \IRCoTMuSiQueEMAnswered & \IRCoTMuSiQueRecallInContext & \IRCoTMuSiQueMeanPassagesInContext & \IRCoTMuSiQueLLMCalls \\
 Adaptive-RAG (router) & \AdaptiveMuSiQueEM & \AdaptiveMuSiQueFOne & \AdaptiveMuSiQueAbstentionRate & \AdaptiveMuSiQueEMAnswered & \AdaptiveMuSiQueRecallInContext & \AdaptiveMuSiQueMeanPassagesInContext & \AdaptiveMuSiQueLLMCalls \\
+\midrule
+Cascade (proposed) & \CascadeMuSiQueEM & \CascadeMuSiQueFOne & \CascadeMuSiQueAbstentionRate & \CascadeMuSiQueEMAnswered & \CascadeMuSiQueRecallInContext & \CascadeMuSiQueMeanPassagesInContext & \CascadeMuSiQueLLMCalls \\
 \bottomrule
 \end{tabular}
 
@@ -160,6 +225,8 @@ CRAG (offline), 5 passages & \CRAGHotpotQAEM & \CRAGHotpotQAFOne & \CRAGHotpotQA
 CRAG (offline), 10 passages & \CRAGTopTenHotpotQAEM & \CRAGTopTenHotpotQAFOne & \CRAGTopTenHotpotQAAbstentionRate & \CRAGTopTenHotpotQAEMAnswered & \CRAGTopTenHotpotQARecallInContext & \CRAGTopTenHotpotQAMeanPassagesInContext & \CRAGTopTenHotpotQALLMCalls \\
 IRCoT & \IRCoTHotpotQAEM & \IRCoTHotpotQAFOne & \IRCoTHotpotQAAbstentionRate & \IRCoTHotpotQAEMAnswered & \IRCoTHotpotQARecallInContext & \IRCoTHotpotQAMeanPassagesInContext & \IRCoTHotpotQALLMCalls \\
 Adaptive-RAG (router) & \AdaptiveHotpotQAEM & \AdaptiveHotpotQAFOne & \AdaptiveHotpotQAAbstentionRate & \AdaptiveHotpotQAEMAnswered & \AdaptiveHotpotQARecallInContext & \AdaptiveHotpotQAMeanPassagesInContext & \AdaptiveHotpotQALLMCalls \\
+\midrule
+Cascade (proposed) & \CascadeHotpotQAEM & \CascadeHotpotQAFOne & \CascadeHotpotQAAbstentionRate & \CascadeHotpotQAEMAnswered & \CascadeHotpotQARecallInContext & \CascadeHotpotQAMeanPassagesInContext & \CascadeHotpotQALLMCalls \\
 \bottomrule
 \end{tabular}
 
@@ -198,6 +265,8 @@ CRAG (offline), 5 passages & \CRAGTwoWikiEM & \CRAGTwoWikiFOne & \CRAGTwoWikiAbs
 CRAG (offline), 10 passages & \CRAGTopTenTwoWikiEM & \CRAGTopTenTwoWikiFOne & \CRAGTopTenTwoWikiAbstentionRate & \CRAGTopTenTwoWikiEMAnswered & \CRAGTopTenTwoWikiRecallInContext & \CRAGTopTenTwoWikiMeanPassagesInContext & \CRAGTopTenTwoWikiLLMCalls \\
 IRCoT & \IRCoTTwoWikiEM & \IRCoTTwoWikiFOne & \IRCoTTwoWikiAbstentionRate & \IRCoTTwoWikiEMAnswered & \IRCoTTwoWikiRecallInContext & \IRCoTTwoWikiMeanPassagesInContext & \IRCoTTwoWikiLLMCalls \\
 Adaptive-RAG (router) & \AdaptiveTwoWikiEM & \AdaptiveTwoWikiFOne & \AdaptiveTwoWikiAbstentionRate & \AdaptiveTwoWikiEMAnswered & \AdaptiveTwoWikiRecallInContext & \AdaptiveTwoWikiMeanPassagesInContext & \AdaptiveTwoWikiLLMCalls \\
+\midrule
+Cascade (proposed) & \CascadeTwoWikiEM & \CascadeTwoWikiFOne & \CascadeTwoWikiAbstentionRate & \CascadeTwoWikiEMAnswered & \CascadeTwoWikiRecallInContext & \CascadeTwoWikiMeanPassagesInContext & \CascadeTwoWikiLLMCalls \\
 \bottomrule
 \end{tabular}
 
@@ -217,6 +286,95 @@ failures out of \DiagTwoWikiFailed{} (\DiagTwoWikiFailedPct\% of the run):
 \DiagTwoWikiNotInCorpusPct\% are not in the corpus. Choosing per question between
 closed-book and this run would be worth \DiagTwoWikiOracleGain{} Exact Match over
 the better single system.
+
+\subsection*{NaturalQuestions}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answered & Answer in ctx & Passages & LLM calls \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookNQEM & \ClosedBookNQFOne & \ClosedBookNQAbstentionRate & \ClosedBookNQEMAnswered & -- & -- & \ClosedBookNQLLMCalls \\
+BM25 (lexical only) & \BMTwentyFiveNQEM & \BMTwentyFiveNQFOne & \BMTwentyFiveNQAbstentionRate & \BMTwentyFiveNQEMAnswered & \BMTwentyFiveNQAnswerInContext & \BMTwentyFiveNQMeanPassagesInContext & \BMTwentyFiveNQLLMCalls \\
+NaiveRAG, 5 passages & \NaiveRAGNQEM & \NaiveRAGNQFOne & \NaiveRAGNQAbstentionRate & \NaiveRAGNQEMAnswered & \NaiveRAGNQAnswerInContext & \NaiveRAGNQMeanPassagesInContext & \NaiveRAGNQLLMCalls \\
+Hybrid (dense + BM25, RRF) & \HybridNQEM & \HybridNQFOne & \HybridNQAbstentionRate & \HybridNQEMAnswered & \HybridNQAnswerInContext & \HybridNQMeanPassagesInContext & \HybridNQLLMCalls \\
+HyDE & \HyDENQEM & \HyDENQFOne & \HyDENQAbstentionRate & \HyDENQEMAnswered & \HyDENQAnswerInContext & \HyDENQMeanPassagesInContext & \HyDENQLLMCalls \\
+Rerank (cross-encoder) & \RerankNQEM & \RerankNQFOne & \RerankNQAbstentionRate & \RerankNQEMAnswered & \RerankNQAnswerInContext & \RerankNQMeanPassagesInContext & \RerankNQLLMCalls \\
+CRAG (offline), 5 passages & \CRAGNQEM & \CRAGNQFOne & \CRAGNQAbstentionRate & \CRAGNQEMAnswered & \CRAGNQAnswerInContext & \CRAGNQMeanPassagesInContext & \CRAGNQLLMCalls \\
+IRCoT & \IRCoTNQEM & \IRCoTNQFOne & \IRCoTNQAbstentionRate & \IRCoTNQEMAnswered & \IRCoTNQAnswerInContext & \IRCoTNQMeanPassagesInContext & \IRCoTNQLLMCalls \\
+Adaptive-RAG (router) & \AdaptiveNQEM & \AdaptiveNQFOne & \AdaptiveNQAbstentionRate & \AdaptiveNQEMAnswered & \AdaptiveNQAnswerInContext & \AdaptiveNQMeanPassagesInContext & \AdaptiveNQLLMCalls \\
+\midrule
+Cascade (proposed) & \CascadeNQEM & \CascadeNQFOne & \CascadeNQAbstentionRate & \CascadeNQEMAnswered & \CascadeNQAnswerInContext & \CascadeNQMeanPassagesInContext & \CascadeNQLLMCalls \\
+\bottomrule
+\end{tabular}
+
+NaturalQuestions and TriviaQA annotate no gold documents, so Recall and MRR cannot be computed; answer-in-context - whether a gold answer appears as a run of whole tokens in a retrieved passage - stands in for them, and is skipped for yes/no questions.
+
+\subsection*{TriviaQA}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answered & Answer in ctx & Passages & LLM calls \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookTriviaQAEM & \ClosedBookTriviaQAFOne & \ClosedBookTriviaQAAbstentionRate & \ClosedBookTriviaQAEMAnswered & -- & -- & \ClosedBookTriviaQALLMCalls \\
+BM25 (lexical only) & \BMTwentyFiveTriviaQAEM & \BMTwentyFiveTriviaQAFOne & \BMTwentyFiveTriviaQAAbstentionRate & \BMTwentyFiveTriviaQAEMAnswered & \BMTwentyFiveTriviaQAAnswerInContext & \BMTwentyFiveTriviaQAMeanPassagesInContext & \BMTwentyFiveTriviaQALLMCalls \\
+NaiveRAG, 5 passages & \NaiveRAGTriviaQAEM & \NaiveRAGTriviaQAFOne & \NaiveRAGTriviaQAAbstentionRate & \NaiveRAGTriviaQAEMAnswered & \NaiveRAGTriviaQAAnswerInContext & \NaiveRAGTriviaQAMeanPassagesInContext & \NaiveRAGTriviaQALLMCalls \\
+Hybrid (dense + BM25, RRF) & \HybridTriviaQAEM & \HybridTriviaQAFOne & \HybridTriviaQAAbstentionRate & \HybridTriviaQAEMAnswered & \HybridTriviaQAAnswerInContext & \HybridTriviaQAMeanPassagesInContext & \HybridTriviaQALLMCalls \\
+HyDE & \HyDETriviaQAEM & \HyDETriviaQAFOne & \HyDETriviaQAAbstentionRate & \HyDETriviaQAEMAnswered & \HyDETriviaQAAnswerInContext & \HyDETriviaQAMeanPassagesInContext & \HyDETriviaQALLMCalls \\
+Rerank (cross-encoder) & \RerankTriviaQAEM & \RerankTriviaQAFOne & \RerankTriviaQAAbstentionRate & \RerankTriviaQAEMAnswered & \RerankTriviaQAAnswerInContext & \RerankTriviaQAMeanPassagesInContext & \RerankTriviaQALLMCalls \\
+CRAG (offline), 5 passages & \CRAGTriviaQAEM & \CRAGTriviaQAFOne & \CRAGTriviaQAAbstentionRate & \CRAGTriviaQAEMAnswered & \CRAGTriviaQAAnswerInContext & \CRAGTriviaQAMeanPassagesInContext & \CRAGTriviaQALLMCalls \\
+IRCoT & \IRCoTTriviaQAEM & \IRCoTTriviaQAFOne & \IRCoTTriviaQAAbstentionRate & \IRCoTTriviaQAEMAnswered & \IRCoTTriviaQAAnswerInContext & \IRCoTTriviaQAMeanPassagesInContext & \IRCoTTriviaQALLMCalls \\
+Adaptive-RAG (router) & \AdaptiveTriviaQAEM & \AdaptiveTriviaQAFOne & \AdaptiveTriviaQAAbstentionRate & \AdaptiveTriviaQAEMAnswered & \AdaptiveTriviaQAAnswerInContext & \AdaptiveTriviaQAMeanPassagesInContext & \AdaptiveTriviaQALLMCalls \\
+\midrule
+Cascade (proposed) & \CascadeTriviaQAEM & \CascadeTriviaQAFOne & \CascadeTriviaQAAbstentionRate & \CascadeTriviaQAEMAnswered & \CascadeTriviaQAAnswerInContext & \CascadeTriviaQAMeanPassagesInContext & \CascadeTriviaQALLMCalls \\
+\bottomrule
+\end{tabular}
+
+NaturalQuestions and TriviaQA annotate no gold documents, so Recall and MRR cannot be computed; answer-in-context - whether a gold answer appears as a run of whole tokens in a retrieved passage - stands in for them, and is skipped for yes/no questions.
+
+\subsection*{Ablations of the cascade}
+
+Exact Match of the cascade with one element switched. Stage 1 alone is the fused retrieval without escalation, so the difference to the cascade row is what the escalation adds. The rerank-, naive- and hybrid-first rows change stage 1 and keep the rest. The confidence row adds the log-probability trigger at the threshold chosen on the train splits (\SweepBestThreshold); the one-shot IRCoT row is the strongest multi-hop baseline re-prompted with a worked example. Paired differences and their p-values are in the corresponding \texttt{cmp-*.gen.tex} fragments.
+
+\begin{tabular}{lrrrrr}
+\toprule
+Variant & MuSiQue & HotpotQA & 2Wiki & NQ & TriviaQA \\
+\midrule
+Stage 1 alone (fused, no escalation) & \FusedMuSiQueEM & \FusedHotpotQAEM & \FusedTwoWikiEM & \FusedNQEM & \FusedTriviaQAEM \\
+Cascade (proposed) & \CascadeMuSiQueEM & \CascadeHotpotQAEM & \CascadeTwoWikiEM & \CascadeNQEM & \CascadeTriviaQAEM \\
+Cascade, rerank first & \CascadeRerankMuSiQueEM & \CascadeRerankHotpotQAEM & \CascadeRerankTwoWikiEM & \CascadeRerankNQEM & \CascadeRerankTriviaQAEM \\
+Cascade, naive first & \CascadeNaiveMuSiQueEM & \CascadeNaiveHotpotQAEM & \CascadeNaiveTwoWikiEM & \CascadeNaiveNQEM & \CascadeNaiveTriviaQAEM \\
+Cascade, hybrid first & \CascadeHybridMuSiQueEM & \CascadeHybridHotpotQAEM & \CascadeHybridTwoWikiEM & \CascadeHybridNQEM & \CascadeHybridTriviaQAEM \\
+Cascade + confidence trigger & \CascadeLogprobMuSiQueEM & \CascadeLogprobHotpotQAEM & \CascadeLogprobTwoWikiEM & \CascadeLogprobNQEM & \CascadeLogprobTriviaQAEM \\
+IRCoT, one-shot & \IRCoTOneShotMuSiQueEM & \IRCoTOneShotHotpotQAEM & \IRCoTOneShotTwoWikiEM & \IRCoTOneShotNQEM & \IRCoTOneShotTriviaQAEM \\
+\bottomrule
+\end{tabular}
+
+\paragraph{Choosing the confidence threshold.} Swept offline over \SweepQuestions{} sampled train questions by composing the three stages question by question. Exact Match peaks at \SweepBestEM{} (threshold \SweepBestThreshold) against \SweepAbstentionOnlyEM{} for the abstention-only cascade.
+
+\begin{tabular}{lrrrrrr}
+\toprule
+Threshold & EM & F1 & Calls & Escalated & Discarded & Missed \\
+\midrule
+\SweepRows
+\bottomrule
+\end{tabular}
+
+\subsection*{A second reader}
+
+The rows the claims rest on, repeated with Llama-3.1-8B-Instruct as the generator over the same index and questions. Exact Match; the last column is the cascade's generation calls per question. Against these four baselines on five sets the cascade wins \ResultLlamaWins{}, loses \ResultLlamaLosses{} and ties \ResultLlamaTies{} of \ResultLlamaPairs{} pairs.
+
+\begin{tabular}{lrrrrr}
+\toprule
+Architecture & MuSiQue & HotpotQA & 2Wiki & NQ & TriviaQA \\
+\midrule
+ClosedBook (no retrieval) & \ClosedBookLlamaMuSiQueEM & \ClosedBookLlamaHotpotQAEM & \ClosedBookLlamaTwoWikiEM & \ClosedBookLlamaNQEM & \ClosedBookLlamaTriviaQAEM \\
+NaiveRAG, 5 passages & \NaiveRAGLlamaMuSiQueEM & \NaiveRAGLlamaHotpotQAEM & \NaiveRAGLlamaTwoWikiEM & \NaiveRAGLlamaNQEM & \NaiveRAGLlamaTriviaQAEM \\
+Rerank (cross-encoder) & \RerankLlamaMuSiQueEM & \RerankLlamaHotpotQAEM & \RerankLlamaTwoWikiEM & \RerankLlamaNQEM & \RerankLlamaTriviaQAEM \\
+Stage 1 alone (fused) & \FusedLlamaMuSiQueEM & \FusedLlamaHotpotQAEM & \FusedLlamaTwoWikiEM & \FusedLlamaNQEM & \FusedLlamaTriviaQAEM \\
+Cascade (proposed) & \CascadeLlamaMuSiQueEM & \CascadeLlamaHotpotQAEM & \CascadeLlamaTwoWikiEM & \CascadeLlamaNQEM & \CascadeLlamaTriviaQAEM \\
+Cascade, LLM calls & \CascadeLlamaMuSiQueLLMCalls & \CascadeLlamaHotpotQALLMCalls & \CascadeLlamaTwoWikiLLMCalls & \CascadeLlamaNQLLMCalls & \CascadeLlamaTriviaQALLMCalls \\
+\bottomrule
+\end{tabular}
+
+\ResultLlamaTable
 
 \subsection*{The proposed architecture against every baseline}
 

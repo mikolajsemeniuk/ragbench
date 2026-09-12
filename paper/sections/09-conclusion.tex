@@ -1,0 +1,64 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{One corpus, one domain.} All measurements use a single English
+Wikipedia snapshot chunked at $\sim$100 words. The failure-cause
+distribution that motivates the cascade --- and therefore the choice of
+its stages --- will differ on enterprise corpora, other languages, and
+other chunkings; the diagnosis method transfers, the numbers do not.
+
+\paragraph{The abstention detector is heuristic.} A refusal is recognised
+by phrase matching plus a length threshold. Both readers we tested
+abstain in easily recognised English formulas; a reader fine-tuned never
+to refuse, or prompted in another language, would starve the trigger, and
+the cascade would degrade to its first stage. The losslessness property
+is likewise specific to span-style Exact Match: under token-level F1 it
+is only approximate, and under long-form or generative evaluation it
+would not hold.
+
+\paragraph{Two implementation deviations are inherited by the
+comparison.} Our CRAG is offline and corpus-only (no web search, no
+knowledge refinement) and our Adaptive-RAG classifies with the generator
+rather than a trained classifier. Both deviations keep the comparison
+controlled --- no row gets an extra model or an extra knowledge source ---
+but they also mean our rows bound those methods' training-free, closed-corpus
+forms, not the published systems.
+
+\paragraph{Structure-augmented methods are absent.} GraphRAG-family
+methods were excluded because their corpus-preprocessing cost is of a
+different class at 21M passages. On corpora where that preprocessing is
+affordable, the comparison should be re-run with them as rows.
+
+\paragraph{Model scale.} Both readers are 7--8B instruct models. Larger
+readers abstain differently --- typically less --- and shift the
+closed-book floor upward; the cascade's escalation margin at larger
+scales is unmeasured.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a controlled comparison of thirteen retrieval-augmented
+generation architectures --- one corpus, one retriever, one generator,
+paired statistics, budget-matched controls, and a measured corpus ceiling
+--- together with a per-question diagnosis of why retrieval fails, and an
+architecture assembled from that diagnosis. CascadeRAG retrieves with a
+fusion of dense, lexical, and cross-encoder rankings, and escalates a
+question to a more expensive strategy only when the reader itself, having
+seen the evidence, declines to answer --- a posterior, and under Exact
+Match provably lossless, trigger. Across \ResultPairs{} paired
+comparisons it wins \ResultWins{}, loses \ResultLosses{}, and ties
+\ResultTies{}, at 1.16--1.58 generator calls per question, and the result
+replicates under a second reader. Alongside the positive result, the
+study documents two useful negative ones: neighbour-chunk expansion adds
+nothing once context size is controlled, and answer-token confidence adds
+nothing over the abstention it accompanies.
+
+The broader claim is methodological. RAG architectures are usually
+compared as point scores on incompatible stacks; held to the standard of
+paired tests, matched budgets, abstention accounting, and a corpus
+ceiling, most published-style gains shrink and one reverses. The
+architecture that survives that standard is not the cleverest one
+measured but the one that spends its calls only where a free, reliable
+signal says they are needed. We release the benchmark, the per-question
+logs, and the manuscript pipeline so that both the standard and the
+architecture can be applied to other stacks as they are.

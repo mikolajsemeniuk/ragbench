@@ -1,0 +1,86 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Retrieval-augmented generation.}
+RAG was introduced as a trainable combination of a dense
+retriever~\cite{karpukhin2020dpr} and a sequence-to-sequence
+generator~\cite{lewis2020rag}, alongside a family of retrieval-augmented
+language models that condition on retrieved text during pre-training or
+decoding --- REALM~\cite{guu2020realm}, FiD~\cite{izacard2021fid},
+RETRO~\cite{borgeaud2022retro}, $k$NN-LM~\cite{khandelwal2020knnlm}.
+Contemporary practice replaces the trained combination with a frozen
+instruction-following LLM reading retrieved passages in its
+prompt~\cite{ram2023incontext,shi2024replug}, the form studied here. Surveys chart the field's rapid growth
+and its progression from naive through advanced to modular
+pipelines~\cite{gao2023ragsurvey} and, most recently, to agentic
+systems~\cite{singh2025agenticrag}.
+
+\paragraph{Retrieval-side refinements.}
+Classical lexical scoring~\cite{robertson2009bm25} survives inside modern
+stacks as the complement to dense retrieval, with Reciprocal Rank
+Fusion~\cite{cormack2009rrf} the standard way to merge the two rankings.
+Cross-encoder reranking~\cite{nogueira2019passage} re-scores a dense
+shortlist with a jointly-encoded relevance model. These methods keep one
+generator call per question and modify only which passages reach it.
+
+\paragraph{Query-side refinements.}
+HyDE~\cite{gao2022hyde} searches with a model-drafted hypothetical answer
+passage instead of the question, bridging the vocabulary gap between
+questions and encyclopedic text. IRCoT~\cite{trivedi2023ircot} interleaves
+one sentence of chain-of-thought reasoning~\cite{wei2022cot} with one
+retrieval per step, so that entities surfaced by reasoning become
+retrievable queries --- the canonical mechanism for multi-hop questions,
+related in spirit to acting-and-reasoning agents~\cite{yao2023react}.
+Neighbouring iterative schemes decompose the question into explicit
+sub-questions (Self-Ask~\cite{press2023selfask}), retrieve whenever the
+model's next sentence is uncertain (FLARE~\cite{jiang2023flare}), or
+alternate full generation and retrieval rounds
+(Iter-RetGen~\cite{shao2023iterretgen}).
+
+\paragraph{Self-assessing and adaptive systems.}
+Self-RAG~\cite{asai2024selfrag} trains a model to emit reflection tokens
+deciding when to retrieve and whether generations are supported. CRAG
+\cite{yan2024crag} grades retrieved passages with a trained evaluator and
+triggers corrective web search when the retrieval is judged poor.
+Adaptive-RAG~\cite{jeong2024adaptiverag} trains a classifier that routes
+each question to no-retrieval, single-step, or multi-step pipelines. All
+three decide how much work a question needs; the cascade proposed here
+differs in \emph{when} the decision is made --- after the reader has seen
+the evidence (a posterior signal) rather than from the question alone (a
+prior one) --- and in requiring no trained component at all.
+
+\paragraph{Structure-augmented retrieval.}
+GraphRAG~\cite{edge2024graphrag}, RAPTOR~\cite{sarthi2024raptor} and
+HippoRAG~2~\cite{gutierrez2025hipporag2} preprocess the corpus into graphs,
+trees, or memory structures. They occupy a different cost class --- their
+indexing step itself involves large-scale LLM calls over the corpus --- and
+systematic evaluation finds their advantage concentrated in query-focused
+summarisation rather than factoid QA~\cite{han2025ragvsgraphrag}; we
+therefore exclude them from a comparison whose corpus is 21M passages, and
+note the exclusion as a limitation (Section~\ref{sec:limitations}).
+
+\paragraph{Benchmarks and evaluation.}
+FlashRAG~\cite{jin2024flashrag} standardises datasets, corpora, and
+reimplementations of a dozen RAG methods, and is the source of our corpus
+and question sets; MultiHop-RAG~\cite{tang2024multihoprag} benchmarks
+multi-hop retrieval specifically, BEIR~\cite{thakur2021beir} zero-shot
+retrieval, and RGB~\cite{chen2024benchmarking} the generation step's
+robustness to noisy passages; RAGAS~\cite{es2024ragas} offers
+reference-free evaluation, and best-practice studies tune pipeline
+components in isolation~\cite{wang2024bestpractices}. Our work differs
+from toolkit
+benchmarking in three ways: paired significance testing with multiplicity
+control instead of point scores; measurement of the corpus-imposed recall
+ceiling and of abstention as a behaviour distinct from error; and a
+per-question failure diagnosis that connects each architecture's gain to
+the failure mode it repairs.
+
+\paragraph{Cascades.}
+Deferring expensive computation until a cheap stage proves insufficient has
+a long history --- boosted detector cascades in
+vision~\cite{viola2001cascade} and cascade ranking in
+retrieval~\cite{wang2011cascade}. The architecture proposed here applies
+the idea at the level of whole RAG strategies, with the reader's own
+refusal as the deferral signal; to our knowledge the losslessness of that
+trigger under span-level Exact Match has not previously been stated or
+exploited.

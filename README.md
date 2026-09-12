@@ -468,7 +468,6 @@ makes the comparison controlled - but they have to be named.
 - ReWOO Agent Pattern (docs) — https://agent-patterns.readthedocs.io/en/stable/patterns/rewoo.html
 - ReWOO vs. ReAct — https://www.nutrient.io/blog/rewoo-vs-react-choosing-right-agent-architecture/
 - The 4 Single-Agent Patterns — https://theaiengineer.substack.com/p/the-4-single-agent-patterns
-- Navigating Modern LLM Agent Architectures — https://www.wollenlabs.com/blog-posts/navigating-modern-llm-agent-architectures-multi-agents-plan-and-execute-rewoo-tree-of-thoughts-and-react
 - HippoRAG 2 Overview (Emergent Mind) — https://www.emergentmind.com/topics/hipporag-2
 - GraphRAG vs HippoRAG vs PathRAG vs OG-RAG — https://medium.com/graph-praxis/graphrag-vs-hipporag-vs-pathrag-vs-og-rag-choosing-the-right-architecture-for-your-knowledge-graph-a4745e8b125f
 - Enhancing HippoRAG with Graph-Based Semantics — https://graphwise.ai/blog/from-retrieval-to-reasoning-enhancing-hipporag-with-graph-based-semantics/

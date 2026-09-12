@@ -1,0 +1,61 @@
+\section{Discussion: Lessons for Practitioners and Evaluators}
+\label{sec:discussion}
+
+The benchmark supports several pieces of guidance that are more general
+than any single row of the tables.
+
+\paragraph{No retrieval refinement is universally safe --- except the
+boring one.} Every advanced method measured here loses to the naive
+baseline on at least one question set, with one exception: hybrid
+dense-plus-BM25 fusion, which is small, positive everywhere, and nearly
+free. A practitioner who can afford exactly one change should make that
+one. The refinements with headline gains (reranking, HyDE, iterative
+retrieval) are bets on a question distribution and should be preceded by
+the diagnosis of Section~\ref{sec:results-diagnosis} on a sample of the
+actual workload --- the failure-cause split, not the aggregate recall,
+predicts which bet pays.
+
+\paragraph{Compare at matched budget, or measure context size by
+accident.} Ten passages instead of five is worth $+0.02$ EM on a multi-hop
+set before any architectural idea enters. Neighbour expansion looks like a
+retrieval improvement against the five-passage baseline and dissolves
+against the twelve-passage control. Any comparison whose systems place
+different amounts of text in the context is confounded until proven
+otherwise.
+
+\paragraph{Report abstention, or Exact Match will lie.} A reader holding
+irrelevant evidence declines; a reader holding nothing guesses; EM scores
+the decline zero and the lucky guess one. That artefact alone reverses the
+closed-book-versus-RAG ordering on 2WikiMultihopQA. Abstention rate and
+EM-over-answered belong next to EM in every RAG table.
+
+\paragraph{Posterior signals beat prior predictions.} Asking a model
+whether a question \emph{will} need retrieval (routing) bought $+0.0004$
+EM; acting on the reader's report that retrieval \emph{did} fail bought
+one to three points on every set at a fraction of the cost of always
+escalating. The reader's refusal is the cheapest reliable difficulty
+signal in the system, and it is already being generated --- most
+pipelines simply throw it away.
+
+\paragraph{Confidence is not a second signal --- at least not for free.}
+The mean token log-probability of a greedily decoded answer, the most
+commonly proposed deferral signal, carried no information beyond the
+abstention it accompanies: tuned on held-out data, it bought $+0.0018$ EM
+at $+0.25$ calls and lost significantly on one test set. Calibration
+should be measured before a confidence threshold is trusted.
+
+\paragraph{Report the ceiling.} Only \CoverageTwoWikiRecallCeiling{} of
+2WikiMultihopQA's gold articles exist in the standard corpus; a quarter
+of ``retrieval failures'' there are unfixable by any retriever. Recall
+reported without the corpus ceiling overstates the room architectures
+have to differ --- and, we suspect, explains part of the literature's
+replication noise on this set.
+
+\paragraph{Escalation prices expensive methods correctly.} The cascade is
+not a new retrieval method; it is a pricing scheme. HyDE at two calls per
+question everywhere is a poor trade on TriviaQA where the fused stage
+answers \CascadeTriviaQAStageFused{} of \CascadeTriviaQAQuestions{}
+questions; HyDE at two calls on the 10--30\% of questions the reader
+declined is close to optimal spend. Any organisation running a RAG stack
+with a refusal-capable reader can adopt the pattern without training
+anything: keep the cheap answer unless the reader declined, then escalate.

@@ -1,0 +1,342 @@
+\section{The Architectures Under Study}
+\label{sec:architectures}
+
+We compare thirteen architectures: a no-retrieval floor, the naive
+baseline at three context budgets, and nine refinements drawn from the
+families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
+them by the shape of their control flow, following the taxonomy of
+\cite{jin2024flashrag}: \emph{sequential} architectures run the pipeline of
+Figure~\ref{fig:naive-pipeline} once, changing only which passages reach
+the generator; \emph{branching} architectures add a generation step before
+retrieval; \emph{conditional} architectures inspect intermediate state and
+choose among actions; \emph{iterative} architectures loop.
+Table~\ref{tab:qualitative} summarises what each one changes and what it
+costs. Each architecture below is described with the same template ---
+what it changes, how it works step by step, and what it costs --- and each
+description states the measured failure mode it targets, anticipating the
+diagnosis of Section~\ref{sec:results-diagnosis}.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=3mm and 5mm]
+\node[comp, fill=black!10, minimum width=32mm] (root) {13 architectures};
+\node[comp, fill=blue!10, below left=8mm and 34mm of root, minimum width=30mm] (seq) {Sequential\\ \scriptsize one pass, better passages};
+\node[comp, fill=violet!10, below left=8mm and -6mm of root, minimum width=26mm] (bra) {Branching\\ \scriptsize generate, then search};
+\node[comp, fill=yellow!20, below right=8mm and -6mm of root, minimum width=26mm] (con) {Conditional\\ \scriptsize judge, then act};
+\node[comp, fill=orange!15, below right=8mm and 30mm of root, minimum width=24mm] (ite) {Iterative\\ \scriptsize loop};
+\draw[arr] (root) -- (seq); \draw[arr] (root) -- (bra);
+\draw[arr] (root) -- (con); \draw[arr] (root) -- (ite);
+\node[lbl, below=2mm of seq, text width=34mm] {ClosedBook$^{*}$\\ NaiveRAG (5/10/12)\\ BM25 \quad Hybrid\\ Rerank \quad Neighbour\\ \textbf{Fused} (\S\ref{sec:cascade})};
+\node[lbl, below=2mm of bra, text width=26mm] {HyDE};
+\node[lbl, below=2mm of con, text width=30mm] {CRAG (5/10)\\ Adaptive-RAG\\ \textbf{Cascade} (\S\ref{sec:cascade})};
+\node[lbl, below=2mm of ite, text width=24mm] {IRCoT\\ (zero- and one-shot)};
+\end{tikzpicture}
+\caption{The compared architectures grouped by control flow.
+$^{*}$ClosedBook retrieves nothing and serves as the floor. The two
+architectures in bold are introduced in Section~\ref{sec:cascade}.}
+\label{fig:taxonomy}
+\end{figure}
+
+\begin{table}[t]
+\centering\small
+\caption{Qualitative comparison. ``Calls'' is generator calls per question;
+``budget'' is passages placed in the generator's context. The measured
+per-question costs are in Table~\ref{tab:cost}.}
+\label{tab:qualitative}
+\begin{tabular}{lllll}
+\toprule
+Architecture & Modifies & Calls & Budget & Targets \\
+\midrule
+ClosedBook & removes retrieval & 1 & 0 & (cost floor) \\
+NaiveRAG & --- (baseline) & 1 & 5 & --- \\
+NaiveRAG 10/12 & context budget & 1 & 10/12 & (budget controls) \\
+BM25 & retriever (lexical) & 1 & 5 & rare surface forms \\
+Hybrid & retriever (dense+lexical) & 1 & 5 & rare surface forms \\
+Rerank & ranking (cross-encoder) & 1 & 5 & right article ranked low \\
+Neighbour & chunking (expand hits) & 1 & $\sim$11.5 & wrong slice of article \\
+HyDE & query (drafted passage) & 2 & 5 & unreachable by query \\
+CRAG & adds retrieval judge & 3 & 5/10 & undetected bad retrieval \\
+IRCoT & query (iterative reasoning) & 2--6 & $\le$15 & multi-hop questions \\
+Adaptive-RAG & routes between strategies & 2--7 & 0--15 & heterogeneous difficulty \\
+\midrule
+Cascade (proposed) & retrieval + escalation & $\sim$1.3 & $\le$5 & all of the above \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{ClosedBook: the floor}
+\label{sec:arch-closedbook}
+
+The generator answers from parametric knowledge alone, with the same
+answer-only prompt as every other row minus the documents. This is the
+floor each retrieval number must be read against: a 7B model has memorised
+a large amount of Wikipedia-scale trivia (it answers
+\ClosedBookTriviaQAEM{} of TriviaQA without any retrieval), so a high RAG
+score does not by itself show that retrieval contributed anything. The
+difference between ClosedBook and NaiveRAG is what retrieval is actually
+worth on each question set --- and on one set that difference will turn
+out to be an artefact of abstention behaviour rather than knowledge
+(Section~\ref{sec:results-worth}).
+
+\subsection{NaiveRAG: the baseline and its budget controls}
+\label{sec:arch-naive}
+
+The pipeline of Figure~\ref{fig:naive-pipeline} verbatim: embed the
+question, retrieve the top five passages, generate. Two further rows run
+the identical pipeline with ten and twelve passages. These exist because
+several refinements below place more than five passages in the context, and
+context size alone is worth measurable Exact Match (naive-10 gains $+0.022$
+over naive-5 on 2WikiMultihopQA); comparing an architecture that reads ten
+passages against a five-passage baseline would credit the architecture with
+what is merely a larger budget. Throughout the article, every comparison
+is made at matched budget.
+
+\subsection{BM25 and Hybrid retrieval}
+\label{sec:arch-hybrid}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 7mm]
+\node[q] (q) {Question};
+\node[ret, above right=2mm and 9mm of q] (dense) {Dense search\\ \scriptsize bi-encoder, top 50};
+\node[ret, below right=2mm and 9mm of q] (lex) {Lexical search\\ \scriptsize BM25, top 50};
+\node[comp, fill=blue!6, right=30mm of q] (rrf) {RRF\\ \scriptsize merge ranks};
+\node[llm, right=of rrf] (gen) {Generator};
+\node[ans, right=of gen] (a) {Answer};
+\draw[arr] (q) -- (dense); \draw[arr] (q) -- (lex);
+\draw[arr] (dense) -- (rrf); \draw[arr] (lex) -- (rrf);
+\draw[arr] (rrf) -- node[lbl, above] {top 5} (gen);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{Hybrid retrieval. Dense and lexical rankings over the same corpus
+are merged by Reciprocal Rank Fusion; the BM25 row is this diagram with
+the dense branch removed.}
+\label{fig:arch-hybrid}
+\end{figure}
+
+The two retrievers fail in opposite ways. The dense retriever understands
+paraphrase but blurs rare surface forms (the lossy compression of
+Section~\ref{sec:embeddings}); the lexical one matches names exactly but is
+blind to a question that never uses the passage's vocabulary. Hybrid
+retrieval runs both and merges the rankings with Reciprocal Rank
+Fusion~\cite{cormack2009rrf}:
+\begin{equation}
+\mathrm{RRF}(d) \;=\; \sum_{r \,\in\, \text{rankings}} \frac{1}{k + r(d)},
+\qquad k = 60,
+\label{eq:rrf}
+\end{equation}
+where $r(d)$ is the rank of document $d$ in each list. RRF combines
+\emph{ranks}, not scores, which is what makes the combination possible at
+all: a cosine similarity and a BM25 score live on incomparable scales,
+while their ranks do not. The BM25-only row is the same code with the dense
+branch disabled, so the difference between the two rows measures exactly
+``was the dense list fused in'' and nothing else. Cost: one extra lexical
+search on the CPU; the generator is still called once.
+
+\subsection{Rerank: cross-encoder reordering}
+\label{sec:arch-rerank}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 7mm]
+\node[q] (q) {Question};
+\node[ret, right=of q] (dense) {Dense search\\ \scriptsize top 100};
+\node[ret, right=of dense, fill=red!12] (ce) {Cross-encoder\\ \scriptsize scores all 100};
+\node[llm, right=of ce] (gen) {Generator};
+\node[ans, right=of gen] (a) {Answer};
+\draw[arr] (q) -- (dense);
+\draw[arr] (dense) -- (ce);
+\draw[arr] (ce) -- node[lbl, above] {top 5} (gen);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{Cross-encoder reranking: a deep bi-encoder shortlist is reordered
+by a jointly-encoding relevance model; only the reordered top five reach
+the generator.}
+\label{fig:arch-rerank}
+\end{figure}
+
+A deep shortlist (100 candidates) is retrieved with the fast bi-encoder and
+reordered with a cross-encoder (Section~\ref{sec:encoders}); the top five
+survivors reach the generator. The target failure is ``right article
+ranked too low'': for a third of the diagnosed failures on 2WikiMultihopQA
+the answer-bearing article is already in the ranking, just below the
+cut-off, and nothing that reasons over the top five can recover it --- the
+fix has to change which five are chosen. Unlike the iterative methods this
+adds no generator call; the cost is one cross-encoder pass over the
+shortlist.
+
+\subsection{Neighbour expansion}
+\label{sec:arch-neighbour}
+
+Wikipedia articles are chunked into $\sim$100-word passages with no regard
+for where a fact ends, so the retriever can land on the paragraph about the
+right entity while the sentence carrying the answer sits in the next chunk.
+Neighbour expansion retrieves as NaiveRAG does, then adds, for every hit,
+the passages adjacent to it in the same article (radius one, capped at
+fifteen passages, $\sim$11.5 in practice). It is included to \emph{test}
+the chunking hypothesis rather than because our diagnosis supports it ---
+the ``wrong slice'' bucket is only 5--14\% of failures --- and it is read
+against the twelve-passage control, because its expanded context would
+otherwise masquerade as a retrieval gain.
+
+\subsection{HyDE: search with a hypothetical document}
+\label{sec:arch-hyde}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 7mm]
+\node[q] (q) {Question};
+\node[llm, right=of q] (draft) {Generator\\ \scriptsize drafts a passage};
+\node[ret, right=of draft] (enc) {Embed draft\\ $+$ question};
+\node[ret, right=of enc] (search) {Dense search\\ \scriptsize mean vector};
+\node[llm, right=of search] (gen) {Generator};
+\node[ans, below=of gen] (a) {Answer};
+\draw[arr] (q) -- (draft);
+\draw[arr] (draft) -- (enc);
+\draw[arr] (enc) -- (search);
+\draw[arr] (search) -- node[lbl, above] {top 5} (gen);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{HyDE. The generator first writes the encyclopedia passage it
+imagines would answer the question; the search runs on the average of the
+draft's and the question's embeddings. The draft's factual errors are
+discarded --- only its vector is used.}
+\label{fig:arch-hyde}
+\end{figure}
+
+A question and the passage that answers it are different kinds of text:
+``Where was the place of death of the director of film Beat Girl?'' shares
+almost no vocabulary with a paragraph about Edmond T.\ Gr\'eville. HyDE
+\cite{gao2022hyde} removes the mismatch by asking the generator to write
+the passage it \emph{thinks} would answer the question and searching with
+that instead. The draft is usually wrong in its details and it does not
+matter: it only has to look like the right passage so that the encoder
+places it near the real one. The question's own embedding is averaged in
+as a safety net, so an off-topic draft degrades towards NaiveRAG instead
+of chasing a hallucination. This targets the ``unreachable by this query''
+failure bucket --- 53\% of failures on MuSiQue. Cost: one extra generator
+call, the cheapest of the query-side methods.
+
+\subsection{IRCoT: interleaved retrieval and reasoning}
+\label{sec:arch-ircot}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 6mm]
+\node[q] (q) {Question};
+\node[ret, right=of q] (r0) {Retrieve\\ \scriptsize top 5};
+\node[llm, right=of r0] (step) {Reason\\ \scriptsize one sentence};
+\node[dec, right=of step] (done) {answer\\found?};
+\node[llm, right=of done] (gen) {Generator};
+\node[ans, right=of gen] (a) {Answer};
+\draw[arr] (q) -- (r0);
+\draw[arr] (r0) -- (step);
+\draw[arr] (step) -- (done);
+\draw[arr] (done) -- node[lbl, above] {yes} (gen);
+\draw[arr] (done.south) to[out=-90,in=-90] node[lbl, below] {no: sentence becomes next query} (r0.south);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{IRCoT. Each reasoning sentence names entities the question never
+mentioned, and is used verbatim as the next retrieval query; accumulated
+passages (up to 15) go to the same reader prompt as NaiveRAG.}
+\label{fig:arch-ircot}
+\end{figure}
+
+A single query built from the question alone is structurally insufficient
+for multi-hop questions: ``What is the capital of the country where X was
+born?'' never names the country, so no single query can reach the passage
+that answers it. Measured on the baseline, recall over the context falls
+from \NaiveRAGHotpotQARecallInContext{} on HotpotQA to
+\NaiveRAGTwoWikiRecallInContext{} on 2WikiMultihopQA to
+\NaiveRAGMuSiQueRecallInContext{} on MuSiQue as the number of required hops
+grows. IRCoT~\cite{trivedi2023ircot} alternates: reason one sentence over
+what has been retrieved, use that sentence as the next query, add what
+comes back, repeat (up to four rounds or fifteen passages). The final
+answer is produced by the same reader prompt as NaiveRAG over the
+accumulated passages, so the only difference between the two systems is
+the set of passages in context. We run a zero-shot variant and, because
+the original method prompts the reasoning step with a worked example, a
+one-shot variant with a single hand-written two-hop demonstration ---
+identical for every question set --- as a separate row, so that a
+under-prompted-baseline objection can be answered with data. Cost: two to
+six generator calls per question.
+
+\subsection{CRAG: corrective retrieval (offline, corpus-only)}
+\label{sec:arch-crag}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 6mm]
+\node[q] (q) {Question};
+\node[ret, right=of q] (r0) {Retrieve\\ \scriptsize top 5};
+\node[llm, right=of r0] (grade) {Grade\\ \scriptsize which passages help?};
+\node[dec, right=of grade] (branch) {verdict};
+\node[llm, above right=1mm and 8mm of branch] (rewrite) {Rewrite query,\\re-search};
+\node[llm, below right=1mm and 8mm of branch] (gen) {Generator};
+\node[ans, right=of gen] (a) {Answer};
+\draw[arr] (q) -- (r0);
+\draw[arr] (r0) -- (grade);
+\draw[arr] (grade) -- (branch);
+\draw[arr] (branch) -- node[lbl, above left] {none/some relevant} (rewrite);
+\draw[arr] (branch) -- node[lbl, below left] {all relevant} (gen);
+\draw[arr] (rewrite.east) to[out=0,in=60] node[lbl, right] {replaced/merged passages} (gen.north east);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{CRAG (offline form). The generator grades its own retrieval; on a
+poor grade the query is rewritten and the corpus searched again, replacing
+(no passage relevant) or topping up (some relevant) the context.}
+\label{fig:arch-crag}
+\end{figure}
+
+NaiveRAG hands the generator whatever came back and hopes it is relevant;
+the baseline measurements say how often that hope is misplaced (a gold
+answer appears in the retrieved context for only
+\NaiveRAGTwoWikiAnswerInContext{} of 2WikiMultihopQA questions).
+CRAG~\cite{yan2024crag} adds the missing step: judge the retrieval before
+using it, and act when it is bad. Our implementation deviates from the
+paper in three deliberate, named ways, and is labelled ``CRAG (offline,
+corpus-only)'' throughout: the generator itself grades relevance in one
+call (the paper trains a T5 evaluator; a trained evaluator would confound
+the controlled comparison with an extra model); the corrective action is a
+query rewrite over the same corpus (the paper uses web search, which would
+change the available knowledge, not the architecture); and the paper's
+knowledge-refinement step is absent. A ten-passage variant pairs with the
+matched-budget control. Cost: three generator calls per question.
+
+\subsection{Adaptive-RAG: routing by predicted difficulty}
+\label{sec:arch-adaptive}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=4mm and 7mm]
+\node[q] (q) {Question};
+\node[llm, right=of q] (route) {Classify\\ \scriptsize A / B / C};
+\node[comp, fill=black!5, above right=6mm and 16mm of route] (cb) {ClosedBook};
+\node[comp, fill=black!5, right=16mm of route] (naive) {NaiveRAG};
+\node[comp, fill=black!5, below right=6mm and 16mm of route] (ircot) {IRCoT};
+\node[ans, right=42mm of route] (a) {Answer};
+\draw[arr] (q) -- (route);
+\draw[arr] (route) -- node[lbl, above, sloped] {famous fact} (cb);
+\draw[arr] (route) -- node[lbl, above, pos=0.45] {one lookup} (naive);
+\draw[arr] (route) -- node[lbl, below, sloped] {multi-hop} (ircot);
+\draw[arr] (cb) -- (a); \draw[arr] (naive) -- (a); \draw[arr] (ircot) -- (a);
+\end{tikzpicture}
+\caption{Adaptive-RAG (training-free form). One classification call routes
+each question to the no-retrieval, single-step, or iterative branch; the
+branches are the very architectures of the neighbouring rows.}
+\label{fig:arch-adaptive}
+\end{figure}
+
+Every other architecture treats all questions alike, and the measurements
+say that is wrong in both directions: on TriviaQA the generator already
+knows \ClosedBookTriviaQAEM{} of the answers with no retrieval, so running
+IRCoT over them spends up to six calls to arrive where one would have
+done, while on MuSiQue a single query reaches the answer-bearing article
+for barely a fifth of questions. Adaptive-RAG~\cite{jeong2024adaptiverag}
+routes each question --- here with a single generator classification call
+rather than the paper's trained classifier, for the same
+no-extra-models reason as CRAG --- to closed-book, single-step, or IRCoT.
+The router's branches are built from the same components as the
+architectures they are compared against, so its row is comparable with
+theirs by construction. Cost: one call plus whatever the chosen branch
+costs (2.1--3.0 in practice).

@@ -1,0 +1,265 @@
+\appendix
+
+\section{Full Per-Set Results}
+\label{app:full-tables}
+
+Recall is measured over the passages actually in the generator's context,
+whose mean size is reported beside it (Section~\ref{sec:setup-metrics});
+``EM answ.''\ is Exact Match restricted to the questions the system did
+not decline. Dashes mark metrics that are undefined for a row (ClosedBook
+retrieves nothing; NaturalQuestions and TriviaQA annotate no gold
+documents, so answer-in-context replaces Recall there).
+
+\subsection{MuSiQue}
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answ. & Recall & Passages & Calls \\
+\midrule
+ClosedBook & \ClosedBookMuSiQueEM & \ClosedBookMuSiQueFOne & \ClosedBookMuSiQueAbstentionRate & \ClosedBookMuSiQueEMAnswered & -- & -- & \ClosedBookMuSiQueLLMCalls \\
+BM25 & \BMTwentyFiveMuSiQueEM & \BMTwentyFiveMuSiQueFOne & \BMTwentyFiveMuSiQueAbstentionRate & \BMTwentyFiveMuSiQueEMAnswered & \BMTwentyFiveMuSiQueRecallInContext & \BMTwentyFiveMuSiQueMeanPassagesInContext & \BMTwentyFiveMuSiQueLLMCalls \\
+NaiveRAG-5 & \NaiveRAGMuSiQueEM & \NaiveRAGMuSiQueFOne & \NaiveRAGMuSiQueAbstentionRate & \NaiveRAGMuSiQueEMAnswered & \NaiveRAGMuSiQueRecallInContext & \NaiveRAGMuSiQueMeanPassagesInContext & \NaiveRAGMuSiQueLLMCalls \\
+NaiveRAG-10 & \NaiveRAGTopTenMuSiQueEM & \NaiveRAGTopTenMuSiQueFOne & \NaiveRAGTopTenMuSiQueAbstentionRate & \NaiveRAGTopTenMuSiQueEMAnswered & \NaiveRAGTopTenMuSiQueRecallInContext & \NaiveRAGTopTenMuSiQueMeanPassagesInContext & \NaiveRAGTopTenMuSiQueLLMCalls \\
+NaiveRAG-12 & \NaiveRAGTopTwelveMuSiQueEM & \NaiveRAGTopTwelveMuSiQueFOne & \NaiveRAGTopTwelveMuSiQueAbstentionRate & \NaiveRAGTopTwelveMuSiQueEMAnswered & \NaiveRAGTopTwelveMuSiQueRecallInContext & \NaiveRAGTopTwelveMuSiQueMeanPassagesInContext & \NaiveRAGTopTwelveMuSiQueLLMCalls \\
+Hybrid & \HybridMuSiQueEM & \HybridMuSiQueFOne & \HybridMuSiQueAbstentionRate & \HybridMuSiQueEMAnswered & \HybridMuSiQueRecallInContext & \HybridMuSiQueMeanPassagesInContext & \HybridMuSiQueLLMCalls \\
+HyDE & \HyDEMuSiQueEM & \HyDEMuSiQueFOne & \HyDEMuSiQueAbstentionRate & \HyDEMuSiQueEMAnswered & \HyDEMuSiQueRecallInContext & \HyDEMuSiQueMeanPassagesInContext & \HyDEMuSiQueLLMCalls \\
+Rerank & \RerankMuSiQueEM & \RerankMuSiQueFOne & \RerankMuSiQueAbstentionRate & \RerankMuSiQueEMAnswered & \RerankMuSiQueRecallInContext & \RerankMuSiQueMeanPassagesInContext & \RerankMuSiQueLLMCalls \\
+Neighbour & \NeighbourMuSiQueEM & \NeighbourMuSiQueFOne & \NeighbourMuSiQueAbstentionRate & \NeighbourMuSiQueEMAnswered & \NeighbourMuSiQueRecallInContext & \NeighbourMuSiQueMeanPassagesInContext & \NeighbourMuSiQueLLMCalls \\
+CRAG-5 & \CRAGMuSiQueEM & \CRAGMuSiQueFOne & \CRAGMuSiQueAbstentionRate & \CRAGMuSiQueEMAnswered & \CRAGMuSiQueRecallInContext & \CRAGMuSiQueMeanPassagesInContext & \CRAGMuSiQueLLMCalls \\
+CRAG-10 & \CRAGTopTenMuSiQueEM & \CRAGTopTenMuSiQueFOne & \CRAGTopTenMuSiQueAbstentionRate & \CRAGTopTenMuSiQueEMAnswered & \CRAGTopTenMuSiQueRecallInContext & \CRAGTopTenMuSiQueMeanPassagesInContext & \CRAGTopTenMuSiQueLLMCalls \\
+IRCoT & \IRCoTMuSiQueEM & \IRCoTMuSiQueFOne & \IRCoTMuSiQueAbstentionRate & \IRCoTMuSiQueEMAnswered & \IRCoTMuSiQueRecallInContext & \IRCoTMuSiQueMeanPassagesInContext & \IRCoTMuSiQueLLMCalls \\
+Adaptive & \AdaptiveMuSiQueEM & \AdaptiveMuSiQueFOne & \AdaptiveMuSiQueAbstentionRate & \AdaptiveMuSiQueEMAnswered & \AdaptiveMuSiQueRecallInContext & \AdaptiveMuSiQueMeanPassagesInContext & \AdaptiveMuSiQueLLMCalls \\
+\midrule
+Cascade & \CascadeMuSiQueEM & \CascadeMuSiQueFOne & \CascadeMuSiQueAbstentionRate & \CascadeMuSiQueEMAnswered & \CascadeMuSiQueRecallInContext & \CascadeMuSiQueMeanPassagesInContext & \CascadeMuSiQueLLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{HotpotQA}
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answ. & Recall & Passages & Calls \\
+\midrule
+ClosedBook & \ClosedBookHotpotQAEM & \ClosedBookHotpotQAFOne & \ClosedBookHotpotQAAbstentionRate & \ClosedBookHotpotQAEMAnswered & -- & -- & \ClosedBookHotpotQALLMCalls \\
+BM25 & \BMTwentyFiveHotpotQAEM & \BMTwentyFiveHotpotQAFOne & \BMTwentyFiveHotpotQAAbstentionRate & \BMTwentyFiveHotpotQAEMAnswered & \BMTwentyFiveHotpotQARecallInContext & \BMTwentyFiveHotpotQAMeanPassagesInContext & \BMTwentyFiveHotpotQALLMCalls \\
+NaiveRAG-5 & \NaiveRAGHotpotQAEM & \NaiveRAGHotpotQAFOne & \NaiveRAGHotpotQAAbstentionRate & \NaiveRAGHotpotQAEMAnswered & \NaiveRAGHotpotQARecallInContext & \NaiveRAGHotpotQAMeanPassagesInContext & \NaiveRAGHotpotQALLMCalls \\
+NaiveRAG-10 & \NaiveRAGTopTenHotpotQAEM & \NaiveRAGTopTenHotpotQAFOne & \NaiveRAGTopTenHotpotQAAbstentionRate & \NaiveRAGTopTenHotpotQAEMAnswered & \NaiveRAGTopTenHotpotQARecallInContext & \NaiveRAGTopTenHotpotQAMeanPassagesInContext & \NaiveRAGTopTenHotpotQALLMCalls \\
+NaiveRAG-12 & \NaiveRAGTopTwelveHotpotQAEM & \NaiveRAGTopTwelveHotpotQAFOne & \NaiveRAGTopTwelveHotpotQAAbstentionRate & \NaiveRAGTopTwelveHotpotQAEMAnswered & \NaiveRAGTopTwelveHotpotQARecallInContext & \NaiveRAGTopTwelveHotpotQAMeanPassagesInContext & \NaiveRAGTopTwelveHotpotQALLMCalls \\
+Hybrid & \HybridHotpotQAEM & \HybridHotpotQAFOne & \HybridHotpotQAAbstentionRate & \HybridHotpotQAEMAnswered & \HybridHotpotQARecallInContext & \HybridHotpotQAMeanPassagesInContext & \HybridHotpotQALLMCalls \\
+HyDE & \HyDEHotpotQAEM & \HyDEHotpotQAFOne & \HyDEHotpotQAAbstentionRate & \HyDEHotpotQAEMAnswered & \HyDEHotpotQARecallInContext & \HyDEHotpotQAMeanPassagesInContext & \HyDEHotpotQALLMCalls \\
+Rerank & \RerankHotpotQAEM & \RerankHotpotQAFOne & \RerankHotpotQAAbstentionRate & \RerankHotpotQAEMAnswered & \RerankHotpotQARecallInContext & \RerankHotpotQAMeanPassagesInContext & \RerankHotpotQALLMCalls \\
+Neighbour & \NeighbourHotpotQAEM & \NeighbourHotpotQAFOne & \NeighbourHotpotQAAbstentionRate & \NeighbourHotpotQAEMAnswered & \NeighbourHotpotQARecallInContext & \NeighbourHotpotQAMeanPassagesInContext & \NeighbourHotpotQALLMCalls \\
+CRAG-5 & \CRAGHotpotQAEM & \CRAGHotpotQAFOne & \CRAGHotpotQAAbstentionRate & \CRAGHotpotQAEMAnswered & \CRAGHotpotQARecallInContext & \CRAGHotpotQAMeanPassagesInContext & \CRAGHotpotQALLMCalls \\
+CRAG-10 & \CRAGTopTenHotpotQAEM & \CRAGTopTenHotpotQAFOne & \CRAGTopTenHotpotQAAbstentionRate & \CRAGTopTenHotpotQAEMAnswered & \CRAGTopTenHotpotQARecallInContext & \CRAGTopTenHotpotQAMeanPassagesInContext & \CRAGTopTenHotpotQALLMCalls \\
+IRCoT & \IRCoTHotpotQAEM & \IRCoTHotpotQAFOne & \IRCoTHotpotQAAbstentionRate & \IRCoTHotpotQAEMAnswered & \IRCoTHotpotQARecallInContext & \IRCoTHotpotQAMeanPassagesInContext & \IRCoTHotpotQALLMCalls \\
+Adaptive & \AdaptiveHotpotQAEM & \AdaptiveHotpotQAFOne & \AdaptiveHotpotQAAbstentionRate & \AdaptiveHotpotQAEMAnswered & \AdaptiveHotpotQARecallInContext & \AdaptiveHotpotQAMeanPassagesInContext & \AdaptiveHotpotQALLMCalls \\
+\midrule
+Cascade & \CascadeHotpotQAEM & \CascadeHotpotQAFOne & \CascadeHotpotQAAbstentionRate & \CascadeHotpotQAEMAnswered & \CascadeHotpotQARecallInContext & \CascadeHotpotQAMeanPassagesInContext & \CascadeHotpotQALLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{2WikiMultihopQA}
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answ. & Recall & Passages & Calls \\
+\midrule
+ClosedBook & \ClosedBookTwoWikiEM & \ClosedBookTwoWikiFOne & \ClosedBookTwoWikiAbstentionRate & \ClosedBookTwoWikiEMAnswered & -- & -- & \ClosedBookTwoWikiLLMCalls \\
+BM25 & \BMTwentyFiveTwoWikiEM & \BMTwentyFiveTwoWikiFOne & \BMTwentyFiveTwoWikiAbstentionRate & \BMTwentyFiveTwoWikiEMAnswered & \BMTwentyFiveTwoWikiRecallInContext & \BMTwentyFiveTwoWikiMeanPassagesInContext & \BMTwentyFiveTwoWikiLLMCalls \\
+NaiveRAG-5 & \NaiveRAGTwoWikiEM & \NaiveRAGTwoWikiFOne & \NaiveRAGTwoWikiAbstentionRate & \NaiveRAGTwoWikiEMAnswered & \NaiveRAGTwoWikiRecallInContext & \NaiveRAGTwoWikiMeanPassagesInContext & \NaiveRAGTwoWikiLLMCalls \\
+NaiveRAG-10 & \NaiveRAGTopTenTwoWikiEM & \NaiveRAGTopTenTwoWikiFOne & \NaiveRAGTopTenTwoWikiAbstentionRate & \NaiveRAGTopTenTwoWikiEMAnswered & \NaiveRAGTopTenTwoWikiRecallInContext & \NaiveRAGTopTenTwoWikiMeanPassagesInContext & \NaiveRAGTopTenTwoWikiLLMCalls \\
+NaiveRAG-12 & \NaiveRAGTopTwelveTwoWikiEM & \NaiveRAGTopTwelveTwoWikiFOne & \NaiveRAGTopTwelveTwoWikiAbstentionRate & \NaiveRAGTopTwelveTwoWikiEMAnswered & \NaiveRAGTopTwelveTwoWikiRecallInContext & \NaiveRAGTopTwelveTwoWikiMeanPassagesInContext & \NaiveRAGTopTwelveTwoWikiLLMCalls \\
+Hybrid & \HybridTwoWikiEM & \HybridTwoWikiFOne & \HybridTwoWikiAbstentionRate & \HybridTwoWikiEMAnswered & \HybridTwoWikiRecallInContext & \HybridTwoWikiMeanPassagesInContext & \HybridTwoWikiLLMCalls \\
+HyDE & \HyDETwoWikiEM & \HyDETwoWikiFOne & \HyDETwoWikiAbstentionRate & \HyDETwoWikiEMAnswered & \HyDETwoWikiRecallInContext & \HyDETwoWikiMeanPassagesInContext & \HyDETwoWikiLLMCalls \\
+Rerank & \RerankTwoWikiEM & \RerankTwoWikiFOne & \RerankTwoWikiAbstentionRate & \RerankTwoWikiEMAnswered & \RerankTwoWikiRecallInContext & \RerankTwoWikiMeanPassagesInContext & \RerankTwoWikiLLMCalls \\
+Neighbour & \NeighbourTwoWikiEM & \NeighbourTwoWikiFOne & \NeighbourTwoWikiAbstentionRate & \NeighbourTwoWikiEMAnswered & \NeighbourTwoWikiRecallInContext & \NeighbourTwoWikiMeanPassagesInContext & \NeighbourTwoWikiLLMCalls \\
+CRAG-5 & \CRAGTwoWikiEM & \CRAGTwoWikiFOne & \CRAGTwoWikiAbstentionRate & \CRAGTwoWikiEMAnswered & \CRAGTwoWikiRecallInContext & \CRAGTwoWikiMeanPassagesInContext & \CRAGTwoWikiLLMCalls \\
+CRAG-10 & \CRAGTopTenTwoWikiEM & \CRAGTopTenTwoWikiFOne & \CRAGTopTenTwoWikiAbstentionRate & \CRAGTopTenTwoWikiEMAnswered & \CRAGTopTenTwoWikiRecallInContext & \CRAGTopTenTwoWikiMeanPassagesInContext & \CRAGTopTenTwoWikiLLMCalls \\
+IRCoT & \IRCoTTwoWikiEM & \IRCoTTwoWikiFOne & \IRCoTTwoWikiAbstentionRate & \IRCoTTwoWikiEMAnswered & \IRCoTTwoWikiRecallInContext & \IRCoTTwoWikiMeanPassagesInContext & \IRCoTTwoWikiLLMCalls \\
+Adaptive & \AdaptiveTwoWikiEM & \AdaptiveTwoWikiFOne & \AdaptiveTwoWikiAbstentionRate & \AdaptiveTwoWikiEMAnswered & \AdaptiveTwoWikiRecallInContext & \AdaptiveTwoWikiMeanPassagesInContext & \AdaptiveTwoWikiLLMCalls \\
+\midrule
+Cascade & \CascadeTwoWikiEM & \CascadeTwoWikiFOne & \CascadeTwoWikiAbstentionRate & \CascadeTwoWikiEMAnswered & \CascadeTwoWikiRecallInContext & \CascadeTwoWikiMeanPassagesInContext & \CascadeTwoWikiLLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{NaturalQuestions}
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answ. & Ans.\ in ctx & Passages & Calls \\
+\midrule
+ClosedBook & \ClosedBookNQEM & \ClosedBookNQFOne & \ClosedBookNQAbstentionRate & \ClosedBookNQEMAnswered & -- & -- & \ClosedBookNQLLMCalls \\
+BM25 & \BMTwentyFiveNQEM & \BMTwentyFiveNQFOne & \BMTwentyFiveNQAbstentionRate & \BMTwentyFiveNQEMAnswered & \BMTwentyFiveNQAnswerInContext & \BMTwentyFiveNQMeanPassagesInContext & \BMTwentyFiveNQLLMCalls \\
+NaiveRAG-5 & \NaiveRAGNQEM & \NaiveRAGNQFOne & \NaiveRAGNQAbstentionRate & \NaiveRAGNQEMAnswered & \NaiveRAGNQAnswerInContext & \NaiveRAGNQMeanPassagesInContext & \NaiveRAGNQLLMCalls \\
+Hybrid & \HybridNQEM & \HybridNQFOne & \HybridNQAbstentionRate & \HybridNQEMAnswered & \HybridNQAnswerInContext & \HybridNQMeanPassagesInContext & \HybridNQLLMCalls \\
+HyDE & \HyDENQEM & \HyDENQFOne & \HyDENQAbstentionRate & \HyDENQEMAnswered & \HyDENQAnswerInContext & \HyDENQMeanPassagesInContext & \HyDENQLLMCalls \\
+Rerank & \RerankNQEM & \RerankNQFOne & \RerankNQAbstentionRate & \RerankNQEMAnswered & \RerankNQAnswerInContext & \RerankNQMeanPassagesInContext & \RerankNQLLMCalls \\
+CRAG-5 & \CRAGNQEM & \CRAGNQFOne & \CRAGNQAbstentionRate & \CRAGNQEMAnswered & \CRAGNQAnswerInContext & \CRAGNQMeanPassagesInContext & \CRAGNQLLMCalls \\
+IRCoT & \IRCoTNQEM & \IRCoTNQFOne & \IRCoTNQAbstentionRate & \IRCoTNQEMAnswered & \IRCoTNQAnswerInContext & \IRCoTNQMeanPassagesInContext & \IRCoTNQLLMCalls \\
+Adaptive & \AdaptiveNQEM & \AdaptiveNQFOne & \AdaptiveNQAbstentionRate & \AdaptiveNQEMAnswered & \AdaptiveNQAnswerInContext & \AdaptiveNQMeanPassagesInContext & \AdaptiveNQLLMCalls \\
+\midrule
+Cascade & \CascadeNQEM & \CascadeNQFOne & \CascadeNQAbstentionRate & \CascadeNQEMAnswered & \CascadeNQAnswerInContext & \CascadeNQMeanPassagesInContext & \CascadeNQLLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{TriviaQA}
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Architecture & EM & F1 & Abst. & EM answ. & Ans.\ in ctx & Passages & Calls \\
+\midrule
+ClosedBook & \ClosedBookTriviaQAEM & \ClosedBookTriviaQAFOne & \ClosedBookTriviaQAAbstentionRate & \ClosedBookTriviaQAEMAnswered & -- & -- & \ClosedBookTriviaQALLMCalls \\
+BM25 & \BMTwentyFiveTriviaQAEM & \BMTwentyFiveTriviaQAFOne & \BMTwentyFiveTriviaQAAbstentionRate & \BMTwentyFiveTriviaQAEMAnswered & \BMTwentyFiveTriviaQAAnswerInContext & \BMTwentyFiveTriviaQAMeanPassagesInContext & \BMTwentyFiveTriviaQALLMCalls \\
+NaiveRAG-5 & \NaiveRAGTriviaQAEM & \NaiveRAGTriviaQAFOne & \NaiveRAGTriviaQAAbstentionRate & \NaiveRAGTriviaQAEMAnswered & \NaiveRAGTriviaQAAnswerInContext & \NaiveRAGTriviaQAMeanPassagesInContext & \NaiveRAGTriviaQALLMCalls \\
+Hybrid & \HybridTriviaQAEM & \HybridTriviaQAFOne & \HybridTriviaQAAbstentionRate & \HybridTriviaQAEMAnswered & \HybridTriviaQAAnswerInContext & \HybridTriviaQAMeanPassagesInContext & \HybridTriviaQALLMCalls \\
+HyDE & \HyDETriviaQAEM & \HyDETriviaQAFOne & \HyDETriviaQAAbstentionRate & \HyDETriviaQAEMAnswered & \HyDETriviaQAAnswerInContext & \HyDETriviaQAMeanPassagesInContext & \HyDETriviaQALLMCalls \\
+Rerank & \RerankTriviaQAEM & \RerankTriviaQAFOne & \RerankTriviaQAAbstentionRate & \RerankTriviaQAEMAnswered & \RerankTriviaQAAnswerInContext & \RerankTriviaQAMeanPassagesInContext & \RerankTriviaQALLMCalls \\
+CRAG-5 & \CRAGTriviaQAEM & \CRAGTriviaQAFOne & \CRAGTriviaQAAbstentionRate & \CRAGTriviaQAEMAnswered & \CRAGTriviaQAAnswerInContext & \CRAGTriviaQAMeanPassagesInContext & \CRAGTriviaQALLMCalls \\
+IRCoT & \IRCoTTriviaQAEM & \IRCoTTriviaQAFOne & \IRCoTTriviaQAAbstentionRate & \IRCoTTriviaQAEMAnswered & \IRCoTTriviaQAAnswerInContext & \IRCoTTriviaQAMeanPassagesInContext & \IRCoTTriviaQALLMCalls \\
+Adaptive & \AdaptiveTriviaQAEM & \AdaptiveTriviaQAFOne & \AdaptiveTriviaQAAbstentionRate & \AdaptiveTriviaQAEMAnswered & \AdaptiveTriviaQAAnswerInContext & \AdaptiveTriviaQAMeanPassagesInContext & \AdaptiveTriviaQALLMCalls \\
+\midrule
+Cascade & \CascadeTriviaQAEM & \CascadeTriviaQAFOne & \CascadeTriviaQAAbstentionRate & \CascadeTriviaQAEMAnswered & \CascadeTriviaQAAnswerInContext & \CascadeTriviaQAMeanPassagesInContext & \CascadeTriviaQALLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Cascade ablations (Exact Match)}
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+Variant & MuSiQue & HotpotQA & 2Wiki & NQ & TriviaQA \\
+\midrule
+Stage 1 alone (fused, no escalation) & \FusedMuSiQueEM & \FusedHotpotQAEM & \FusedTwoWikiEM & \FusedNQEM & \FusedTriviaQAEM \\
+Cascade (proposed) & \CascadeMuSiQueEM & \CascadeHotpotQAEM & \CascadeTwoWikiEM & \CascadeNQEM & \CascadeTriviaQAEM \\
+Cascade, rerank first & \CascadeRerankMuSiQueEM & \CascadeRerankHotpotQAEM & \CascadeRerankTwoWikiEM & \CascadeRerankNQEM & \CascadeRerankTriviaQAEM \\
+Cascade, naive first & \CascadeNaiveMuSiQueEM & \CascadeNaiveHotpotQAEM & \CascadeNaiveTwoWikiEM & \CascadeNaiveNQEM & \CascadeNaiveTriviaQAEM \\
+Cascade, hybrid first & \CascadeHybridMuSiQueEM & \CascadeHybridHotpotQAEM & \CascadeHybridTwoWikiEM & \CascadeHybridNQEM & \CascadeHybridTriviaQAEM \\
+Cascade + confidence trigger & \CascadeLogprobMuSiQueEM & \CascadeLogprobHotpotQAEM & \CascadeLogprobTwoWikiEM & \CascadeLogprobNQEM & \CascadeLogprobTriviaQAEM \\
+IRCoT, one-shot & \IRCoTOneShotMuSiQueEM & \IRCoTOneShotHotpotQAEM & \IRCoTOneShotTwoWikiEM & \IRCoTOneShotNQEM & \IRCoTOneShotTriviaQAEM \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Second reader (Llama-3.1-8B-Instruct, Exact Match)}
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+Architecture & MuSiQue & HotpotQA & 2Wiki & NQ & TriviaQA \\
+\midrule
+ClosedBook & \ClosedBookLlamaMuSiQueEM & \ClosedBookLlamaHotpotQAEM & \ClosedBookLlamaTwoWikiEM & \ClosedBookLlamaNQEM & \ClosedBookLlamaTriviaQAEM \\
+NaiveRAG-5 & \NaiveRAGLlamaMuSiQueEM & \NaiveRAGLlamaHotpotQAEM & \NaiveRAGLlamaTwoWikiEM & \NaiveRAGLlamaNQEM & \NaiveRAGLlamaTriviaQAEM \\
+Rerank & \RerankLlamaMuSiQueEM & \RerankLlamaHotpotQAEM & \RerankLlamaTwoWikiEM & \RerankLlamaNQEM & \RerankLlamaTriviaQAEM \\
+Stage 1 alone (fused) & \FusedLlamaMuSiQueEM & \FusedLlamaHotpotQAEM & \FusedLlamaTwoWikiEM & \FusedLlamaNQEM & \FusedLlamaTriviaQAEM \\
+Cascade & \CascadeLlamaMuSiQueEM & \CascadeLlamaHotpotQAEM & \CascadeLlamaTwoWikiEM & \CascadeLlamaNQEM & \CascadeLlamaTriviaQAEM \\
+Cascade, calls/question & \CascadeLlamaMuSiQueLLMCalls & \CascadeLlamaHotpotQALLMCalls & \CascadeLlamaTwoWikiLLMCalls & \CascadeLlamaNQLLMCalls & \CascadeLlamaTriviaQALLMCalls \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\resizebox{\textwidth}{!}{\ResultLlamaTable}
+\end{center}
+
+\section{The Confidence-Threshold Sweep}
+\label{app:sweep}
+
+Swept offline over \SweepQuestions{} sampled train questions by composing
+the three independently-run stages question by question
+(Section~\ref{sec:cascade-confidence}). ``Escalated'' counts stage-1
+answers handed on at that threshold, ``discarded'' the correct answers
+among them, ``missed'' those no later stage recovered. Exact Match peaks
+at \SweepBestEM{} (threshold \SweepBestThreshold) against
+\SweepAbstentionOnlyEM{} for the abstention-only cascade.
+
+\begin{center}\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Threshold & EM & F1 & Calls & Escalated & Discarded & Missed \\
+\midrule
+\SweepRows
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Prompts}
+\label{app:prompts}
+
+All prompts, verbatim from the implementation. The reader prompt is shared
+by every architecture; the instruction to output only the answer exists
+because the gold answers are short spans (Section~\ref{sec:setup-metrics}).
+
+\paragraph{Reader (all architectures).}
+\begin{quote}\small\ttfamily\raggedright
+Answer the question based on the given documents. Only give me the answer
+and do not output any other words.\\[2pt]
+Documents:\\
+{[}1{]} \ldots\ {[}k{]} \ldots\\[2pt]
+Question: \{question\}
+\end{quote}
+
+\paragraph{ClosedBook reader.} As above, minus the documents block.
+
+\paragraph{HyDE drafter.}
+\begin{quote}\small\ttfamily\raggedright
+Write a short encyclopedia passage that answers the question.\\[2pt]
+Question: \{question\}\\[2pt]
+Name the people, places, dates and titles involved. Write it as an
+encyclopedia entry, not as a reply to the question. If you are not sure of
+the facts, write the most plausible passage anyway. Reply with only the
+passage.
+\end{quote}
+
+\paragraph{IRCoT reasoning step.}
+\begin{quote}\small\ttfamily\raggedright
+You are answering a question step by step using the documents below.\\[2pt]
+Documents: \ldots\\
+Question: \{question\}\\
+Reasoning so far: \ldots\\[2pt]
+Write the next single sentence of reasoning. Name the entities that still
+need to be looked up. If the documents already answer the question, write
+"So the answer is: <answer>".
+\end{quote}
+The one-shot variant prepends a single hand-written two-hop worked example
+(identical for every question set).
+
+\paragraph{CRAG retrieval grader.}
+\begin{quote}\small\ttfamily\raggedright
+Judge which documents contain information useful for answering the
+question.\\[2pt]
+Documents: \ldots\\
+Question: \{question\}\\[2pt]
+Reply with only the numbers of the useful documents, separated by commas.
+If none of them are useful, reply with "none".
+\end{quote}
+
+\paragraph{CRAG query rewrite.}
+\begin{quote}\small\ttfamily\raggedright
+The search results for this question were not useful.\\[2pt]
+Question: \{question\}\\[2pt]
+Write a better search query for finding the documents that answer it.
+Spell out the entities the question only refers to indirectly. Reply with
+only the query.
+\end{quote}
+
+\paragraph{Adaptive-RAG router.}
+\begin{quote}\small\ttfamily\raggedright
+Classify how much looking up the question needs.\\[2pt]
+Question: \{question\}\\[2pt]
+A - a widely known fact that needs no source, such as a famous person,
+country or date.\\
+B - one fact that has to be looked up in a single document.\\
+C - several facts from different documents that have to be combined, for
+example when the question refers to an entity it does not name.\\[2pt]
+Reply with only the letter A, B or C.
+\end{quote}
+
+\paragraph{Abstention phrases.} An answer is counted as an abstention if,
+after normalisation, it contains any of: \emph{do(es) not contain, no
+information, not mentioned, can(not) answer, not provided, no mention,
+unable to answer, not enough information, insufficient information, there
+is no, not possible to determine} --- or if it is longer than twenty
+words.

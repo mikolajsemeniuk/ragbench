@@ -1,0 +1,95 @@
+package provider
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"time"
+)
+
+// Ollama is a client for a local Ollama server (/api/embeddings, /api/generate).
+//
+// Unlike vLLM, Ollama exposes no way to cap the prompt at a given number of
+// tokens, so callers that need a hard length bound must approximate it
+// themselves (see cmd/ingest, -max-words).
+type Ollama struct {
+	URL    string // e.g. http://localhost:11434
+	Model  string
+	Client *http.Client
+
+	// Temperature and MaxTokens pin down generation, for the same
+	// reproducibility reason as provider.VLLM.
+	Temperature float64
+	MaxTokens   int
+}
+
+// NewOllama creates an Ollama client with sensible defaults.
+func NewOllama(url, model string) *Ollama {
+	return &Ollama{
+		URL:         url,
+		Model:       model,
+		Client:      NewHTTPClient(5*time.Minute, 64),
+		Temperature: 0,
+		MaxTokens:   64,
+	}
+}
+
+// Embed calls /api/embeddings once per text, because that endpoint takes a
+// single prompt and has no batch form.
+func (o *Ollama) Embed(ctx context.Context, texts []string) ([][]float32, error) {
+	vectors := make([][]float32, len(texts))
+	for i, text := range texts {
+		body := map[string]any{
+			"model":  o.Model,
+			"prompt": text,
+		}
+		raw, err := doJSON(ctx, o.Client, http.MethodPost, o.URL+"/api/embeddings", body)
+		if err != nil {
+			return nil, err
+		}
+
+		var resp struct {
+			Embedding []float32 `json:"embedding"`
+		}
+		if err := json.Unmarshal(raw, &resp); err != nil {
+			return nil, fmt.Errorf("decode embedding response: %w", err)
+		}
+		if len(resp.Embedding) == 0 {
+			return nil, fmt.Errorf("embedding response for input %d is empty", i)
+		}
+		vectors[i] = resp.Embedding
+	}
+	return vectors, nil
+}
+
+// Generate calls /api/generate with streaming disabled.
+func (o *Ollama) Generate(ctx context.Context, prompt string) (string, error) {
+	options := map[string]any{"temperature": o.Temperature}
+	if o.MaxTokens > 0 {
+		options["num_predict"] = o.MaxTokens
+	}
+	body := map[string]any{
+		"model":   o.Model,
+		"prompt":  prompt,
+		"stream":  false,
+		"options": options,
+	}
+	raw, err := doJSON(ctx, o.Client, http.MethodPost, o.URL+"/api/generate", body)
+	if err != nil {
+		return "", err
+	}
+
+	var resp struct {
+		Response string `json:"response"`
+		// Ollama names the same two counts differently from the OpenAI
+		// schema vLLM serves.
+		PromptEvalCount int64 `json:"prompt_eval_count"`
+		EvalCount       int64 `json:"eval_count"`
+	}
+	if err := json.Unmarshal(raw, &resp); err != nil {
+		return "", fmt.Errorf("decode generate response: %w", err)
+	}
+	recordUsage(ctx, resp.PromptEvalCount, resp.EvalCount)
+	return resp.Response, nil
+}

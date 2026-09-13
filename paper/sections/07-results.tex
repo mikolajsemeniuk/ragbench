@@ -1,0 +1,284 @@
+\section{Results}
+\label{sec:results}
+
+We organise the results as six questions. Full per-set tables for every
+architecture and metric are in Appendix~\ref{app:full-tables}; unless
+stated otherwise, differences quoted below are paired Exact Match
+differences with Holm-adjusted p-values, and ``significant'' means
+$p<0.05$ after adjustment.
+
+\subsection{RQ1: Is retrieval worth anything at all?}
+\label{sec:results-worth}
+
+Against the closed-book floor, naive retrieval is worth
+\ClosedBookVsNaiveNQExactMatchDiff{} EM on NaturalQuestions,
+\ClosedBookVsNaiveTriviaQAExactMatchDiff{} on TriviaQA,
+\ClosedBookVsNaiveHotpotQAExactMatchDiff{} on HotpotQA, and
+\ClosedBookVsNaiveMuSiQueExactMatchDiff{} on MuSiQue --- large,
+significant gains everywhere except one set. On 2WikiMultihopQA the naive
+row appears to \emph{lose} to no retrieval at all
+(\ClosedBookVsNaiveTwoWikiExactMatchDiff{} EM), and this apparent
+inversion is an abstention artefact, not a knowledge difference: holding
+irrelevant passages, the reader declines on
+\NaiveRAGTwoWikiAbstentionRate{} of questions (closed-book:
+\ClosedBookTwoWikiAbstentionRate), and a decline scores zero where a
+closed-book \emph{guess} is sometimes right. Restricted to questions both
+systems answered, the ordering reverses
+(\ClosedBookVsNaiveTwoWikiEMbothansweredDiff{} in naive's favour). Any
+evaluation that reports EM without abstention would publish the wrong
+conclusion on this set --- which is why every table in this article
+carries both.
+
+\subsection{RQ2: What does each single refinement buy?}
+\label{sec:results-single}
+
+\paragraph{Lexical and hybrid retrieval.} BM25 alone is well below the
+dense baseline on the open-domain sets
+(\NaiveVsBMTwentyFiveNQExactMatchDiff{} on NaturalQuestions) but
+\emph{ahead} of it on 2WikiMultihopQA
+(\NaiveVsBMTwentyFiveTwoWikiExactMatchDiff), whose questions name their
+target articles verbatim --- exactly the rare-surface-form failure of
+Section~\ref{sec:embeddings}. Fusing the two (Hybrid) is a small but
+uniformly non-negative improvement
+(\NaiveVsHybridNQExactMatchDiff{} to
+\NaiveVsHybridTwoWikiExactMatchDiff{} across sets) at one CPU search of
+extra cost --- the cheapest strictly-safe refinement measured here.
+
+\paragraph{Cross-encoder reranking.} The strongest single gain and the
+worst single failure, on different sets: \NaiveVsRerankHotpotQAExactMatchDiff{}
+on HotpotQA and \NaiveVsRerankTwoWikiExactMatchDiff{} on 2WikiMultihopQA,
+against \NaiveVsRerankNQExactMatchDiff{} on NaturalQuestions, where
+answer-in-context falls from \NaiveRAGNQAnswerInContext{} to
+\RerankNQAnswerInContext{} by the asking-for/asking-about mechanism of
+Section~\ref{sec:cascade-fused}. Reranking is a bet on the question
+distribution, not a safe default.
+
+\paragraph{HyDE.} The one refinement that beats the baseline on
+NaturalQuestions (\NaiveVsHyDENQExactMatchDiff{}, answer-in-context
+\NaiveRAGNQAnswerInContext{} $\rightarrow$ \HyDENQAnswerInContext) and it
+helps on the multi-hop sets as well
+(\NaiveVsHyDETwoWikiExactMatchDiff{} on 2WikiMultihopQA), at the fixed
+price of doubling the generator calls on every question.
+
+\paragraph{Neighbour expansion.} Read against the twelve-passage control,
+expansion is worth \NaiveTwelveVsNeighbourHotpotQAExactMatchDiff{} on
+HotpotQA, \NaiveTwelveVsNeighbourTwoWikiExactMatchDiff{} on
+2WikiMultihopQA and \NaiveTwelveVsNeighbourMuSiQueExactMatchDiff{} on
+MuSiQue --- a null result, and a predicted one: the diagnosis
+(RQ3) puts the ``wrong slice of the right article'' bucket this method
+repairs at 5--14\% of failures. The popular advice to always fetch
+neighbouring chunks is, on this corpus, worth approximately nothing once
+context size is controlled.
+
+\paragraph{Iterative and corrective methods.} Against the matched
+ten-passage control, IRCoT gains
+\NaiveTenVsIRCoTHotpotQAExactMatchDiff{} on HotpotQA,
+\NaiveTenVsIRCoTTwoWikiExactMatchDiff{} on 2WikiMultihopQA and
+\NaiveTenVsIRCoTMuSiQueExactMatchDiff{} on MuSiQue at 2.1--2.5 calls per
+question; the one-shot variant with a worked example changes little
+(\IRCoTVsIRCoTOneShotHotpotQAExactMatchDiff{} on HotpotQA,
+\IRCoTVsIRCoTOneShotTwoWikiExactMatchDiff{} on 2WikiMultihopQA), because
+the zero-shot loop already declares itself able to answer after the first
+round --- the same five passages NaiveRAG reads --- on 70--80\% of
+multi-hop questions. CRAG at the same budget gains
+\NaiveTenVsCRAGTenMuSiQueExactMatchDiff{} on MuSiQue, its best set, at
+three calls per question. Adaptive routing is indistinguishable from its
+own single-hop branch (\NaiveVsAdaptiveTwoWikiExactMatchDiff{} vs.\ naive
+on 2WikiMultihopQA): predicting difficulty from the question alone sends
+92\% of a multi-hop set down the single-hop path.
+
+\subsection{RQ3: Why does retrieval fail?}
+\label{sec:results-diagnosis}
+
+\begin{table}[t]
+\centering\small
+\caption{Diagnosis of the naive baseline's retrieval failures (300 sampled
+failures per set; percentages of the diagnosed sample). The last row is
+the Exact Match an oracle choosing per question between the naive run and
+closed-book would add over the better single system.}
+\label{tab:diagnosis}
+\begin{tabular}{lrrr}
+\toprule
+Failure cause & HotpotQA & 2Wiki & MuSiQue \\
+\midrule
+Wrong slice of the right article & \DiagHotpotQAWrongSlicePct\% & \DiagTwoWikiWrongSlicePct\% & \DiagMuSiQueWrongSlicePct\% \\
+Right article ranked 11--1000 & \DiagHotpotQARankedLowPct\% & \DiagTwoWikiRankedLowPct\% & \DiagMuSiQueRankedLowPct\% \\
+Unreachable by this query & \DiagHotpotQAUnreachablePct\% & \DiagTwoWikiUnreachablePct\% & \DiagMuSiQueUnreachablePct\% \\
+No gold article states the answer & \DiagHotpotQAAnswerAbsentPct\% & \DiagTwoWikiAnswerAbsentPct\% & \DiagMuSiQueAnswerAbsentPct\% \\
+Gold article not in the corpus & \DiagHotpotQANotInCorpusPct\% & \DiagTwoWikiNotInCorpusPct\% & \DiagMuSiQueNotInCorpusPct\% \\
+\midrule
+Oracle (retrieve-or-closed-book) gain & \DiagHotpotQAOracleGain{} & \DiagTwoWikiOracleGain{} & \DiagMuSiQueOracleGain{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:diagnosis} splits the baseline's failures into the five
+causes of Section~\ref{sec:naive-pipeline}, each demanding a different
+remedy. Three readings matter. First, the two \emph{unfixable} buckets ---
+answer not stated by any gold article, article absent from the corpus ---
+account for roughly a quarter to a third of failures, which is the
+concrete form of the recall ceiling. Second, the \emph{ranking} bucket
+(article present, reachable, ranked 11--1000) is the largest fixable one
+on HotpotQA and 2WikiMultihopQA --- which is why reranking is the
+strongest single refinement there --- while on MuSiQue the
+\emph{unreachable} bucket dominates at \DiagMuSiQueUnreachablePct\%,
+which is why query-side methods are what helps there. Third, the
+\emph{wrong slice} bucket that neighbour expansion repairs is small
+everywhere, predicting that method's null result. The diagnosis, made
+before the cascade was designed, is the design brief the cascade answers:
+fuse rankings (largest bucket), escalate to a query-side method
+(second bucket), fall back to no retrieval (the questions where
+retrieval cannot help but a guess might).
+
+\subsection{RQ4: The cascade against every baseline}
+\label{sec:results-main}
+
+\begin{table}[t]
+\centering\small
+\caption{The proposed cascade against every baseline on every question
+set. Each cell is the paired Exact Match difference (cascade minus
+baseline); \textbf{bold} marks a significant cascade win and
+\underline{underline} a significant loss under McNemar's test with Holm
+adjustment over all \ResultPairs{} cells jointly. The cascade wins
+\ResultWins{}, loses \ResultLosses{}, ties \ResultTies{}.}
+\label{tab:main}
+\ResultTable
+\end{table}
+
+Table~\ref{tab:main} is the headline result: \ResultWins{} significant
+wins, \ResultLosses{} loss, \ResultTies{} ties over \ResultPairs{}
+(baseline, question set) pairs, under the strictest correction. Against
+the standard baseline the cascade gains
+\NaiveVsCascadeTriviaQAExactMatchDiff{} on TriviaQA,
+\NaiveVsCascadeHotpotQAExactMatchDiff{} on HotpotQA,
+\NaiveVsCascadeTwoWikiExactMatchDiff{} on 2WikiMultihopQA and
+\NaiveVsCascadeMuSiQueExactMatchDiff{} on MuSiQue; on NaturalQuestions the
+difference (\NaiveVsCascadeNQExactMatchDiff) is not significant --- the
+one set where the baseline was already near its measured ceiling for this
+reader. The single loss is to reranking on HotpotQA
+(\RerankVsCascadeHotpotQAExactMatchDiff), the set where the
+cross-encoder's bet pays; against the same reranking on NaturalQuestions
+the cascade gains \RerankVsCascadeNQExactMatchDiff. No other architecture
+in the study has a row without a significant loss; several
+(rerank, HyDE, CRAG-10) beat the cascade on their single best set. The
+cascade's claim is not ``best everywhere'' but \emph{never worse than the
+baseline, never catastrophic, at near-baseline cost} --- and
+Table~\ref{tab:main} is that claim in test form.
+
+Where does the gain come from? The stage distribution says: the fused
+first stage answers \CascadeNQStageFused{} of \CascadeNQQuestions{}
+NaturalQuestions questions, \CascadeTriviaQAStageFused{} of
+\CascadeTriviaQAQuestions{} on TriviaQA, and
+\CascadeMuSiQueStageFused{} of \CascadeMuSiQueQuestions{} on MuSiQue ---
+the escalated remainder splits between HyDE
+(e.g.\ \CascadeMuSiQueStageHyde{} on MuSiQue) and closed-book
+(\CascadeMuSiQueStageClosedbook). The cascade's own abstention rate
+collapses to \CascadeTriviaQAAbstentionRate--\CascadeMuSiQueAbstentionRate{}
+(baseline: \NaiveRAGTriviaQAAbstentionRate--\NaiveRAGMuSiQueAbstentionRate),
+because a question must be declined by \emph{three} strategies to end in a
+refusal. Consistent with Section~\ref{sec:cascade-caveats}, EM restricted
+to questions both systems answered is at or below zero against reranking
+on four of five sets: the cascade wins by rescuing declined questions,
+not by answering differently where its first stage already answered.
+
+\subsection{RQ5: What does it cost?}
+\label{sec:results-cost}
+
+\begin{table}[t]
+\centering\small
+\caption{Cost per question, averaged over the sets each architecture ran
+on, from the per-question logs. The last column is prompt tokens relative
+to the naive baseline. The cross-encoder pass (rerank, fused, cascade) and
+the CPU lexical search (BM25, hybrid, fused, cascade) are outside the
+token count.}
+\label{tab:cost}
+\resizebox{\textwidth}{!}{\CostTable}
+\end{table}
+
+Table~\ref{tab:cost} prices every row. The cascade averages
+\CostcascadeCalls{} generator calls and \CostcascadePromptRatio$\times$ the
+baseline's prompt tokens --- against $2$--$3\times$ calls and
+$2.2$--$4\times$ tokens for the corrective and iterative methods it
+outperforms in Table~\ref{tab:main}. Figure~\ref{fig:pareto} plots both
+dimensions: the cascade and its own first stage bound the quality--cost
+frontier at each end, and every architecture that spends more than 1.6
+calls per question sits strictly inside it. Escalation prices the
+expensive strategies by the questions that need them: HyDE costs two
+calls \emph{per escalated question}, and only 10--30\% of questions
+escalate.
+
+\subsection{RQ6: Which parts of the cascade matter?}
+\label{sec:results-ablations}
+
+\paragraph{What the fusion adds.} Stage one alone against plain reranking:
+\RerankVsFusedNQExactMatchDiff{} on NaturalQuestions and
+\RerankVsFusedHotpotQAExactMatchDiff{} on HotpotQA --- the fusion buys
+back the collapse at the price of part of the gain, and its mean over the
+five sets (0.322) is the best of any single-call architecture measured.
+Swapping the first stage confirms the choice: a rerank-first cascade beats
+the fused-first one on HotpotQA
+(\CascadeRerankVsCascadeHotpotQAExactMatchDiff{} for fused-first) but
+loses \CascadeRerankVsCascadeNQExactMatchDiff{} on NaturalQuestions; a
+naive-first cascade is close behind everywhere
+(\CascadeNaiveVsCascadeTwoWikiExactMatchDiff{} on 2WikiMultihopQA) and is
+the cheapest variant; hybrid-first sits between
+(\CascadeHybridVsCascadeNQExactMatchDiff{} on NaturalQuestions). No first
+stage wins everywhere; fused has the best mean and the smallest
+worst-case loss, which is its case.
+
+\paragraph{What the escalation adds.} The cascade against its own first
+stage run without escalation: \FusedVsCascadeNQExactMatchDiff{} on
+NaturalQuestions, \FusedVsCascadeTriviaQAExactMatchDiff{} on TriviaQA,
+\FusedVsCascadeHotpotQAExactMatchDiff{} on HotpotQA,
+\FusedVsCascadeTwoWikiExactMatchDiff{} on 2WikiMultihopQA,
+\FusedVsCascadeMuSiQueExactMatchDiff{} on MuSiQue --- one to three points
+on every set, all significant, for 0.16--0.58 extra calls. The escalation
+is worth roughly this much on top of \emph{any} first stage we tried;
+which first stage is best depends on the set, but that the escalation
+helps does not.
+
+\paragraph{The confidence trigger does not pay.} The sweep over
+\SweepQuestions{} held-out train questions puts the best threshold at
+\SweepBestThreshold{} for a gain of $+0.0018$ EM over the abstention-only
+cascade ($p=0.42$) at $+0.25$ calls per question. At that threshold on the
+test sets, the trigger fires on 9--15\% of questions and the paired
+difference against the abstention-only cascade is
+\CascadeVsCascadeLogprobNQExactMatchDiff{} on NaturalQuestions,
+\CascadeVsCascadeLogprobTriviaQAExactMatchDiff{} on TriviaQA,
+\CascadeVsCascadeLogprobHotpotQAExactMatchDiff{} on HotpotQA,
+\CascadeVsCascadeLogprobTwoWikiExactMatchDiff{} on 2WikiMultihopQA (the
+one significant difference --- a loss) and
+\CascadeVsCascadeLogprobMuSiQueExactMatchDiff{} on MuSiQue, at 0.2--0.36
+extra calls. The greedy reader is nearly as confident when wrong as when
+right: its token log-probabilities carry almost no information the
+abstention did not already carry. We report this negative result because
+the opposite is widely assumed; the abstention-only cascade remains the
+proposed configuration. (Full sweep in Appendix~\ref{app:sweep}.)
+
+\paragraph{The one-shot IRCoT objection.} Prompted with a worked example
+as the original method prescribes, IRCoT changes by
+\IRCoTVsIRCoTOneShotHotpotQAExactMatchDiff{} on HotpotQA and
+\IRCoTVsIRCoTOneShotTwoWikiExactMatchDiff{} on 2WikiMultihopQA relative
+to the zero-shot loop, and the cascade's comparison against it
+(\IRCoTOneShotVsCascadeTwoWikiExactMatchDiff{} on 2WikiMultihopQA at
+$2.4$ vs.\ $1.3$ calls) is materially the same as against the zero-shot
+row. The multi-hop baseline was not under-prompted.
+
+\subsection{RQ7: Does it survive a different reader?}
+\label{sec:results-reader}
+
+Everything the cascade claims rests on how a reader behaves when the
+passages are irrelevant --- it must decline rather than guess. One model
+is not evidence that readers in general do that, so the rows the claims
+stand on (closed-book, naive, rerank, fused, cascade) were re-run with
+Llama-3.1-8B-Instruct over the same index and questions, changing nothing
+else. The pattern transfers: the cascade wins \ResultLlamaWins{} of
+\ResultLlamaPairs{} pairs, loses \ResultLlamaLosses{}, ties
+\ResultLlamaTies{} (Holm over the table), with the same signature ---
+large gains over reranking on NaturalQuestions
+(\RerankVsCascadeLlamaNQExactMatchDiff), a small loss to it on HotpotQA
+(\RerankVsCascadeLlamaHotpotQAExactMatchDiff), significant gains over the
+naive baseline on every set, and the escalation worth
+\FusedVsCascadeLlamaNQExactMatchDiff{} to
+\FusedVsCascadeLlamaTwoWikiExactMatchDiff{} over stage one alone. The
+full second-reader table is in Appendix~\ref{app:full-tables}.

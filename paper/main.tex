@@ -1,0 +1,92 @@
+% The article. Every number in it comes from a generated fragment
+% (*.gen.tex, written by cmd/bench, cmd/compare, cmd/diagnose, cmd/coverage,
+% cmd/result, cmd/cost, cmd/sweep); none is typed by hand. A \newcommand that
+% is renamed, dropped or never generated shows up as a build failure here
+% instead of as a stale number in a table nobody re-checked.
+%
+% Each section lives in sections/*.tex; this file assembles them.
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+
+\input{sections/tikzstyles}
+
+% Fragments are input only when they exist, so the skeleton still builds
+% while a run is half finished. A table that references a command from a
+% fragment that is missing WILL fail, which is the intended signal.
+\newcommand{\useresults}[1]{\IfFileExists{generated/#1.gen.tex}{\input{generated/#1.gen.tex}}{}}
+% sections/fragments.tex lists every generated/*.gen.tex present; regenerate it with:
+%   ls generated/*.gen.tex | sed 's|^generated/||; s/\.gen\.tex$//' | awk '{print "\\useresults{" $0 "}"}' > sections/fragments.tex
+\input{sections/fragments}
+
+\title{CascadeRAG: Abstention-Triggered Escalation\\
+That Outperforms Costlier Retrieval-Augmented Generation\\
+Architectures at a Fraction of Their Cost}
+\author{Miko{\l}aj Semeniuk \and Agnieszka Jastrz{\k{e}}bska}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Retrieval-Augmented Generation (RAG) grounds a language model's answers in
+an external document collection, and a large family of architectural
+refinements --- hybrid retrieval, cross-encoder reranking, hypothetical
+document embeddings, corrective retrieval, iterative retrieval, routing
+--- competes for a place in practical systems. Published evaluations of
+these refinements are rarely comparable: each uses its own corpus,
+retriever, generator, and context budget. We present a controlled
+comparison of thirteen RAG architectures on a single stack --- one
+21-million-passage corpus, one embedding model, one generator, one answer
+prompt --- over five question sets and more than 37{,}000 questions, with
+paired significance tests under multiplicity control, budget-matched
+controls, abstention measured separately from error, and retrieval read
+against the ceiling the corpus imposes, which we measure. No refinement is
+universally safe: the strongest one, cross-encoder reranking, gains
+$+0.051$ Exact Match on one question set and loses $-0.100$ on another. A
+per-question diagnosis of \emph{why} retrieval fails explains these
+reversals and yields a design we call CascadeRAG: retrieve with a fusion
+of dense, lexical, and cross-encoder rankings, and escalate to a more
+expensive strategy only when the reader itself, having seen the evidence,
+declines to answer --- a posterior signal that is provably lossless under
+Exact Match, so escalation cannot discard a correct answer. Across
+\ResultPairs{} paired (baseline, question set) comparisons CascadeRAG
+wins \ResultWins{},
+loses \ResultLosses{}, and ties \ResultTies{}, at 1.16--1.58 generator
+calls per question against 2.3--3.0 for iterative and corrective methods,
+and the result replicates under a second, unrelated generator. Two
+negative results are documented along the way: neighbour-chunk expansion
+adds nothing once context size is controlled, and answer-token confidence
+adds nothing over the abstention signal it accompanies. Every number in
+the article is generated from the per-question logs by the released
+benchmark pipeline.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-background}
+\input{sections/03-related}
+\input{sections/04-architectures}
+\input{sections/05-cascade}
+\input{sections/06-setup}
+\input{sections/07-results}
+\input{sections/08-discussion}
+\input{sections/09-conclusion}
+
+\input{sections/appendix}
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}

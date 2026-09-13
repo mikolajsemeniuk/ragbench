@@ -1,0 +1,189 @@
+\section{CascadeRAG: An Abstention-Triggered Cascade}
+\label{sec:cascade}
+
+Three measured facts motivate the design. First, \emph{no single
+architecture wins everywhere}: reranking is the strongest refinement on
+HotpotQA and the worst failure on NaturalQuestions; HyDE leads on
+NaturalQuestions and adds little elsewhere; the iterative methods pay two
+to six calls on every question including the majority that a single call
+answers just as well. Second, \emph{there is large headroom in choosing
+per question}: an oracle that picked, per question, the better of
+closed-book and the naive baseline would gain
+\DiagTwoWikiOracleGain{} Exact Match on 2WikiMultihopQA over the better
+single system --- an order of magnitude more than any single refinement
+delivers. Third, \emph{the reader already signals which questions need
+more work}: a 7B instruct model holding irrelevant passages does not
+guess; it declines (``the provided documents do not contain\ldots'').
+On 2WikiMultihopQA the naive baseline declines on
+\NaiveRAGTwoWikiAbstentionRate{} of questions, against
+\ClosedBookTwoWikiAbstentionRate{} for the closed-book reader that has
+nothing to object to. A refusal after reading the evidence is a
+\emph{posterior} judgement of exactly the quantity a router tries to
+\emph{predict} from the question alone.
+
+CascadeRAG turns that signal into control flow: answer cheaply, and only
+when the reader itself says the evidence does not support an answer, try
+differently. It has two components; in tables and figures the
+architecture appears as ``Cascade''.
+
+\subsection{Stage one: fused retrieval}
+\label{sec:cascade-fused}
+
+The natural first stage would be the strongest single-call architecture,
+reranking --- but its collapse on NaturalQuestions makes it unsafe as a
+default. The collapse has a mechanism, visible in the per-question dumps.
+A cross-encoder matches what a question is \emph{asking for} while a
+bi-encoder matches what it is \emph{asking about}: for ``where is the tv
+show the curse of oak island filmed'' the cross-encoder promotes the three
+shortlist passages that state a filming location --- for \emph{Stake
+Land}, \emph{The Island}, and \emph{Come Outside} --- because each answers
+``where was it filmed'' perfectly, and pushes out the passage naming the
+right show, which says nothing about filming locations. Answer-in-context
+falls from 0.727 to 0.510 and Exact Match with it
+($-0.100$).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=3.5mm and 6mm]
+\node[q] (q) {Question};
+\node[ret, above right=5mm and 8mm of q] (dense) {Dense search\\ \scriptsize top 100};
+\node[ret, below right=5mm and 8mm of q] (lex) {Lexical search\\ \scriptsize top 100};
+\node[ret, right=of dense, fill=red!12] (ce) {Cross-encoder\\ \scriptsize reorders the 100};
+\node[comp, fill=blue!6, below right=1mm and 8mm of ce] (rrf) {RRF over\\ three rankings};
+\node[llm, right=of rrf] (gen) {Generator};
+\node[ans, right=of gen] (a) {Answer};
+\draw[arr] (q) -- (dense); \draw[arr] (q) -- (lex);
+\draw[arr] (dense) -- (ce);
+\draw[arr] (dense.east) to[out=-20,in=170] (rrf.west);
+\draw[arr] (ce) -- (rrf);
+\draw[arr] (lex.east) to[out=0,in=-160] (rrf.south west);
+\draw[arr] (rrf) -- node[lbl, above, pos=0.6] {top 5} (gen);
+\draw[arr] (gen) -- (a);
+\end{tikzpicture}
+\caption{Fused retrieval, the cascade's first stage. The cross-encoder is
+one voter among three rather than the arbiter: dense, lexical, and
+reranked orderings of the same candidate pool are merged by RRF
+(Eq.~\ref{eq:rrf}). A passage found by dense retrieval is voted for twice
+(bi-encoder rank and cross-encoder rank); a passage only the lexical index
+found is voted for once --- the lexical list is there to rescue passages
+dense retrieval missed, not to outvote it.}
+\label{fig:arch-fused}
+\end{figure}
+
+Fused retrieval (Figure~\ref{fig:arch-fused}) therefore demotes the
+cross-encoder from arbiter to voter: the dense ranking, the cross-encoder's
+reordering of it, and the lexical ranking are merged with the same RRF as
+the hybrid baseline. Measured, the fusion is a compromise rather than a
+free lunch --- on NaturalQuestions it scores 0.325 where rerank collapses
+to \RerankNQEM{} (naive: \NaiveRAGNQEM); on HotpotQA it scores 0.351
+against rerank's \RerankHotpotQAEM{} --- it avoids the catastrophe and
+gives back part of the gain. Its case is robustness: of the candidate
+first stages we measure, it has the best mean over the five sets and the
+smallest worst-case loss (Section~\ref{sec:results-ablations}). Cost over
+plain reranking: one lexical search on the CPU; the generator is still
+called once.
+
+\subsection{Stage two and three: escalation on abstention}
+\label{sec:cascade-escalation}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=3.5mm and 5.5mm]
+\node[q] (q) {Question};
+\node[comp, fill=blue!10, right=of q] (s1) {Stage 1\\ \scriptsize fused retrieval};
+\node[dec, right=of s1] (d1) {declined?};
+\node[comp, fill=violet!10, right=of d1] (s2) {Stage 2\\ \scriptsize HyDE};
+\node[dec, right=of s2] (d2) {declined?};
+\node[comp, fill=black!8, right=of d2] (s3) {Stage 3\\ \scriptsize ClosedBook};
+\node[ans, below=9mm of d1] (a1) {Answer};
+\draw[arr] (q) -- (s1);
+\draw[arr] (s1) -- (d1);
+\draw[arr] (d1) -- node[lbl, above] {yes} (s2);
+\draw[arr] (s2) -- (d2);
+\draw[arr] (d2) -- node[lbl, above] {yes} (s3);
+\draw[arr] (d1) -- node[lbl, left] {no} (a1);
+\draw[arr] (d2.south) to[out=-90,in=0] node[lbl, below right] {no} (a1.east);
+\draw[arr] (s3.south) to[out=-90,in=0] (a1.east);
+\end{tikzpicture}
+\caption{The cascade. A stage's answer is kept unless the reader declined;
+only declined questions pay for the next stage. The last stage's answer is
+kept whatever it says --- a refusal is still the most honest answer
+available.}
+\label{fig:arch-cascade}
+\end{figure}
+
+Declined questions are handed to HyDE --- whose drafted-passage search
+reaches articles the fused query could not, the dominant remaining failure
+--- and, if HyDE's reader declines too, to closed-book, which at least
+recovers the guessing behaviour that abstention suppressed. Abstention is
+detected heuristically: an explicit refusal phrase, or an answer longer
+than twenty words where the gold answers are short spans; the threshold is
+a stated hyperparameter.
+
+Two properties distinguish this trigger from prior adaptive systems.
+
+\paragraph{It is posterior.} Adaptive-RAG asks the generator to predict,
+from the question alone, how much work the question will need --- and
+gains $+0.0004$ Exact Match on 2WikiMultihopQA for it, routing 92\% of
+that multi-hop set down the single-hop branch. The cascade's signal fires
+\emph{after} the evidence has been seen: it is not a prediction of whether
+retrieval will fail but a report that it did.
+
+\paragraph{It is lossless under Exact Match.} An abstention is a sentence;
+the gold answers in these datasets are short spans; a sentence cannot
+normalise to a short span, so an abstention cannot score Exact Match~1 ---
+verified exhaustively over all 887{,}917 (question, architecture) pairs
+measured in this study, with zero exceptions. Escalating a declined
+question therefore \emph{cannot discard a correct answer}: it can only
+move a question from certainly-wrong to possibly-right. In the vocabulary
+of selective prediction~\cite{chow1970reject,geifman2017selective}, the
+refusal is a reject option whose selective risk is provably zero under
+this metric. This is what makes the cascade safe by construction where
+confidence-threshold deferral is a gamble; it is exact for Exact Match and approximate for token-level F1,
+where an abstention averages 0.05 and exceeds 0.5 for 0.09\% of questions.
+
+The ordering of stages follows their measured cost and coverage: fused
+answers every question it can at one call; HyDE is the cheapest method
+that reaches differently (two calls, only for the escalated minority);
+closed-book costs one call and cannot itself retrieve badly. Only declined
+questions pay for later stages, which is why the whole cascade averages
+1.16--1.58 generator calls per question while containing a two-call and a
+one-call stage.
+
+\subsection{A second, continuous trigger: answer confidence}
+\label{sec:cascade-confidence}
+
+The abstention trigger is blind to the failure it cannot see: a wrong
+answer given \emph{without} hesitation. The one free signal about those is
+the generator's own certainty --- a signal language models are reported
+to carry~\cite{kadavath2022know}, though eliciting it reliably is
+hard~\cite{xiong2024uncertainty} --- here the mean log-probability of the
+answer's tokens under greedy decoding, which the serving engine reports
+at no extra cost. As an extension, the cascade also escalates any answer whose mean
+token log-probability falls below a threshold $\tau$. Unlike the
+abstention this is \emph{not} lossless --- a correct answer given with low
+confidence is discarded and only sometimes recovered --- so $\tau$ is a
+true hyperparameter, and we select it on 1{,}000 sampled questions from
+each \emph{training} split, never on the test sets, by composing
+independently-run stages question by question offline (exact under greedy
+decoding, since every stage is deterministic given the question). Whether
+this second trigger pays at all is an empirical question, answered ---
+negatively --- in Section~\ref{sec:results-ablations}.
+
+\subsection{Reading the cascade's numbers fairly}
+\label{sec:cascade-caveats}
+
+Three caveats belong in any honest report of this architecture, and we
+state them before the results. Questions that reach the closed-book stage
+end with no passages in context, so the cascade's aggregate retrieval
+metrics are averages over a mixture and are not comparable with a pure
+retrieval system's; it must be compared on answer quality. Its abstention
+rate is the \emph{last} stage's, so ``Exact Match over questions both
+systems answered'' compares different populations when set against a
+single-stage system. And the gain, by design, sits in the questions the
+first stage declined --- against reranking, Exact Match restricted to
+questions both answered is at or below zero on four of five sets. The
+cascade does not answer better where its first stage already answered; it
+rescues the questions where the first stage knew it had failed. That is
+what the design predicts, and the tables of
+Section~\ref{sec:results} should be read with it in mind.

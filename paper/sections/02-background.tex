@@ -1,0 +1,209 @@
+\section{Background: How Retrieval-Augmented Generation Works}
+\label{sec:background}
+
+This section is a self-contained primer. Readers familiar with dense
+retrieval and RAG can skip to Section~\ref{sec:related}; every concept
+introduced here is used later to explain a measured result.
+
+\subsection{The knowledge problem, and why not simply retrain the model}
+\label{sec:why-rag}
+
+A large language model stores what it knows in its
+weights~\cite{brown2020gpt3,petroni2019lmkb} --- so-called
+\emph{parametric} knowledge, acquired once, during training. Three
+consequences follow. First, the knowledge is \emph{frozen}: a model trained
+in 2024 knows nothing that happened afterwards. Second, it is
+\emph{incomplete and unreliable}: how much a model retains depends on how
+often it saw a fact~\cite{roberts2020knowledge,kandpal2023longtail} ---
+popular facts appear thousands of times where rare facts appear once or
+never~\cite{mallen2023popqa} --- and when asked about the latter it tends
+to produce fluent, plausible, wrong answers ---
+hallucinations~\cite{ji2023hallucination,zhang2023sirens}. Third, it is
+\emph{closed}: an
+organisation's internal documentation, product catalogue, or case history
+was never in the training data at all.
+
+The obvious remedy --- continue training the model on the missing documents
+--- is rarely practical. Full retraining of even a mid-sized model costs
+GPU-months; parameter-efficient fine-tuning~\cite{hu2022lora} is cheaper
+but must be repeated every time the documents change, offers no
+attribution (the model still cannot say \emph{where} an answer came
+from), and injects new factual knowledge less reliably than simply
+retrieving it~\cite{ovadia2024finetuning}. Retrieval-Augmented
+Generation~\cite{lewis2020rag} sidesteps the problem: the documents stay
+outside the model, in a searchable index that can be updated by inserting
+or deleting a record, and at question time the system retrieves the few
+passages most relevant to the question and prepends them to the model's
+prompt. The model's job shrinks from \emph{recalling} the fact to
+\emph{reading} it. Updating knowledge becomes a database operation rather than
+a training run; a company can place its private business context into the
+index without any of it entering the model's weights; and every answer can
+cite the passages it was read from.
+
+\subsection{Embeddings and cosine similarity}
+\label{sec:embeddings}
+
+The search step must match a question to passages by \emph{meaning}, not
+just by shared words --- ``Where did the director of Beat Girl die?'' shares
+almost no vocabulary with the encyclopedia paragraph that answers it. The
+standard tool is the \emph{text embedding}: a neural network (the
+\emph{embedding model} or \emph{encoder}, typically a Transformer
+encoder~\cite{vaswani2017attention,devlin2019bert}) that maps a piece of
+text to a vector of a few hundred real numbers, trained so that texts
+with similar meaning land close together in that vector
+space~\cite{reimers2019sbert}.
+
+Closeness is measured by \emph{cosine similarity}: the cosine of the angle
+between two vectors, which is $1$ for parallel vectors, $0$ for orthogonal
+ones, and $-1$ for opposite ones. For vectors $\mathbf{a}$ and $\mathbf{b}$,
+\begin{equation}
+\cos(\mathbf{a},\mathbf{b})
+  = \frac{\mathbf{a}\cdot\mathbf{b}}{\lVert\mathbf{a}\rVert\,\lVert\mathbf{b}\rVert}
+  = \frac{\sum_i a_i b_i}{\sqrt{\sum_i a_i^2}\sqrt{\sum_i b_i^2}}.
+\end{equation}
+A toy example with three dimensions makes the mechanics concrete. Suppose an
+encoder mapped three texts as follows:
+\begin{center}
+\small
+\begin{tabular}{lr}
+\toprule
+Text & Vector \\
+\midrule
+``Who directed Beat Girl?'' & $(0.9,\; 0.4,\; 0.1)$ \\
+``Beat Girl is a 1960 film directed by Edmond T.\ Gr\'eville.'' & $(0.8,\; 0.5,\; 0.2)$ \\
+``The recipe calls for two eggs and a cup of flour.'' & $(0.1,\; 0.2,\; 0.9)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The question and the film passage give
+$\cos = (0.72+0.20+0.02)/(1.0\cdot0.97) \approx 0.97$; the question and the
+recipe give $\cos \approx 0.35$. The film passage is retrieved. Real
+encoders behave the same way in 768 dimensions instead of three.
+
+Two properties of embeddings matter for the results in this article. First,
+an embedding is a \emph{lossy compression}: 768 numbers cannot preserve
+everything in a hundred-word passage, and what the compression loses first
+is rare surface forms --- exact titles, names, codes. A question that names
+its target verbatim can therefore still miss it in embedding space, which
+is precisely the failure that lexical search repairs
+(Section~\ref{sec:arch-hybrid}). Second, some encoders are trained
+\emph{asymmetrically}: the query is expected to carry a short instruction
+prefix (e.g.\ \texttt{query:}~\ldots) that the passage side does not.
+Ignoring the convention silently degrades retrieval; we verify the
+convention for our encoder empirically (Section~\ref{sec:setup}).
+
+\subsection{Embedding models and cross-encoders}
+\label{sec:encoders}
+
+The encoder used for search is a \emph{bi-encoder}: it embeds the question
+and each passage \emph{separately}, and their relevance is the similarity
+of the two vectors. This is what makes web-scale search possible --- all
+passage vectors are computed once, offline, and a question at query time is
+embedded once and compared against millions of stored vectors in
+milliseconds. The price is that the encoder never sees the question and the
+passage \emph{together}, so it cannot model their interaction; it matches
+what a question is \emph{about}.
+
+A \emph{cross-encoder}~\cite{nogueira2019passage} reads the concatenated
+(question, passage) pair through one network and outputs a relevance score.
+Seeing both texts jointly, it can judge whether the passage actually
+answers the question --- what the question is \emph{asking for} --- far
+more precisely, but at the cost of one full network pass per pair, which
+rules out scanning a corpus. The standard compromise is a two-stage
+pipeline: a bi-encoder retrieves a shortlist of candidates, and the
+cross-encoder reorders the shortlist (Section~\ref{sec:arch-rerank}). The
+distinction between \emph{about} and \emph{asking for} is not cosmetic; it
+produces the single largest failure we measure
+(Section~\ref{sec:results-single}).
+
+\subsection{Vector databases}
+\label{sec:vectordb}
+
+Storing millions of embedding vectors and answering ``which stored vectors
+are most similar to this query vector'' is the job of a \emph{vector
+database}. Comparing the query against every stored vector (exact search)
+is linear in corpus size; even GPU-accelerated exact
+search~\cite{johnson2019faiss} is a poor fit for serving interactive
+queries at the 21-million-passage scale used here. Vector databases therefore build an
+\emph{approximate nearest neighbour} (ANN) index --- most commonly a
+Hierarchical Navigable Small World graph (HNSW)~\cite{malkov2020hnsw}, a
+layered proximity graph walked greedily from an entry point towards the
+query. The walk inspects a small fraction of the corpus and returns the
+nearest vectors it visited, trading a tunable amount of recall for orders of
+magnitude in speed; the size of the candidate list the walk keeps
+(\texttt{ef}) controls that trade, and we report and fix it in our setup
+because a benchmark that leaves it at an unknown default silently measures
+the index rather than the architecture.
+
+Alongside each vector, the database stores the passage text and its
+identifier, so a search returns readable passages, ready to be placed in a
+prompt. The same database can also host a \emph{sparse} (lexical) index, in
+which a passage is represented by weighted term counts and matching is by
+exact term overlap under BM25 scoring~\cite{robertson2009bm25} --- the
+modern packaging of classical keyword search, and the complement to dense
+retrieval used by the hybrid architectures below.
+
+\subsection{The naive RAG pipeline}
+\label{sec:naive-pipeline}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=5mm and 8mm]
+% Ingestion phase
+\node[doc] (corpus) {Documents};
+\node[comp, fill=black!5, right=of corpus] (chunk) {Split into\\$\sim$100-word passages};
+\node[ret, right=of chunk] (encdoc) {Embedding\\model};
+\node[store, right=of encdoc] (db) {Vector\\database};
+\draw[arr] (corpus) -- (chunk);
+\draw[arr] (chunk) -- (encdoc);
+\draw[arr] (encdoc) -- node[lbl, above] {vectors} (db);
+\node[lbl, anchor=west] at ($(corpus.west)+(-2mm,9mm)$) {\textbf{Ingestion (once, offline)}};
+% Query phase
+\node[q, below=13mm of corpus] (question) {Question};
+\node[ret, right=of question] (encq) {Embedding\\model};
+\node[comp, fill=blue!6, right=of encq] (search) {Similarity\\search};
+\node[llm, right=of search] (gen) {Generator\\(LLM)};
+\node[ans, right=of gen] (answer) {Answer};
+\draw[arr] (question) -- (encq);
+\draw[arr] (encq) -- node[lbl, above] {vector} (search);
+\draw[arr] (db.south) to[out=-90,in=90] node[lbl, right] {top-$k$ passages} (search.north);
+\draw[arr] (search) -- (gen);
+\draw[arr] (gen) -- (answer);
+\draw[arr] (question.south) to[out=-60,in=-150] ($(gen.south)+(-2mm,0)$);
+\node[lbl, anchor=west] at ($(question.west)+(-2mm,9mm)$) {\textbf{Query time (per question)}};
+\end{tikzpicture}
+\caption{The naive RAG pipeline. Offline, the document collection is split
+into passages, embedded, and stored in a vector database. At query time the
+question is embedded with the same model, the $k$ most similar passages are
+retrieved, and the generator answers from the question plus those passages.
+Every architecture in this article is a modification of one or more blocks
+of this pipeline.}
+\label{fig:naive-pipeline}
+\end{figure}
+
+Figure~\ref{fig:naive-pipeline} assembles the components into the baseline
+architecture that every refinement modifies. Offline, the collection is
+split into passages of roughly one hundred words --- small enough that a
+retrieved passage is mostly about one thing, large enough to carry a fact
+in context --- and each passage is embedded and stored. At query time, the
+question is embedded, the $k$ most similar passages are retrieved (here
+$k=5$), and the generator receives a prompt of the form ``Answer the
+question based on the given documents\ldots'' followed by the passages and
+the question.
+
+Everything that can go wrong in this pipeline goes wrong in one of a few
+ways: the passage that answers the question is in the corpus but ranked
+below the top~$k$; it is unreachable because the question's own words are
+too far from it in embedding space; the right article was found but the
+wrong hundred-word slice of it was taken; or the answer simply is not in
+the corpus. Which of these dominates depends on the question distribution,
+and measuring that split --- rather than guessing it --- is what
+Section~\ref{sec:results-diagnosis} contributes; the architectures of
+Section~\ref{sec:architectures} are, in effect, one remedy per failure
+mode. The generation side has failure modes of its own --- readers use
+passages unevenly by position in the context~\cite{liu2024lost}, react
+measurably to irrelevant passages~\cite{cuconasu2024noise}, and
+engineering surveys catalogue further failure points across the
+pipeline~\cite{barnett2024seven} --- but on this benchmark the bulk of
+the measurable headroom sits in retrieval, which is where the diagnosis
+looks.

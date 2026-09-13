@@ -129,14 +129,14 @@ questions pay for the next stage, which is why the whole thing runs at about
 ### Generating and comparing its runs
 
 `cascade` is part of `make bench`, so `make bench` (or `make cascade` alone)
-produces `runs/cascade-<set>.jsonl` and `paper/cascade-<set>.gen.tex`. It needs
+produces `runs/cascade-<set>.jsonl` and `paper/generated/cascade-<set>.gen.tex`. It needs
 both collections - the dense one and the BM25 one - and the reranker
 container, because stage 1 fuses all three. The fragment carries, on top of the
 usual metrics, how many questions each stage answered
 (`\Cascade<Set>StageFused`, `StageHyde`, `StageClosedbook`) and the mean
 number of stages run. `make compare` then writes the two paired tests the
-paper reads it from, `paper/cmp-rerank-cascade-<set>.gen.tex` and
-`paper/cmp-naive-cascade-<set>.gen.tex`. Every cascade row in the per-question
+paper reads it from, `paper/generated/cmp-rerank-cascade-<set>.gen.tex` and
+`paper/generated/cmp-naive-cascade-<set>.gen.tex`. Every cascade row in the per-question
 dump names the stage that answered, so per-stage Exact Match is a one-line
 aggregation over `stage`.
 
@@ -168,7 +168,7 @@ many stage-1 answers were escalated, how many of those were correct
 is chosen for all sets; put it in `TAU`. The test run writes
 `runs/cascade-lp-<set>.jsonl` and is compared with the abstention-only
 cascade, naive and rerank, and rendered as its own summary table
-(`paper/result-lp.gen.tex`).
+(`paper/generated/result-lp.gen.tex`).
 
 Measured, it does not pay. The sweep over 4,988 train questions put the best
 threshold at -0.15 for +0.0018 Exact Match (McNemar p = 0.42) at +0.25 calls.
@@ -183,18 +183,18 @@ the proposed row; `cascade-lp` is the ablation that says so.
 
 ### The summary table
 
-`make result` renders `paper/result.gen.tex`: the proposed architecture against
+`make result` renders `paper/generated/result.gen.tex`: the proposed architecture against
 every baseline on every set, one cell per pair, each cell the paired Exact
 Match difference marked as a win (bold), a loss (underlined) or a tie (plain).
 The test is McNemar's, as in `cmd/compare`, but Holm-adjusted over every cell
 of the table at once, because the sentence the table supports - "wins W,
 loses L, ties T of P pairs" - is one family of tests. That is stricter than
-the per-pair figures in `paper/cmp-*.gen.tex`, and a few narrow wins there
+the per-pair figures in `paper/generated/cmp-*.gen.tex`, and a few narrow wins there
 are ties here.
 
 ### The cost table
 
-`make cost` renders `paper/cost.gen.tex`: generation calls, prompt tokens,
+`make cost` renders `paper/generated/cost.gen.tex`: generation calls, prompt tokens,
 completion tokens and passages per question for every architecture, averaged
 over the sets it ran on, plus the prompt-token ratio to NaiveRAG. It reads the
 dumps, so it is tokens and calls only - the comparable cost. The throughput in
@@ -226,7 +226,7 @@ make cascade-ablations   # after make cascade; ~4 benchmark runs per set plus co
 | `cascade-hybrid` | hybrid -> hyde -> closedbook | fusion without the cross-encoder |
 
 The target ends with the paired comparisons of each variant against `cascade`
-(`paper/cmp-<variant>-cascade-<set>.gen.tex`) and of `fused` against `rerank`.
+(`paper/generated/cmp-<variant>-cascade-<set>.gen.tex`) and of `fused` against `rerank`.
 
 The `fused` run is optional for Exact Match. Stage 1 answers every question in
 the cascade, and every escalated question is one where stage 1 abstained -
@@ -263,7 +263,7 @@ Three things to keep in mind:
 
 ### Where it stands
 
-Paired Exact Match differences from `paper/cmp-*-cascade-*.gen.tex` (Holm-adjusted
+Paired Exact Match differences from `paper/generated/cmp-*-cascade-*.gen.tex` (Holm-adjusted
 p on the primary endpoint), generation calls per question in brackets:
 
 | set | vs NaiveRAG [1.0] | vs Rerank [1.0] | cascade calls |
@@ -320,9 +320,9 @@ The service pulls `NousResearch/Meta-Llama-3.1-8B-Instruct`, a byte-identical
 mirror of Meta's gated repository, so no Hugging Face token is needed; cite
 the Meta model in the paper. The runs are
 written as `runs/<architecture>-llama-<set>.jsonl`, their fragments as
-`paper/<architecture>-llama-<set>.gen.tex` with `Llama` in the command names,
-the six comparisons that matter as `paper/cmp-*-llama-*.gen.tex`, and the
-summary table as `paper/result-llama.gen.tex`. Another model is
+`paper/generated/<architecture>-llama-<set>.gen.tex` with `Llama` in the command names,
+the six comparisons that matter as `paper/generated/cmp-*-llama-*.gen.tex`, and the
+summary table as `paper/generated/result-llama.gen.tex`. Another model is
 `make reader READER_MODEL=... READER_URL=... READER_TAG=... READER_NAME=...`.
 
 ## Diagnose retrieval failures

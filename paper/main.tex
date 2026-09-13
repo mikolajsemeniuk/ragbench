@@ -25,9 +25,9 @@
 % Fragments are input only when they exist, so the skeleton still builds
 % while a run is half finished. A table that references a command from a
 % fragment that is missing WILL fail, which is the intended signal.
-\newcommand{\useresults}[1]{\IfFileExists{#1.gen.tex}{\input{#1.gen.tex}}{}}
-% sections/fragments.tex lists every *.gen.tex present; regenerate it with:
-%   ls *.gen.tex | sed 's/\.gen\.tex$//' | awk '{print "\\useresults{" $0 "}"}' > sections/fragments.tex
+\newcommand{\useresults}[1]{\IfFileExists{generated/#1.gen.tex}{\input{generated/#1.gen.tex}}{}}
+% sections/fragments.tex lists every generated/*.gen.tex present; regenerate it with:
+%   ls generated/*.gen.tex | sed 's|^generated/||; s/\.gen\.tex$//' | awk '{print "\\useresults{" $0 "}"}' > sections/fragments.tex
 \input{sections/fragments}
 
 \title{CascadeRAG: Abstention-Triggered Escalation\\

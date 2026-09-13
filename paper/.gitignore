@@ -1,0 +1,8 @@
+# LaTeX build artifacts; main.pdf stays tracked on purpose.
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+*.log

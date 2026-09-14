@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "FusedVsCascadeTriviaQAPaired",
+      "value": "11292"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchA",
+      "value": "0.5920"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchB",
+      "value": "0.6032"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchDiff",
+      "value": "+0.0112"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchCILow",
+      "value": "+0.0092"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchCIHigh",
+      "value": "+0.0132"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFA",
+      "value": "0.6803"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFB",
+      "value": "0.6933"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFDiff",
+      "value": "+0.0130"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFCILow",
+      "value": "+0.0111"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFCIHigh",
+      "value": "+0.0150"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionA",
+      "value": "0.0621"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionB",
+      "value": "0.0044"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionDiff",
+      "value": "-0.0577"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionCILow",
+      "value": "-0.0620"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionCIHigh",
+      "value": "-0.0535"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredA",
+      "value": "0.6313"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredB",
+      "value": "0.6314"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredDiff",
+      "value": "+0.0002"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredCILow",
+      "value": "-0.0002"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredCIHigh",
+      "value": "+0.0006"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredP",
+      "value": "0.6171"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAEMbothansweredPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextA",
+      "value": "0.7633"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextB",
+      "value": "0.7617"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextDiff",
+      "value": "-0.0016"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextCILow",
+      "value": "-0.0040"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextCIHigh",
+      "value": "+0.0007"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextP",
+      "value": "0.2126"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAAnswerincontextPHolm",
+      "value": "0.6377"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxB",
+      "value": "4.8384"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxDiff",
+      "value": "-0.1616"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxCILow",
+      "value": "-0.1784"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxCIHigh",
+      "value": "-0.1457"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsB",
+      "value": "1.1572"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsDiff",
+      "value": "+0.1572"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsCILow",
+      "value": "+0.1458"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsCIHigh",
+      "value": "+0.1686"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensA",
+      "value": "838.4099"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensB",
+      "value": "898.7107"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensDiff",
+      "value": "+60.3007"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensCILow",
+      "value": "+56.1074"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensCIHigh",
+      "value": "+64.6066"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysA",
+      "value": "28.2930"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysB",
+      "value": "29.2937"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysDiff",
+      "value": "+1.0006"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysCILow",
+      "value": "+0.8172"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysCIHigh",
+      "value": "+1.1899"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysP",
+      "value": "0.9676"
+    },
+    {
+      "name": "FusedVsCascadeTriviaQALatencysPHolm",
+      "value": "1.0000"
+    }
+  ]
+}

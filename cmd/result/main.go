@@ -23,6 +23,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 	"github.com/mikolajsemeniuk/ragbench/pkg/report"
 )
 
@@ -55,8 +56,8 @@ func main() {
 		alpha     = flag.Float64("alpha", 0.05, "significance level after the Holm adjustment")
 		resamples = flag.Int("bootstrap", 2000, "bootstrap resamples for each cell's confidence interval")
 		seed      = flag.Int64("seed", 42, "bootstrap seed")
-		texOut    = flag.String("tex-out", "", "path of a .tex file to write the table to - optional")
-		name      = flag.String("name", "Result", "prefix of the generated .tex commands")
+		jsonOut   = flag.String("json-out", "", "path of the eval .json file to write the table to (rendered to LaTeX by cmd/render) - optional")
+		name      = flag.String("name", "Result", "prefix of the aggregate names")
 	)
 	flag.Parse()
 
@@ -122,11 +123,11 @@ func main() {
 	}
 	fmt.Printf("\n\n%d pairs: %d wins, %d losses, %d ties (Holm over all %d tests, alpha %.2f)\n", wins+losses+ties, wins, losses, ties, wins+losses+ties, *alpha)
 
-	if *texOut != "" {
-		if err := writeTex(*texOut, *name, *proposed, strings.Split(*baselines, ","), setList, cells, wins, losses, ties); err != nil {
-			log.Fatalf("writing tex: %v", err)
+	if *jsonOut != "" {
+		if err := writeJSON(*jsonOut, *name, *proposed, strings.Split(*baselines, ","), setList, cells, wins, losses, ties); err != nil {
+			log.Fatalf("writing eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 }
 
@@ -224,17 +225,22 @@ func holm(cells []*cell) {
 	}
 }
 
-func writeTex(path, name, proposed string, baselines, sets []string, cells []*cell, wins, losses, ties int) error {
+func writeJSON(path, name, proposed string, baselines, sets []string, cells []*cell, wins, losses, ties int) error {
 	id := texSafeID(name)
+	doc := eval.Doc{
+		Generator: "cmd/result",
+		Comments: []string{
+			fmt.Sprintf("A cell is the paired Exact Match difference (%s minus baseline). Bold: %s is significantly better;", report.ArchitectureName(proposed), report.ArchitectureName(proposed)),
+			"underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell.",
+		},
+	}
+	doc.Addf(id+"Pairs", "%d", wins+losses+ties)
+	doc.Addf(id+"Wins", "%d", wins)
+	doc.Addf(id+"Losses", "%d", losses)
+	doc.Addf(id+"Ties", "%d", ties)
+
 	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/result - do not edit by hand\n")
-	fmt.Fprintf(&b, "%% A cell is the paired Exact Match difference (%s minus baseline). Bold: %s is significantly better;\n", report.ArchitectureName(proposed), report.ArchitectureName(proposed))
-	fmt.Fprintf(&b, "%% underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell.\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sPairs}{%d}\n", id, wins+losses+ties)
-	fmt.Fprintf(&b, "\\newcommand{\\%sWins}{%d}\n", id, wins)
-	fmt.Fprintf(&b, "\\newcommand{\\%sLosses}{%d}\n", id, losses)
-	fmt.Fprintf(&b, "\\newcommand{\\%sTies}{%d}\n", id, ties)
-	fmt.Fprintf(&b, "\\newcommand{\\%sTable}{%%\n", id)
+	fmt.Fprintf(&b, "%%\n")
 	fmt.Fprintf(&b, "\\begin{tabular}{l%s}\n\\toprule\n", strings.Repeat("r", len(sets)))
 	fmt.Fprintf(&b, "Baseline (calls/q)")
 	for _, s := range sets {
@@ -262,14 +268,10 @@ func writeTex(path, name, proposed string, baselines, sets []string, cells []*ce
 	for _, s := range sets {
 		fmt.Fprintf(&b, " & %s", proposedCalls(cells, s))
 	}
-	fmt.Fprintf(&b, " \\\\\n\\bottomrule\n\\end{tabular}}\n")
+	fmt.Fprintf(&b, " \\\\\n\\bottomrule\n\\end{tabular}")
+	doc.Add(id+"Table", b.String())
 
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return err
-		}
-	}
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	return eval.Write(path, &doc)
 }
 
 func texSafeID(name string) string {

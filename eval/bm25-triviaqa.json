@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "BMTwentyFiveTriviaQAQuestions",
+      "value": "11312"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAEM",
+      "value": "0.5356"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAFOne",
+      "value": "0.6220"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAAbstentionRate",
+      "value": "0.0994"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAAnsweredQuestions",
+      "value": "10188"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAEMAnswered",
+      "value": "0.5947"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAFOneAnswered",
+      "value": "0.6845"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAAnswerInContext",
+      "value": "0.6706"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAAnswerInContextQuestions",
+      "value": "11312"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAPromptTokens",
+      "value": "840"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQACompletionTokens",
+      "value": "9"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAThroughput",
+      "value": "6.52"
+    },
+    {
+      "name": "BMTwentyFiveTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

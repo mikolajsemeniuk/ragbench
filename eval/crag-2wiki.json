@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGTwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "CRAGTwoWikiEM",
+      "value": "0.2332"
+    },
+    {
+      "name": "CRAGTwoWikiFOne",
+      "value": "0.3014"
+    },
+    {
+      "name": "CRAGTwoWikiAbstentionRate",
+      "value": "0.1808"
+    },
+    {
+      "name": "CRAGTwoWikiAnsweredQuestions",
+      "value": "10302"
+    },
+    {
+      "name": "CRAGTwoWikiEMAnswered",
+      "value": "0.2846"
+    },
+    {
+      "name": "CRAGTwoWikiFOneAnswered",
+      "value": "0.3547"
+    },
+    {
+      "name": "CRAGTwoWikiMeanPassagesInContext",
+      "value": "5.17"
+    },
+    {
+      "name": "CRAGTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CRAGTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGTwoWikiAnswerInContext",
+      "value": "0.3244"
+    },
+    {
+      "name": "CRAGTwoWikiAnswerInContextQuestions",
+      "value": "11267"
+    },
+    {
+      "name": "CRAGTwoWikiRecallInContext",
+      "value": "0.3375"
+    },
+    {
+      "name": "CRAGTwoWikiMRR",
+      "value": "0.5583"
+    },
+    {
+      "name": "CRAGTwoWikiRetrievalEvalQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "CRAGTwoWikiLLMCalls",
+      "value": "3.00"
+    },
+    {
+      "name": "CRAGTwoWikiPromptTokens",
+      "value": "1958"
+    },
+    {
+      "name": "CRAGTwoWikiCompletionTokens",
+      "value": "39"
+    },
+    {
+      "name": "CRAGTwoWikiThroughput",
+      "value": "1.49"
+    },
+    {
+      "name": "CRAGTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGTwoWikiBranchAmbiguous",
+      "value": "4543"
+    },
+    {
+      "name": "CRAGTwoWikiBranchCorrect",
+      "value": "29"
+    },
+    {
+      "name": "CRAGTwoWikiBranchIncorrect",
+      "value": "8003"
+    }
+  ]
+}

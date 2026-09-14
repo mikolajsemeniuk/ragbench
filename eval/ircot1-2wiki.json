@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "IRCoTOneShotTwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiEM",
+      "value": "0.2565"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiFOne",
+      "value": "0.3266"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiAbstentionRate",
+      "value": "0.1454"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiAnsweredQuestions",
+      "value": "10746"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiEMAnswered",
+      "value": "0.3001"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiFOneAnswered",
+      "value": "0.3720"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiMeanPassagesInContext",
+      "value": "7.81"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiAnswerInContext",
+      "value": "0.3989"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiAnswerInContextQuestions",
+      "value": "11267"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiRecallInContext",
+      "value": "0.4031"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiMRR",
+      "value": "0.5892"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiRetrievalEvalQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiLLMCalls",
+      "value": "2.65"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiPromptTokens",
+      "value": "3742"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiCompletionTokens",
+      "value": "122"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiThroughput",
+      "value": "0.90"
+    },
+    {
+      "name": "IRCoTOneShotTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

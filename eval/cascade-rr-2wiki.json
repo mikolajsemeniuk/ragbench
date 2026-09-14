@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeRerankTwoWikiQuestions",
+      "value": "12568"
+    },
+    {
+      "name": "CascadeRerankTwoWikiEM",
+      "value": "0.2823"
+    },
+    {
+      "name": "CascadeRerankTwoWikiFOne",
+      "value": "0.3459"
+    },
+    {
+      "name": "CascadeRerankTwoWikiAbstentionRate",
+      "value": "0.0037"
+    },
+    {
+      "name": "CascadeRerankTwoWikiAnsweredQuestions",
+      "value": "12522"
+    },
+    {
+      "name": "CascadeRerankTwoWikiEMAnswered",
+      "value": "0.2833"
+    },
+    {
+      "name": "CascadeRerankTwoWikiFOneAnswered",
+      "value": "0.3471"
+    },
+    {
+      "name": "CascadeRerankTwoWikiMeanPassagesInContext",
+      "value": "4.68"
+    },
+    {
+      "name": "CascadeRerankTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeRerankTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeRerankTwoWikiAnswerInContext",
+      "value": "0.3853"
+    },
+    {
+      "name": "CascadeRerankTwoWikiAnswerInContextQuestions",
+      "value": "11262"
+    },
+    {
+      "name": "CascadeRerankTwoWikiRecallInContext",
+      "value": "0.3851"
+    },
+    {
+      "name": "CascadeRerankTwoWikiMRR",
+      "value": "0.6701"
+    },
+    {
+      "name": "CascadeRerankTwoWikiRetrievalEvalQuestions",
+      "value": "12568"
+    },
+    {
+      "name": "CascadeRerankTwoWikiLLMCalls",
+      "value": "1.32"
+    },
+    {
+      "name": "CascadeRerankTwoWikiPromptTokens",
+      "value": "1035"
+    },
+    {
+      "name": "CascadeRerankTwoWikiCompletionTokens",
+      "value": "32"
+    },
+    {
+      "name": "CascadeRerankTwoWikiThroughput",
+      "value": "2.16"
+    },
+    {
+      "name": "CascadeRerankTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeRerankTwoWikiStageClosedbook",
+      "value": "800"
+    },
+    {
+      "name": "CascadeRerankTwoWikiStageHyde",
+      "value": "794"
+    },
+    {
+      "name": "CascadeRerankTwoWikiStageRerank",
+      "value": "10974"
+    },
+    {
+      "name": "CascadeRerankTwoWikiStagesRun",
+      "value": "1.19"
+    }
+  ]
+}

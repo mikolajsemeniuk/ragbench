@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "RerankTwoWikiQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "RerankTwoWikiEM",
+      "value": "0.2675"
+    },
+    {
+      "name": "RerankTwoWikiFOne",
+      "value": "0.3311"
+    },
+    {
+      "name": "RerankTwoWikiAbstentionRate",
+      "value": "0.1273"
+    },
+    {
+      "name": "RerankTwoWikiAnsweredQuestions",
+      "value": "10969"
+    },
+    {
+      "name": "RerankTwoWikiEMAnswered",
+      "value": "0.3065"
+    },
+    {
+      "name": "RerankTwoWikiFOneAnswered",
+      "value": "0.3724"
+    },
+    {
+      "name": "RerankTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "RerankTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "RerankTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "RerankTwoWikiAnswerInContext",
+      "value": "0.3885"
+    },
+    {
+      "name": "RerankTwoWikiAnswerInContextQuestions",
+      "value": "11262"
+    },
+    {
+      "name": "RerankTwoWikiRecallInContext",
+      "value": "0.3941"
+    },
+    {
+      "name": "RerankTwoWikiMRR",
+      "value": "0.6909"
+    },
+    {
+      "name": "RerankTwoWikiRetrievalEvalQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "RerankTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "RerankTwoWikiPromptTokens",
+      "value": "904"
+    },
+    {
+      "name": "RerankTwoWikiCompletionTokens",
+      "value": "12"
+    },
+    {
+      "name": "RerankTwoWikiThroughput",
+      "value": "2.97"
+    },
+    {
+      "name": "RerankTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

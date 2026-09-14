@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "CascadeVsCascadeLogprobNQPaired",
+      "value": "3600"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchA",
+      "value": "0.3417"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchB",
+      "value": "0.3408"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchDiff",
+      "value": "-0.0008"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchCILow",
+      "value": "-0.0061"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchCIHigh",
+      "value": "+0.0042"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchP",
+      "value": "0.8339"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQExactMatchPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFA",
+      "value": "0.4604"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFB",
+      "value": "0.4598"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFDiff",
+      "value": "-0.0006"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFCILow",
+      "value": "-0.0059"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFCIHigh",
+      "value": "+0.0046"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFP",
+      "value": "0.7937"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQFPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionA",
+      "value": "0.0317"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionB",
+      "value": "0.0328"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionDiff",
+      "value": "+0.0011"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionCILow",
+      "value": "-0.0019"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionCIHigh",
+      "value": "+0.0042"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionP",
+      "value": "0.5959"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAbstentionPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredA",
+      "value": "0.3544"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredB",
+      "value": "0.3538"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredDiff",
+      "value": "-0.0006"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredCILow",
+      "value": "-0.0058"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredCIHigh",
+      "value": "+0.0049"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredP",
+      "value": "0.9161"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQEMbothansweredPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextA",
+      "value": "0.6745"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextB",
+      "value": "0.6565"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextDiff",
+      "value": "-0.0181"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextCILow",
+      "value": "-0.0250"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextCIHigh",
+      "value": "-0.0111"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxA",
+      "value": "4.5153"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxB",
+      "value": "4.3028"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxDiff",
+      "value": "-0.2125"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxCILow",
+      "value": "-0.2528"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxCIHigh",
+      "value": "-0.1736"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsA",
+      "value": "1.4381"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsB",
+      "value": "1.6528"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsDiff",
+      "value": "+0.2147"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsCILow",
+      "value": "+0.1911"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsCIHigh",
+      "value": "+0.2383"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensA",
+      "value": "986.0558"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensB",
+      "value": "1067.2361"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensDiff",
+      "value": "+81.1803"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensCILow",
+      "value": "+72.5847"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensCIHigh",
+      "value": "+89.9311"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysA",
+      "value": "32.2760"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysB",
+      "value": "37.5726"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysDiff",
+      "value": "+5.2966"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysCILow",
+      "value": "+4.9499"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysCIHigh",
+      "value": "+5.6440"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeVsCascadeLogprobNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

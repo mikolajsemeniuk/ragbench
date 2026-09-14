@@ -1,0 +1,117 @@
+{
+  "generator": "cmd/diagnose",
+  "commands": [
+    {
+      "name": "DiagMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "DiagMuSiQueFailed",
+      "value": "1886"
+    },
+    {
+      "name": "DiagMuSiQueFailedPct",
+      "value": "78.0"
+    },
+    {
+      "name": "DiagMuSiQueDiagnosed",
+      "value": "300"
+    },
+    {
+      "name": "DiagMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "DiagMuSiQueDeep",
+      "value": "1000"
+    },
+    {
+      "name": "DiagMuSiQueWrongSlice",
+      "value": "23"
+    },
+    {
+      "name": "DiagMuSiQueWrongSlicePct",
+      "value": "7.7"
+    },
+    {
+      "name": "DiagMuSiQueAnswerAbsent",
+      "value": "46"
+    },
+    {
+      "name": "DiagMuSiQueAnswerAbsentPct",
+      "value": "15.3"
+    },
+    {
+      "name": "DiagMuSiQueRankedLow",
+      "value": "125"
+    },
+    {
+      "name": "DiagMuSiQueRankedLowPct",
+      "value": "41.7"
+    },
+    {
+      "name": "DiagMuSiQueUnreachable",
+      "value": "105"
+    },
+    {
+      "name": "DiagMuSiQueUnreachablePct",
+      "value": "35.0"
+    },
+    {
+      "name": "DiagMuSiQueNotInCorpus",
+      "value": "1"
+    },
+    {
+      "name": "DiagMuSiQueNotInCorpusPct",
+      "value": "0.3"
+    },
+    {
+      "name": "DiagMuSiQueRetrievedN",
+      "value": "531"
+    },
+    {
+      "name": "DiagMuSiQueRetrievedEM",
+      "value": "0.2637"
+    },
+    {
+      "name": "DiagMuSiQueRetrievedClosedBookEM",
+      "value": "0.1111"
+    },
+    {
+      "name": "DiagMuSiQueRetrievedAbstention",
+      "value": "0.1356"
+    },
+    {
+      "name": "DiagMuSiQueNotRetrievedN",
+      "value": "1886"
+    },
+    {
+      "name": "DiagMuSiQueNotRetrievedEM",
+      "value": "0.0021"
+    },
+    {
+      "name": "DiagMuSiQueNotRetrievedClosedBookEM",
+      "value": "0.0175"
+    },
+    {
+      "name": "DiagMuSiQueNotRetrievedAbstention",
+      "value": "0.2959"
+    },
+    {
+      "name": "DiagMuSiQueClosedBookAbstention",
+      "value": "0.1320"
+    },
+    {
+      "name": "DiagMuSiQueClosedBookEM",
+      "value": "0.0381"
+    },
+    {
+      "name": "DiagMuSiQueOracleEM",
+      "value": "0.0827"
+    },
+    {
+      "name": "DiagMuSiQueOracleGain",
+      "value": "0.0232"
+    }
+  ]
+}

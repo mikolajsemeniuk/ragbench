@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NaiveRAGHotpotQAQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "NaiveRAGHotpotQAEM",
+      "value": "0.3248"
+    },
+    {
+      "name": "NaiveRAGHotpotQAFOne",
+      "value": "0.4313"
+    },
+    {
+      "name": "NaiveRAGHotpotQAAbstentionRate",
+      "value": "0.1124"
+    },
+    {
+      "name": "NaiveRAGHotpotQAAnsweredQuestions",
+      "value": "6573"
+    },
+    {
+      "name": "NaiveRAGHotpotQAEMAnswered",
+      "value": "0.3659"
+    },
+    {
+      "name": "NaiveRAGHotpotQAFOneAnswered",
+      "value": "0.4812"
+    },
+    {
+      "name": "NaiveRAGHotpotQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "NaiveRAGHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "NaiveRAGHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NaiveRAGHotpotQAAnswerInContext",
+      "value": "0.5422"
+    },
+    {
+      "name": "NaiveRAGHotpotQAAnswerInContextQuestions",
+      "value": "6947"
+    },
+    {
+      "name": "NaiveRAGHotpotQARecallInContext",
+      "value": "0.5405"
+    },
+    {
+      "name": "NaiveRAGHotpotQAMRR",
+      "value": "0.6959"
+    },
+    {
+      "name": "NaiveRAGHotpotQARetrievalEvalQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "NaiveRAGHotpotQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NaiveRAGHotpotQAPromptTokens",
+      "value": "870"
+    },
+    {
+      "name": "NaiveRAGHotpotQACompletionTokens",
+      "value": "10"
+    },
+    {
+      "name": "NaiveRAGHotpotQAThroughput",
+      "value": "2.77"
+    },
+    {
+      "name": "NaiveRAGHotpotQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

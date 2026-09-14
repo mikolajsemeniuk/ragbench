@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "FusedMuSiQueQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "FusedMuSiQueEM",
+      "value": "0.0783"
+    },
+    {
+      "name": "FusedMuSiQueFOne",
+      "value": "0.1544"
+    },
+    {
+      "name": "FusedMuSiQueAbstentionRate",
+      "value": "0.2315"
+    },
+    {
+      "name": "FusedMuSiQueAnsweredQuestions",
+      "value": "1856"
+    },
+    {
+      "name": "FusedMuSiQueEMAnswered",
+      "value": "0.1018"
+    },
+    {
+      "name": "FusedMuSiQueFOneAnswered",
+      "value": "0.1922"
+    },
+    {
+      "name": "FusedMuSiQueMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "FusedMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "FusedMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "FusedMuSiQueAnswerInContext",
+      "value": "0.2435"
+    },
+    {
+      "name": "FusedMuSiQueAnswerInContextQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "FusedMuSiQueRecallInContext",
+      "value": "0.2617"
+    },
+    {
+      "name": "FusedMuSiQueMRR",
+      "value": "0.4359"
+    },
+    {
+      "name": "FusedMuSiQueRetrievalEvalQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "FusedMuSiQueLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "FusedMuSiQuePromptTokens",
+      "value": "847"
+    },
+    {
+      "name": "FusedMuSiQueCompletionTokens",
+      "value": "17"
+    },
+    {
+      "name": "FusedMuSiQueThroughput",
+      "value": "2.39"
+    },
+    {
+      "name": "FusedMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

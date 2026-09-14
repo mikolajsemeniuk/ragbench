@@ -30,11 +30,11 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 	"github.com/mikolajsemeniuk/ragbench/pkg/flashrag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/metrics"
 	"github.com/mikolajsemeniuk/ragbench/pkg/provider"
@@ -80,8 +80,8 @@ func main() {
 		deep   = flag.Int("deep", 1000, "how far down the ranking to look for the gold article. Anything below this is reported as unreachable by this query")
 		topK   = flag.Int("top-k", 10, "ranking cut treated as \"the retriever did surface the article\"")
 
-		texOut = flag.String("tex-out", "", "path of the .tex file to write (e.g. paper/diagnosis-2wiki.gen.tex)")
-		name   = flag.String("name", "Diagnosis", "name used in the generated .tex commands")
+		jsonOut = flag.String("json-out", "", "path of the eval .json file to write (e.g. eval/diagnosis-2wiki.json); rendered to LaTeX by cmd/render")
+		name    = flag.String("name", "Diagnosis", "prefix of the aggregate names")
 	)
 	flag.Parse()
 
@@ -229,17 +229,17 @@ func main() {
 	fmt.Printf("no gold article states the answer%4d  (%4.1f%%)  not a retrieval failure: needs inference\n", answerAbsent, pct(answerAbsent))
 	fmt.Printf("gold article not in corpus      %5d  (%4.1f%%)  not fixable\n", notInCorpus, pct(notInCorpus))
 
-	var split, oracle string
+	var extra []eval.Command
 	if *cbPath != "" {
-		split, oracle = compareToClosedBook(*cbPath, run)
+		extra = compareToClosedBook(*cbPath, run)
 	}
 
-	if *texOut != "" {
-		if err := writeTex(*texOut, *name, len(run), len(failed), len(diagnosed),
-			wrongSlice, answerAbsent, rankedLow, unreachable, notInCorpus, *topK, *deep, split, oracle); err != nil {
-			log.Fatalf("writing tex: %v", err)
+	if *jsonOut != "" {
+		if err := writeJSON(*jsonOut, *name, len(run), len(failed), len(diagnosed),
+			wrongSlice, answerAbsent, rankedLow, unreachable, notInCorpus, *topK, *deep, extra); err != nil {
+			log.Fatalf("writing eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 	log.Printf("done in %s", time.Since(start).Round(time.Second))
 }
@@ -284,11 +284,12 @@ func holderArticles(holders map[uint64]struct{}, byTitle map[string][]passage, t
 	return out
 }
 
-// compareToClosedBook prints, and returns as .tex bodies, the two figures that
+// compareToClosedBook prints, and returns as aggregates (the LaTeX macro
+// names are prefixed with the run's -name by writeJSON), the two figures that
 // argue for a retrieve-or-abstain design: how the system does when retrieval
 // succeeded versus when it failed, and the ceiling of picking the better of
 // the two systems per question.
-func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
+func compareToClosedBook(path string, run []runRecord) []eval.Command {
 	cb, err := loadRun(path)
 	if err != nil {
 		log.Fatalf("reading closed-book dump: %v", err)
@@ -326,7 +327,7 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 	}
 	if paired == 0 {
 		log.Printf("closed-book dump shares no questions with the run - skipping that analysis")
-		return "", ""
+		return nil
 	}
 
 	fmt.Printf("\n--- retrieval succeeded vs failed (paired with %s) ---\n", path)
@@ -348,23 +349,20 @@ func compareToClosedBook(path string, run []runRecord) (split, oracle string) {
 	fmt.Printf("this run %.4f | closed-book %.4f | always the better one %.4f (+%.4f over the best single system)\n",
 		r, c, o, o-max(r, c))
 
-	split = fmt.Sprintf(""+
-		"\\newcommand{\\%%sRetrievedN}{%d}\n"+
-		"\\newcommand{\\%%sRetrievedEM}{%.4f}\n"+
-		"\\newcommand{\\%%sRetrievedClosedBookEM}{%.4f}\n"+
-		"\\newcommand{\\%%sRetrievedAbstention}{%.4f}\n"+
-		"\\newcommand{\\%%sNotRetrievedN}{%d}\n"+
-		"\\newcommand{\\%%sNotRetrievedEM}{%.4f}\n"+
-		"\\newcommand{\\%%sNotRetrievedClosedBookEM}{%.4f}\n"+
-		"\\newcommand{\\%%sNotRetrievedAbstention}{%.4f}\n"+
-		"\\newcommand{\\%%sClosedBookAbstention}{%.4f}\n",
-		foundN, fr, fc, fa, missedN, mr, mc, ma, cbAbstain/float64(paired))
-	oracle = fmt.Sprintf(""+
-		"\\newcommand{\\%%sClosedBookEM}{%.4f}\n"+
-		"\\newcommand{\\%%sOracleEM}{%.4f}\n"+
-		"\\newcommand{\\%%sOracleGain}{%.4f}\n",
-		c, o, o-max(r, c))
-	return split, oracle
+	return []eval.Command{
+		{Name: "RetrievedN", Value: fmt.Sprintf("%d", foundN)},
+		{Name: "RetrievedEM", Value: fmt.Sprintf("%.4f", fr)},
+		{Name: "RetrievedClosedBookEM", Value: fmt.Sprintf("%.4f", fc)},
+		{Name: "RetrievedAbstention", Value: fmt.Sprintf("%.4f", fa)},
+		{Name: "NotRetrievedN", Value: fmt.Sprintf("%d", missedN)},
+		{Name: "NotRetrievedEM", Value: fmt.Sprintf("%.4f", mr)},
+		{Name: "NotRetrievedClosedBookEM", Value: fmt.Sprintf("%.4f", mc)},
+		{Name: "NotRetrievedAbstention", Value: fmt.Sprintf("%.4f", ma)},
+		{Name: "ClosedBookAbstention", Value: fmt.Sprintf("%.4f", cbAbstain/float64(paired))},
+		{Name: "ClosedBookEM", Value: fmt.Sprintf("%.4f", c)},
+		{Name: "OracleEM", Value: fmt.Sprintf("%.4f", o)},
+		{Name: "OracleGain", Value: fmt.Sprintf("%.4f", o-max(r, c))},
+	}
 }
 
 func boolean(v bool) float64 {
@@ -484,24 +482,17 @@ func loadRun(path string) ([]runRecord, error) {
 	return out, scanner.Err()
 }
 
-func writeTex(path, name string, runN, failedN, diagnosedN, wrongSlice, answerAbsent, rankedLow, unreachable, notInCorpus, topK, deep int, split, oracle string) error {
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return err
-		}
-	}
-
+func writeJSON(path, name string, runN, failedN, diagnosedN, wrongSlice, answerAbsent, rankedLow, unreachable, notInCorpus, topK, deep int, extra []eval.Command) error {
 	id := texSafeID(name)
 	pct := func(c int) float64 { return 100 * float64(c) / float64(diagnosedN) }
 
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/diagnose - do not edit by hand\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sQuestions}{%d}\n", id, runN)
-	fmt.Fprintf(&b, "\\newcommand{\\%sFailed}{%d}\n", id, failedN)
-	fmt.Fprintf(&b, "\\newcommand{\\%sFailedPct}{%.1f}\n", id, 100*float64(failedN)/float64(runN))
-	fmt.Fprintf(&b, "\\newcommand{\\%sDiagnosed}{%d}\n", id, diagnosedN)
-	fmt.Fprintf(&b, "\\newcommand{\\%sTopK}{%d}\n", id, topK)
-	fmt.Fprintf(&b, "\\newcommand{\\%sDeep}{%d}\n", id, deep)
+	doc := eval.Doc{Generator: "cmd/diagnose"}
+	doc.Addf(id+"Questions", "%d", runN)
+	doc.Addf(id+"Failed", "%d", failedN)
+	doc.Addf(id+"FailedPct", "%.1f", 100*float64(failedN)/float64(runN))
+	doc.Addf(id+"Diagnosed", "%d", diagnosedN)
+	doc.Addf(id+"TopK", "%d", topK)
+	doc.Addf(id+"Deep", "%d", deep)
 	for _, row := range []struct {
 		key   string
 		count int
@@ -512,12 +503,13 @@ func writeTex(path, name string, runN, failedN, diagnosedN, wrongSlice, answerAb
 		{"Unreachable", unreachable},
 		{"NotInCorpus", notInCorpus},
 	} {
-		fmt.Fprintf(&b, "\\newcommand{\\%s%s}{%d}\n", id, row.key, row.count)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sPct}{%.1f}\n", id, row.key, pct(row.count))
+		doc.Addf(id+row.key, "%d", row.count)
+		doc.Addf(id+row.key+"Pct", "%.1f", pct(row.count))
 	}
-	b.WriteString(strings.ReplaceAll(split, "%s", id))
-	b.WriteString(strings.ReplaceAll(oracle, "%s", id))
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	for _, c := range extra {
+		doc.Add(id+c.Name, c.Value)
+	}
+	return eval.Write(path, &doc)
 }
 
 func texSafeID(name string) string {

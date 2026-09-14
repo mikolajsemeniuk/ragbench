@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveVsHyDEMuSiQuePaired",
+      "value": "2416"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchA",
+      "value": "0.0596"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchB",
+      "value": "0.0753"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchDiff",
+      "value": "+0.0157"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchCILow",
+      "value": "+0.0075"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchCIHigh",
+      "value": "+0.0240"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchP",
+      "value": "0.0003"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueExactMatchPHolm",
+      "value": "0.0013"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFA",
+      "value": "0.1322"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFB",
+      "value": "0.1596"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFDiff",
+      "value": "+0.0274"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFCILow",
+      "value": "+0.0175"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFCIHigh",
+      "value": "+0.0375"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionA",
+      "value": "0.2603"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionB",
+      "value": "0.2334"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionDiff",
+      "value": "-0.0269"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionCILow",
+      "value": "-0.0464"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionCIHigh",
+      "value": "-0.0079"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionP",
+      "value": "0.0061"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAbstentionPHolm",
+      "value": "0.0122"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredA",
+      "value": "0.0886"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredB",
+      "value": "0.1080"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredDiff",
+      "value": "+0.0194"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredCILow",
+      "value": "+0.0078"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredCIHigh",
+      "value": "+0.0310"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredP",
+      "value": "0.0016"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueEMbothansweredPHolm",
+      "value": "0.0047"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextA",
+      "value": "0.2198"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextB",
+      "value": "0.2537"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextDiff",
+      "value": "+0.0339"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextCILow",
+      "value": "+0.0211"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextCIHigh",
+      "value": "+0.0472"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextA",
+      "value": "0.2208"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextB",
+      "value": "0.2420"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextDiff",
+      "value": "+0.0212"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextCILow",
+      "value": "+0.0135"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextCIHigh",
+      "value": "+0.0293"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueRecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRA",
+      "value": "0.3452"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRB",
+      "value": "0.3763"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRDiff",
+      "value": "+0.0312"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRCILow",
+      "value": "+0.0180"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRCIHigh",
+      "value": "+0.0444"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePassagesinctxPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsB",
+      "value": "2.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsDiff",
+      "value": "+1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsCILow",
+      "value": "+1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsCIHigh",
+      "value": "+1.0000"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensA",
+      "value": "852.2003"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensB",
+      "value": "960.3597"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensDiff",
+      "value": "+108.1594"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensCILow",
+      "value": "+106.4499"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensCIHigh",
+      "value": "+109.8564"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQuePrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysA",
+      "value": "11.1910"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysB",
+      "value": "19.7003"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysDiff",
+      "value": "+8.5093"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysCILow",
+      "value": "+8.2609"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysCIHigh",
+      "value": "+8.7618"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHyDEMuSiQueLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

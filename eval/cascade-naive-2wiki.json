@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeNaiveTwoWikiQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiEM",
+      "value": "0.2542"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiFOne",
+      "value": "0.3209"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiAbstentionRate",
+      "value": "0.0056"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiAnsweredQuestions",
+      "value": "12506"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiEMAnswered",
+      "value": "0.2556"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiFOneAnswered",
+      "value": "0.3227"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiMeanPassagesInContext",
+      "value": "4.56"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiAnswerInContext",
+      "value": "0.3349"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiAnswerInContextQuestions",
+      "value": "11268"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiRecallInContext",
+      "value": "0.3474"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiMRR",
+      "value": "0.5756"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiRetrievalEvalQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiLLMCalls",
+      "value": "1.43"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiPromptTokens",
+      "value": "1088"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiCompletionTokens",
+      "value": "41"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiThroughput",
+      "value": "2.23"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiStageClosedbook",
+      "value": "1114"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiStageHyde",
+      "value": "1002"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiStageNaive",
+      "value": "10460"
+    },
+    {
+      "name": "CascadeNaiveTwoWikiStagesRun",
+      "value": "1.26"
+    }
+  ]
+}

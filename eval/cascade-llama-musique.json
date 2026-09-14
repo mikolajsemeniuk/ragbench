@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLlamaMuSiQueQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueEM",
+      "value": "0.0961"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueFOne",
+      "value": "0.1789"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueAbstentionRate",
+      "value": "0.0128"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueAnsweredQuestions",
+      "value": "2383"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueEMAnswered",
+      "value": "0.0974"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueFOneAnswered",
+      "value": "0.1806"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueMeanPassagesInContext",
+      "value": "4.58"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueAnswerInContext",
+      "value": "0.2452"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueAnswerInContextQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueRecallInContext",
+      "value": "0.2464"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueMRR",
+      "value": "0.4001"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueRetrievalEvalQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueLLMCalls",
+      "value": "1.41"
+    },
+    {
+      "name": "CascadeLlamaMuSiQuePromptTokens",
+      "value": "941"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueCompletionTokens",
+      "value": "43"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueThroughput",
+      "value": "2.56"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueStageClosedbook",
+      "value": "203"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueStageFused",
+      "value": "2025"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueStageHyde",
+      "value": "186"
+    },
+    {
+      "name": "CascadeLlamaMuSiQueStagesRun",
+      "value": "1.25"
+    }
+  ]
+}

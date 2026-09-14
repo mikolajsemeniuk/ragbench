@@ -4,7 +4,8 @@
 % is renamed, dropped or never generated shows up as a build failure here
 % instead of as a stale number in a table nobody re-checked.
 %
-% Each section lives in sections/*.tex; this file assembles them.
+% Each section lives in its own .tex file next to this one; this file
+% assembles them.
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage[T1]{fontenc}
@@ -20,15 +21,15 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage[hidelinks]{hyperref}
 
-\input{sections/tikzstyles}
+\input{tikzstyles}
 
 % Fragments are input only when they exist, so the skeleton still builds
 % while a run is half finished. A table that references a command from a
 % fragment that is missing WILL fail, which is the intended signal.
-\newcommand{\useresults}[1]{\IfFileExists{generated/#1.gen.tex}{\input{generated/#1.gen.tex}}{}}
-% sections/fragments.tex lists every generated/*.gen.tex present; regenerate it with:
-%   ls generated/*.gen.tex | sed 's|^generated/||; s/\.gen\.tex$//' | awk '{print "\\useresults{" $0 "}"}' > sections/fragments.tex
-\input{sections/fragments}
+\newcommand{\useresults}[1]{\IfFileExists{#1.gen.tex}{\input{#1.gen.tex}}{}}
+% fragments.tex lists every *.gen.tex present; regenerate it with:
+%   ls *.gen.tex | sed "s/\\.gen\\.tex$//" | awk '{print "\\useresults{" $0 "}"}' > fragments.tex
+\input{fragments}
 
 \title{CascadeRAG: Abstention-Triggered Escalation\\
 That Outperforms Costlier Retrieval-Augmented Generation\\
@@ -74,17 +75,17 @@ the article is generated from the per-question logs by the released
 benchmark pipeline.
 \end{abstract}
 
-\input{sections/01-introduction}
-\input{sections/02-background}
-\input{sections/03-related}
-\input{sections/04-architectures}
-\input{sections/05-cascade}
-\input{sections/06-setup}
-\input{sections/07-results}
-\input{sections/08-discussion}
-\input{sections/09-conclusion}
+\input{01-introduction}
+\input{02-background}
+\input{03-related}
+\input{04-architectures}
+\input{05-cascade}
+\input{06-setup}
+\input{07-results}
+\input{08-discussion}
+\input{09-conclusion}
 
-\input{sections/appendix}
+\input{appendix}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}

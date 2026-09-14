@@ -26,9 +26,10 @@ import (
 	"log"
 	"math"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 )
 
 type record struct {
@@ -53,8 +54,8 @@ func main() {
 		stage2     = flag.String("stage2", "", "dump(s) of the second stage on the same questions, in the same order - optional")
 		last       = flag.String("last", "", "dump(s) of the last stage on the same questions, in the same order (required)")
 		thresholds = flag.String("thresholds", "-2,-1.5,-1,-0.8,-0.6,-0.5,-0.4,-0.3,-0.2,-0.15,-0.1,-0.05,-0.02,-0.01,-0.005", "comma-separated mean log-probability thresholds to try")
-		texOut     = flag.String("tex-out", "", "path of a .tex file to write the sweep to - optional")
-		name       = flag.String("name", "Sweep", "name used in the generated .tex commands")
+		jsonOut    = flag.String("json-out", "", "path of the eval .json file to write the sweep to (rendered to LaTeX by cmd/render) - optional")
+		name       = flag.String("name", "Sweep", "prefix of the aggregate names")
 	)
 	flag.Parse()
 	if *stage1 == "" || *last == "" {
@@ -127,11 +128,11 @@ func main() {
 		fmt.Printf("best Exact Match at threshold %.2f: %+.4f over abstention-only for %+.2f calls per question.\n", points[best].threshold, points[best].em-points[0].em, points[best].calls-points[0].calls)
 	}
 
-	if *texOut != "" {
-		if err := writeTex(*texOut, *name, len(keys), points, best); err != nil {
-			log.Fatalf("writing tex: %v", err)
+	if *jsonOut != "" {
+		if err := writeJSON(*jsonOut, *name, len(keys), points, best); err != nil {
+			log.Fatalf("writing eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 }
 
@@ -179,19 +180,20 @@ func simulate(threshold float64, keys []key, s1, s2, last map[key]record) point 
 	return p
 }
 
-func writeTex(path, name string, questions int, points []point, best int) error {
+func writeJSON(path, name string, questions int, points []point, best int) error {
 	id := texSafeID(name)
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/sweep - do not edit by hand\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sQuestions}{%d}\n", id, questions)
+	doc := eval.Doc{Generator: "cmd/sweep"}
+	doc.Addf(id+"Questions", "%d", questions)
 	bestLabel := "$-\\infty$"
 	if !math.IsInf(points[best].threshold, -1) {
 		bestLabel = fmt.Sprintf("%.3f", points[best].threshold)
 	}
-	fmt.Fprintf(&b, "\\newcommand{\\%sBestThreshold}{%s}\n", id, bestLabel)
-	fmt.Fprintf(&b, "\\newcommand{\\%sBestEM}{%.4f}\n", id, points[best].em)
-	fmt.Fprintf(&b, "\\newcommand{\\%sAbstentionOnlyEM}{%.4f}\n", id, points[0].em)
-	fmt.Fprintf(&b, "\\newcommand{\\%sRows}{%%\n", id)
+	doc.Add(id+"BestThreshold", bestLabel)
+	doc.Addf(id+"BestEM", "%.4f", points[best].em)
+	doc.Addf(id+"AbstentionOnlyEM", "%.4f", points[0].em)
+
+	var b strings.Builder
+	fmt.Fprintf(&b, "%%\n")
 	for _, p := range points {
 		label := "$-\\infty$ (abstention only)"
 		if !math.IsInf(p.threshold, -1) {
@@ -199,13 +201,9 @@ func writeTex(path, name string, questions int, points []point, best int) error 
 		}
 		fmt.Fprintf(&b, "%s & %.4f & %.4f & %.2f & %d & %d & %d \\\\\n", label, p.em, p.f1, p.calls, p.escalated, p.discarded, p.missed)
 	}
-	fmt.Fprintf(&b, "}\n")
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return err
-		}
-	}
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	doc.Add(id+"Rows", b.String())
+
+	return eval.Write(path, &doc)
 }
 
 func texSafeID(name string) string {

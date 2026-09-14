@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPaired",
+      "value": "11313"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchA",
+      "value": "0.5723"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchB",
+      "value": "0.5698"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchDiff",
+      "value": "-0.0025"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchCILow",
+      "value": "-0.0042"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchCIHigh",
+      "value": "-0.0008"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchP",
+      "value": "0.0049"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAExactMatchPHolm",
+      "value": "0.0146"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFA",
+      "value": "0.6623"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFB",
+      "value": "0.6593"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFDiff",
+      "value": "-0.0030"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFCILow",
+      "value": "-0.0046"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFCIHigh",
+      "value": "-0.0015"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFP",
+      "value": "0.0078"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAFPHolm",
+      "value": "0.0156"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionA",
+      "value": "0.0756"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionB",
+      "value": "0.0791"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionDiff",
+      "value": "+0.0035"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionCILow",
+      "value": "+0.0018"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionCIHigh",
+      "value": "+0.0053"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionP",
+      "value": "0.0002"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAbstentionPHolm",
+      "value": "0.0009"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredA",
+      "value": "0.6223"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredB",
+      "value": "0.6206"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredDiff",
+      "value": "-0.0017"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredCILow",
+      "value": "-0.0034"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredCIHigh",
+      "value": "-0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredP",
+      "value": "0.0512"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAEMbothansweredPHolm",
+      "value": "0.0512"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextA",
+      "value": "0.7416"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextB",
+      "value": "0.7346"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextDiff",
+      "value": "-0.0070"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextCILow",
+      "value": "-0.0086"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextCIHigh",
+      "value": "-0.0055"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxA",
+      "value": "5.3833"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxB",
+      "value": "5.0166"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxDiff",
+      "value": "-0.3667"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxCILow",
+      "value": "-0.3948"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxCIHigh",
+      "value": "-0.3387"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsA",
+      "value": "2.1109"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsB",
+      "value": "2.0613"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsDiff",
+      "value": "-0.0497"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsCILow",
+      "value": "-0.0592"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsCIHigh",
+      "value": "-0.0403"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensA",
+      "value": "1953.5713"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensB",
+      "value": "1038.7751"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensDiff",
+      "value": "-914.7962"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensCILow",
+      "value": "-933.5958"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensCIHigh",
+      "value": "-896.0161"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysA",
+      "value": "28.0021"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysB",
+      "value": "24.3521"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysDiff",
+      "value": "-3.6500"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysCILow",
+      "value": "-3.9319"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysCIHigh",
+      "value": "-3.3762"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveTriviaQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

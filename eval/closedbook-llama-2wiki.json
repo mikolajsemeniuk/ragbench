@@ -1,0 +1,53 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "ClosedBookLlamaTwoWikiQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiEM",
+      "value": "0.2932"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiFOne",
+      "value": "0.3530"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiAbstentionRate",
+      "value": "0.0013"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiAnsweredQuestions",
+      "value": "12560"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiEMAnswered",
+      "value": "0.2936"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiFOneAnswered",
+      "value": "0.3533"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiPromptTokens",
+      "value": "46"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiCompletionTokens",
+      "value": "6"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiThroughput",
+      "value": "61.22"
+    },
+    {
+      "name": "ClosedBookLlamaTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

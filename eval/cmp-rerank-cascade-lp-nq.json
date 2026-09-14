@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "RerankVsCascadeLogprobNQPaired",
+      "value": "3603"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchA",
+      "value": "0.2351"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchB",
+      "value": "0.3408"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchDiff",
+      "value": "+0.1057"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchCILow",
+      "value": "+0.0910"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchCIHigh",
+      "value": "+0.1202"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFA",
+      "value": "0.3177"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFB",
+      "value": "0.4597"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFDiff",
+      "value": "+0.1420"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFCILow",
+      "value": "+0.1281"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFCIHigh",
+      "value": "+0.1561"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionA",
+      "value": "0.2775"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionB",
+      "value": "0.0330"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionDiff",
+      "value": "-0.2445"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionCILow",
+      "value": "-0.2592"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionCIHigh",
+      "value": "-0.2295"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredA",
+      "value": "0.3284"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredB",
+      "value": "0.3949"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredDiff",
+      "value": "+0.0665"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredCILow",
+      "value": "+0.0486"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredCIHigh",
+      "value": "+0.0843"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextA",
+      "value": "0.5096"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextB",
+      "value": "0.6562"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextDiff",
+      "value": "+0.1466"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextCILow",
+      "value": "+0.1286"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextCIHigh",
+      "value": "+0.1647"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxB",
+      "value": "4.3020"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxDiff",
+      "value": "-0.6980"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxCILow",
+      "value": "-0.7549"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxCIHigh",
+      "value": "-0.6411"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsB",
+      "value": "1.6531"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsDiff",
+      "value": "+0.6531"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsCILow",
+      "value": "+0.6159"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsCIHigh",
+      "value": "+0.6908"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensA",
+      "value": "836.6750"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensB",
+      "value": "1067.3822"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensDiff",
+      "value": "+230.7072"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensCILow",
+      "value": "+217.0286"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensCIHigh",
+      "value": "+244.5376"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysA",
+      "value": "25.3071"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysB",
+      "value": "37.5755"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysDiff",
+      "value": "+12.2684"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysCILow",
+      "value": "+11.7644"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysCIHigh",
+      "value": "+12.7682"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

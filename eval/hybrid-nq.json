@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HybridNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "HybridNQEM",
+      "value": "0.3089"
+    },
+    {
+      "name": "HybridNQFOne",
+      "value": "0.4228"
+    },
+    {
+      "name": "HybridNQAbstentionRate",
+      "value": "0.1748"
+    },
+    {
+      "name": "HybridNQAnsweredQuestions",
+      "value": "2979"
+    },
+    {
+      "name": "HybridNQEMAnswered",
+      "value": "0.3743"
+    },
+    {
+      "name": "HybridNQFOneAnswered",
+      "value": "0.4987"
+    },
+    {
+      "name": "HybridNQMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HybridNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "HybridNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HybridNQAnswerInContext",
+      "value": "0.6707"
+    },
+    {
+      "name": "HybridNQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "HybridNQLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "HybridNQPromptTokens",
+      "value": "821"
+    },
+    {
+      "name": "HybridNQCompletionTokens",
+      "value": "15"
+    },
+    {
+      "name": "HybridNQThroughput",
+      "value": "1.93"
+    },
+    {
+      "name": "HybridNQConcurrency",
+      "value": "48"
+    }
+  ]
+}

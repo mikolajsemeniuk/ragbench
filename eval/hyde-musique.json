@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HyDEMuSiQueQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "HyDEMuSiQueEM",
+      "value": "0.0753"
+    },
+    {
+      "name": "HyDEMuSiQueFOne",
+      "value": "0.1596"
+    },
+    {
+      "name": "HyDEMuSiQueAbstentionRate",
+      "value": "0.2334"
+    },
+    {
+      "name": "HyDEMuSiQueAnsweredQuestions",
+      "value": "1852"
+    },
+    {
+      "name": "HyDEMuSiQueEMAnswered",
+      "value": "0.0983"
+    },
+    {
+      "name": "HyDEMuSiQueFOneAnswered",
+      "value": "0.1998"
+    },
+    {
+      "name": "HyDEMuSiQueMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HyDEMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "HyDEMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HyDEMuSiQueAnswerInContext",
+      "value": "0.2537"
+    },
+    {
+      "name": "HyDEMuSiQueAnswerInContextQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "HyDEMuSiQueRecallInContext",
+      "value": "0.2420"
+    },
+    {
+      "name": "HyDEMuSiQueMRR",
+      "value": "0.3763"
+    },
+    {
+      "name": "HyDEMuSiQueRetrievalEvalQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "HyDEMuSiQueLLMCalls",
+      "value": "2.00"
+    },
+    {
+      "name": "HyDEMuSiQuePromptTokens",
+      "value": "960"
+    },
+    {
+      "name": "HyDEMuSiQueCompletionTokens",
+      "value": "166"
+    },
+    {
+      "name": "HyDEMuSiQueThroughput",
+      "value": "2.40"
+    },
+    {
+      "name": "HyDEMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

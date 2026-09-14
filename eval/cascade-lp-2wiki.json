@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLogprobTwoWikiQuestions",
+      "value": "12565"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiEM",
+      "value": "0.2745"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiFOne",
+      "value": "0.3391"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiAbstentionRate",
+      "value": "0.0068"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiAnsweredQuestions",
+      "value": "12479"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiEMAnswered",
+      "value": "0.2764"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiFOneAnswered",
+      "value": "0.3414"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiMeanPassagesInContext",
+      "value": "4.44"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiAnswerInContext",
+      "value": "0.3642"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiAnswerInContextQuestions",
+      "value": "11258"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiRecallInContext",
+      "value": "0.3667"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiMRR",
+      "value": "0.6328"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiRetrievalEvalQuestions",
+      "value": "12565"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiLLMCalls",
+      "value": "1.52"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiPromptTokens",
+      "value": "1122"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiCompletionTokens",
+      "value": "44"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiThroughput",
+      "value": "1.73"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiStageClosedbook",
+      "value": "1415"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiStageFused",
+      "value": "9990"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiStageHyde",
+      "value": "1160"
+    },
+    {
+      "name": "CascadeLogprobTwoWikiStagesRun",
+      "value": "1.32"
+    }
+  ]
+}

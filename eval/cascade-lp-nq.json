@@ -1,0 +1,89 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLogprobNQQuestions",
+      "value": "3603"
+    },
+    {
+      "name": "CascadeLogprobNQEM",
+      "value": "0.3408"
+    },
+    {
+      "name": "CascadeLogprobNQFOne",
+      "value": "0.4597"
+    },
+    {
+      "name": "CascadeLogprobNQAbstentionRate",
+      "value": "0.0330"
+    },
+    {
+      "name": "CascadeLogprobNQAnsweredQuestions",
+      "value": "3484"
+    },
+    {
+      "name": "CascadeLogprobNQEMAnswered",
+      "value": "0.3525"
+    },
+    {
+      "name": "CascadeLogprobNQFOneAnswered",
+      "value": "0.4734"
+    },
+    {
+      "name": "CascadeLogprobNQMeanPassagesInContext",
+      "value": "4.30"
+    },
+    {
+      "name": "CascadeLogprobNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLogprobNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLogprobNQAnswerInContext",
+      "value": "0.6562"
+    },
+    {
+      "name": "CascadeLogprobNQAnswerInContextQuestions",
+      "value": "3601"
+    },
+    {
+      "name": "CascadeLogprobNQLLMCalls",
+      "value": "1.65"
+    },
+    {
+      "name": "CascadeLogprobNQPromptTokens",
+      "value": "1067"
+    },
+    {
+      "name": "CascadeLogprobNQCompletionTokens",
+      "value": "66"
+    },
+    {
+      "name": "CascadeLogprobNQThroughput",
+      "value": "1.27"
+    },
+    {
+      "name": "CascadeLogprobNQConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLogprobNQStageClosedbook",
+      "value": "503"
+    },
+    {
+      "name": "CascadeLogprobNQStageFused",
+      "value": "2678"
+    },
+    {
+      "name": "CascadeLogprobNQStageHyde",
+      "value": "422"
+    },
+    {
+      "name": "CascadeLogprobNQStagesRun",
+      "value": "1.40"
+    }
+  ]
+}

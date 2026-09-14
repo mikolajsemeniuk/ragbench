@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 	"github.com/mikolajsemeniuk/ragbench/pkg/report"
 )
 
@@ -50,8 +51,8 @@ func main() {
 		sets     = flag.String("sets", "nq,triviaqa,hotpotqa,2wiki,musique", "comma-separated question-set slugs")
 		relative = flag.String("relative", "naive", "slug of the architecture the prompt-token ratio is taken against")
 		suffix   = flag.String("suffix", "", "tag inserted after every slug in the file names, e.g. \"llama\" reads naive-llama-<set>.jsonl")
-		texOut   = flag.String("tex-out", "", "path of a .tex file to write the table to - optional")
-		name     = flag.String("name", "Cost", "prefix of the generated .tex commands")
+		jsonOut  = flag.String("json-out", "", "path of the eval .json file to write the table to (rendered to LaTeX by cmd/render) - optional")
+		name     = flag.String("name", "Cost", "prefix of the aggregate names")
 	)
 	flag.Parse()
 
@@ -107,11 +108,11 @@ func main() {
 	}
 	fmt.Printf("\nmeans over the sets each architecture ran on; calls shown as a range when they differ across sets.\n")
 
-	if *texOut != "" {
-		if err := writeTex(*texOut, *name, *relative, rows, base); err != nil {
-			log.Fatalf("writing tex: %v", err)
+	if *jsonOut != "" {
+		if err := writeJSON(*jsonOut, *name, *relative, rows, base); err != nil {
+			log.Fatalf("writing eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 }
 
@@ -129,34 +130,34 @@ func ratio(v, base float64) string {
 	return fmt.Sprintf("%.2f", v/base)
 }
 
-func writeTex(path, name, relative string, rows []row, base float64) error {
+func writeJSON(path, name, relative string, rows []row, base float64) error {
 	id := texSafeID(name)
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/cost - do not edit by hand\n")
-	fmt.Fprintf(&b, "%% Per-question means over the sets each architecture ran on. Calls are a range when they differ across sets.\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sRelativeTo}{%s}\n", id, report.ArchitectureName(relative))
+	doc := eval.Doc{
+		Generator: "cmd/cost",
+		Comments:  []string{"Per-question means over the sets each architecture ran on. Calls are a range when they differ across sets."},
+	}
+	doc.Add(id+"RelativeTo", report.ArchitectureName(relative))
 	for _, r := range rows {
-		rid := texSafeID(r.slug)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sCalls}{%.2f}\n", id, rid, r.calls)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sPromptTokens}{%.0f}\n", id, rid, r.prompt)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sCompletionTokens}{%.0f}\n", id, rid, r.complete)
+		rid := id + texSafeID(r.slug)
+		doc.Addf(rid+"Calls", "%.2f", r.calls)
+		doc.Addf(rid+"PromptTokens", "%.0f", r.prompt)
+		doc.Addf(rid+"CompletionTokens", "%.0f", r.complete)
 		if !math.IsNaN(base) && base != 0 {
-			fmt.Fprintf(&b, "\\newcommand{\\%s%sPromptRatio}{%.2f}\n", id, rid, r.prompt/base)
+			doc.Addf(rid+"PromptRatio", "%.2f", r.prompt/base)
 		}
 	}
-	fmt.Fprintf(&b, "\\newcommand{\\%sTable}{%%\n", id)
+
+	var b strings.Builder
+	fmt.Fprintf(&b, "%%\n")
 	fmt.Fprintf(&b, "\\begin{tabular}{lrrrrr}\n\\toprule\n")
 	fmt.Fprintf(&b, "Architecture & LLM calls & Prompt tokens & Completion tokens & Passages & $\\times$ %s \\\\\n\\midrule\n", report.ArchitectureName(relative))
 	for _, r := range rows {
 		fmt.Fprintf(&b, "%s & %s & %.0f & %.0f & %.1f & %s \\\\\n", report.ArchitectureName(r.slug), callsLabel(r), r.prompt, r.complete, r.passages, ratio(r.prompt, base))
 	}
-	fmt.Fprintf(&b, "\\bottomrule\n\\end{tabular}}\n")
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return err
-		}
-	}
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	fmt.Fprintf(&b, "\\bottomrule\n\\end{tabular}")
+	doc.Add(id+"Table", b.String())
+
+	return eval.Write(path, &doc)
 }
 
 // texSafeID keeps letters only, mapping the digits a slug may carry to words

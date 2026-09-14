@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "BMTwentyFiveNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "BMTwentyFiveNQEM",
+      "value": "0.2249"
+    },
+    {
+      "name": "BMTwentyFiveNQFOne",
+      "value": "0.3166"
+    },
+    {
+      "name": "BMTwentyFiveNQAbstentionRate",
+      "value": "0.2349"
+    },
+    {
+      "name": "BMTwentyFiveNQAnsweredQuestions",
+      "value": "2762"
+    },
+    {
+      "name": "BMTwentyFiveNQEMAnswered",
+      "value": "0.2940"
+    },
+    {
+      "name": "BMTwentyFiveNQFOneAnswered",
+      "value": "0.4025"
+    },
+    {
+      "name": "BMTwentyFiveNQMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "BMTwentyFiveNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "BMTwentyFiveNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "BMTwentyFiveNQAnswerInContext",
+      "value": "0.4559"
+    },
+    {
+      "name": "BMTwentyFiveNQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "BMTwentyFiveNQLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "BMTwentyFiveNQPromptTokens",
+      "value": "819"
+    },
+    {
+      "name": "BMTwentyFiveNQCompletionTokens",
+      "value": "18"
+    },
+    {
+      "name": "BMTwentyFiveNQThroughput",
+      "value": "6.29"
+    },
+    {
+      "name": "BMTwentyFiveNQConcurrency",
+      "value": "48"
+    }
+  ]
+}

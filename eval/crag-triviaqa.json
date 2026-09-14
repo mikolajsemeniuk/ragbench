@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGTriviaQAQuestions",
+      "value": "11312"
+    },
+    {
+      "name": "CRAGTriviaQAEM",
+      "value": "0.5845"
+    },
+    {
+      "name": "CRAGTriviaQAFOne",
+      "value": "0.6739"
+    },
+    {
+      "name": "CRAGTriviaQAAbstentionRate",
+      "value": "0.0720"
+    },
+    {
+      "name": "CRAGTriviaQAAnsweredQuestions",
+      "value": "10498"
+    },
+    {
+      "name": "CRAGTriviaQAEMAnswered",
+      "value": "0.6298"
+    },
+    {
+      "name": "CRAGTriviaQAFOneAnswered",
+      "value": "0.7214"
+    },
+    {
+      "name": "CRAGTriviaQAMeanPassagesInContext",
+      "value": "5.39"
+    },
+    {
+      "name": "CRAGTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CRAGTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGTriviaQAAnswerInContext",
+      "value": "0.7560"
+    },
+    {
+      "name": "CRAGTriviaQAAnswerInContextQuestions",
+      "value": "11312"
+    },
+    {
+      "name": "CRAGTriviaQALLMCalls",
+      "value": "2.97"
+    },
+    {
+      "name": "CRAGTriviaQAPromptTokens",
+      "value": "1842"
+    },
+    {
+      "name": "CRAGTriviaQACompletionTokens",
+      "value": "32"
+    },
+    {
+      "name": "CRAGTriviaQAThroughput",
+      "value": "0.99"
+    },
+    {
+      "name": "CRAGTriviaQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGTriviaQABranchAmbiguous",
+      "value": "8666"
+    },
+    {
+      "name": "CRAGTriviaQABranchCorrect",
+      "value": "361"
+    },
+    {
+      "name": "CRAGTriviaQABranchIncorrect",
+      "value": "2285"
+    }
+  ]
+}

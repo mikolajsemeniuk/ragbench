@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGTopTenHotpotQAQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAEM",
+      "value": "0.3410"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAFOne",
+      "value": "0.4505"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAAbstentionRate",
+      "value": "0.0821"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAAnsweredQuestions",
+      "value": "6796"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAEMAnswered",
+      "value": "0.3715"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAFOneAnswered",
+      "value": "0.4873"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAMeanPassagesInContext",
+      "value": "10.00"
+    },
+    {
+      "name": "CRAGTopTenHotpotQATopK",
+      "value": "10"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAAnswerInContext",
+      "value": "0.6149"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAAnswerInContextQuestions",
+      "value": "6946"
+    },
+    {
+      "name": "CRAGTopTenHotpotQARecallInContext",
+      "value": "0.6017"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAMRR",
+      "value": "0.7248"
+    },
+    {
+      "name": "CRAGTopTenHotpotQARetrievalEvalQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "CRAGTopTenHotpotQALLMCalls",
+      "value": "3.00"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAPromptTokens",
+      "value": "3434"
+    },
+    {
+      "name": "CRAGTopTenHotpotQACompletionTokens",
+      "value": "37"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAThroughput",
+      "value": "1.00"
+    },
+    {
+      "name": "CRAGTopTenHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGTopTenHotpotQABranchAmbiguous",
+      "value": "5514"
+    },
+    {
+      "name": "CRAGTopTenHotpotQABranchCorrect",
+      "value": "3"
+    },
+    {
+      "name": "CRAGTopTenHotpotQABranchIncorrect",
+      "value": "1887"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "IRCoTTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "IRCoTTriviaQAEM",
+      "value": "0.5723"
+    },
+    {
+      "name": "IRCoTTriviaQAFOne",
+      "value": "0.6623"
+    },
+    {
+      "name": "IRCoTTriviaQAAbstentionRate",
+      "value": "0.0756"
+    },
+    {
+      "name": "IRCoTTriviaQAAnsweredQuestions",
+      "value": "10458"
+    },
+    {
+      "name": "IRCoTTriviaQAEMAnswered",
+      "value": "0.6190"
+    },
+    {
+      "name": "IRCoTTriviaQAFOneAnswered",
+      "value": "0.7115"
+    },
+    {
+      "name": "IRCoTTriviaQAMeanPassagesInContext",
+      "value": "5.38"
+    },
+    {
+      "name": "IRCoTTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "IRCoTTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "IRCoTTriviaQAAnswerInContext",
+      "value": "0.7416"
+    },
+    {
+      "name": "IRCoTTriviaQAAnswerInContextQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "IRCoTTriviaQALLMCalls",
+      "value": "2.11"
+    },
+    {
+      "name": "IRCoTTriviaQAPromptTokens",
+      "value": "1954"
+    },
+    {
+      "name": "IRCoTTriviaQACompletionTokens",
+      "value": "78"
+    },
+    {
+      "name": "IRCoTTriviaQAThroughput",
+      "value": "1.71"
+    },
+    {
+      "name": "IRCoTTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeHybridMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeHybridMuSiQueEM",
+      "value": "0.0757"
+    },
+    {
+      "name": "CascadeHybridMuSiQueFOne",
+      "value": "0.1664"
+    },
+    {
+      "name": "CascadeHybridMuSiQueAbstentionRate",
+      "value": "0.0327"
+    },
+    {
+      "name": "CascadeHybridMuSiQueAnsweredQuestions",
+      "value": "2338"
+    },
+    {
+      "name": "CascadeHybridMuSiQueEMAnswered",
+      "value": "0.0783"
+    },
+    {
+      "name": "CascadeHybridMuSiQueFOneAnswered",
+      "value": "0.1711"
+    },
+    {
+      "name": "CascadeHybridMuSiQueMeanPassagesInContext",
+      "value": "4.43"
+    },
+    {
+      "name": "CascadeHybridMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeHybridMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeHybridMuSiQueAnswerInContext",
+      "value": "0.2098"
+    },
+    {
+      "name": "CascadeHybridMuSiQueAnswerInContextQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeHybridMuSiQueRecallInContext",
+      "value": "0.2360"
+    },
+    {
+      "name": "CascadeHybridMuSiQueMRR",
+      "value": "0.3802"
+    },
+    {
+      "name": "CascadeHybridMuSiQueRetrievalEvalQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeHybridMuSiQueLLMCalls",
+      "value": "1.60"
+    },
+    {
+      "name": "CascadeHybridMuSiQuePromptTokens",
+      "value": "1091"
+    },
+    {
+      "name": "CascadeHybridMuSiQueCompletionTokens",
+      "value": "65"
+    },
+    {
+      "name": "CascadeHybridMuSiQueThroughput",
+      "value": "1.94"
+    },
+    {
+      "name": "CascadeHybridMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeHybridMuSiQueStageClosedbook",
+      "value": "274"
+    },
+    {
+      "name": "CascadeHybridMuSiQueStageHybrid",
+      "value": "1829"
+    },
+    {
+      "name": "CascadeHybridMuSiQueStageHyde",
+      "value": "314"
+    },
+    {
+      "name": "CascadeHybridMuSiQueStagesRun",
+      "value": "1.36"
+    }
+  ]
+}

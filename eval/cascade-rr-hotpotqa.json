@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeRerankHotpotQAQuestions",
+      "value": "7396"
+    },
+    {
+      "name": "CascadeRerankHotpotQAEM",
+      "value": "0.3825"
+    },
+    {
+      "name": "CascadeRerankHotpotQAFOne",
+      "value": "0.5016"
+    },
+    {
+      "name": "CascadeRerankHotpotQAAbstentionRate",
+      "value": "0.0046"
+    },
+    {
+      "name": "CascadeRerankHotpotQAAnsweredQuestions",
+      "value": "7362"
+    },
+    {
+      "name": "CascadeRerankHotpotQAEMAnswered",
+      "value": "0.3843"
+    },
+    {
+      "name": "CascadeRerankHotpotQAFOneAnswered",
+      "value": "0.5037"
+    },
+    {
+      "name": "CascadeRerankHotpotQAMeanPassagesInContext",
+      "value": "4.81"
+    },
+    {
+      "name": "CascadeRerankHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeRerankHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeRerankHotpotQAAnswerInContext",
+      "value": "0.6236"
+    },
+    {
+      "name": "CascadeRerankHotpotQAAnswerInContextQuestions",
+      "value": "6940"
+    },
+    {
+      "name": "CascadeRerankHotpotQARecallInContext",
+      "value": "0.6292"
+    },
+    {
+      "name": "CascadeRerankHotpotQAMRR",
+      "value": "0.7892"
+    },
+    {
+      "name": "CascadeRerankHotpotQARetrievalEvalQuestions",
+      "value": "7396"
+    },
+    {
+      "name": "CascadeRerankHotpotQALLMCalls",
+      "value": "1.19"
+    },
+    {
+      "name": "CascadeRerankHotpotQAPromptTokens",
+      "value": "945"
+    },
+    {
+      "name": "CascadeRerankHotpotQACompletionTokens",
+      "value": "22"
+    },
+    {
+      "name": "CascadeRerankHotpotQAThroughput",
+      "value": "1.57"
+    },
+    {
+      "name": "CascadeRerankHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeRerankHotpotQAStageClosedbook",
+      "value": "279"
+    },
+    {
+      "name": "CascadeRerankHotpotQAStageHyde",
+      "value": "302"
+    },
+    {
+      "name": "CascadeRerankHotpotQAStageRerank",
+      "value": "6815"
+    },
+    {
+      "name": "CascadeRerankHotpotQAStagesRun",
+      "value": "1.12"
+    }
+  ]
+}

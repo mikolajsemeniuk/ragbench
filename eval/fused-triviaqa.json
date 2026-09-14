@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "FusedTriviaQAQuestions",
+      "value": "11296"
+    },
+    {
+      "name": "FusedTriviaQAEM",
+      "value": "0.5921"
+    },
+    {
+      "name": "FusedTriviaQAFOne",
+      "value": "0.6803"
+    },
+    {
+      "name": "FusedTriviaQAAbstentionRate",
+      "value": "0.0621"
+    },
+    {
+      "name": "FusedTriviaQAAnsweredQuestions",
+      "value": "10595"
+    },
+    {
+      "name": "FusedTriviaQAEMAnswered",
+      "value": "0.6312"
+    },
+    {
+      "name": "FusedTriviaQAFOneAnswered",
+      "value": "0.7212"
+    },
+    {
+      "name": "FusedTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "FusedTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "FusedTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "FusedTriviaQAAnswerInContext",
+      "value": "0.7633"
+    },
+    {
+      "name": "FusedTriviaQAAnswerInContextQuestions",
+      "value": "11296"
+    },
+    {
+      "name": "FusedTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "FusedTriviaQAPromptTokens",
+      "value": "838"
+    },
+    {
+      "name": "FusedTriviaQACompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "FusedTriviaQAThroughput",
+      "value": "1.69"
+    },
+    {
+      "name": "FusedTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

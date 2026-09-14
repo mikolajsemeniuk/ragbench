@@ -1,0 +1,37 @@
+{
+  "generator": "cmd/coverage",
+  "commands": [
+    {
+      "name": "CoverageHotpotQAAnnotatedQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "CoverageHotpotQAGoldTitles",
+      "value": "13783"
+    },
+    {
+      "name": "CoverageHotpotQAGoldTitlesPresent",
+      "value": "12341"
+    },
+    {
+      "name": "CoverageHotpotQAGoldTitlesPresentExact",
+      "value": "12032"
+    },
+    {
+      "name": "CoverageHotpotQARecallCeiling",
+      "value": "0.8987"
+    },
+    {
+      "name": "CoverageHotpotQARecallCeilingExact",
+      "value": "0.8760"
+    },
+    {
+      "name": "CoverageHotpotQAQuestionsFullyCovered",
+      "value": "5984"
+    },
+    {
+      "name": "CoverageHotpotQAQuestionsFullyCoveredPct",
+      "value": "80.8"
+    }
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPaired",
+      "value": "11294"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchA",
+      "value": "0.5869"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchB",
+      "value": "0.6032"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchDiff",
+      "value": "+0.0163"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchCILow",
+      "value": "+0.0101"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchCIHigh",
+      "value": "+0.0228"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFA",
+      "value": "0.6791"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFB",
+      "value": "0.6933"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFDiff",
+      "value": "+0.0142"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFCILow",
+      "value": "+0.0088"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFCIHigh",
+      "value": "+0.0200"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionA",
+      "value": "0.0043"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionB",
+      "value": "0.0044"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionDiff",
+      "value": "+0.0002"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionCILow",
+      "value": "-0.0005"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionCIHigh",
+      "value": "+0.0009"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionP",
+      "value": "0.8026"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAbstentionPHolm",
+      "value": "0.8026"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredA",
+      "value": "0.5898"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredB",
+      "value": "0.6062"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredDiff",
+      "value": "+0.0164"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredCILow",
+      "value": "+0.0100"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredCIHigh",
+      "value": "+0.0227"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextA",
+      "value": "0.7391"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextB",
+      "value": "0.7617"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextDiff",
+      "value": "+0.0227"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextCILow",
+      "value": "+0.0174"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextCIHigh",
+      "value": "+0.0279"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxA",
+      "value": "4.8079"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxB",
+      "value": "4.8384"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxDiff",
+      "value": "+0.0305"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxCILow",
+      "value": "+0.0164"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxCIHigh",
+      "value": "+0.0447"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxP",
+      "value": "0.0002"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPassagesinctxPHolm",
+      "value": "0.0005"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsA",
+      "value": "1.1987"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsB",
+      "value": "1.1572"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsDiff",
+      "value": "-0.0415"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsCILow",
+      "value": "-0.0527"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsCIHigh",
+      "value": "-0.0303"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensA",
+      "value": "918.0846"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensB",
+      "value": "898.7015"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensDiff",
+      "value": "-19.3831"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensCILow",
+      "value": "-24.1296"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensCIHigh",
+      "value": "-14.6766"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysA",
+      "value": "28.8577"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysB",
+      "value": "29.2933"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysDiff",
+      "value": "+0.4357"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysCILow",
+      "value": "+0.2224"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysCIHigh",
+      "value": "+0.6512"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeNaiveVsCascadeTriviaQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

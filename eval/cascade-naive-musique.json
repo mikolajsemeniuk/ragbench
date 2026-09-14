@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeNaiveMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueEM",
+      "value": "0.0662"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueFOne",
+      "value": "0.1516"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueAbstentionRate",
+      "value": "0.0372"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueAnsweredQuestions",
+      "value": "2327"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueEMAnswered",
+      "value": "0.0688"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueFOneAnswered",
+      "value": "0.1564"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueMeanPassagesInContext",
+      "value": "4.33"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueAnswerInContext",
+      "value": "0.2127"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueAnswerInContextQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueRecallInContext",
+      "value": "0.2049"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueMRR",
+      "value": "0.3219"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueRetrievalEvalQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueLLMCalls",
+      "value": "1.66"
+    },
+    {
+      "name": "CascadeNaiveMuSiQuePromptTokens",
+      "value": "1111"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueCompletionTokens",
+      "value": "69"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueThroughput",
+      "value": "2.09"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueStageClosedbook",
+      "value": "324"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueStageHyde",
+      "value": "306"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueStageNaive",
+      "value": "1787"
+    },
+    {
+      "name": "CascadeNaiveMuSiQueStagesRun",
+      "value": "1.39"
+    }
+  ]
+}

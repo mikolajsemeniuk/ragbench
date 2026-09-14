@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "FusedLlamaTwoWikiQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "FusedLlamaTwoWikiEM",
+      "value": "0.2550"
+    },
+    {
+      "name": "FusedLlamaTwoWikiFOne",
+      "value": "0.3336"
+    },
+    {
+      "name": "FusedLlamaTwoWikiAbstentionRate",
+      "value": "0.1140"
+    },
+    {
+      "name": "FusedLlamaTwoWikiAnsweredQuestions",
+      "value": "11136"
+    },
+    {
+      "name": "FusedLlamaTwoWikiEMAnswered",
+      "value": "0.2878"
+    },
+    {
+      "name": "FusedLlamaTwoWikiFOneAnswered",
+      "value": "0.3620"
+    },
+    {
+      "name": "FusedLlamaTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "FusedLlamaTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "FusedLlamaTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "FusedLlamaTwoWikiAnswerInContext",
+      "value": "0.3763"
+    },
+    {
+      "name": "FusedLlamaTwoWikiAnswerInContextQuestions",
+      "value": "11262"
+    },
+    {
+      "name": "FusedLlamaTwoWikiRecallInContext",
+      "value": "0.3906"
+    },
+    {
+      "name": "FusedLlamaTwoWikiMRR",
+      "value": "0.6787"
+    },
+    {
+      "name": "FusedLlamaTwoWikiRetrievalEvalQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "FusedLlamaTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "FusedLlamaTwoWikiPromptTokens",
+      "value": "850"
+    },
+    {
+      "name": "FusedLlamaTwoWikiCompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "FusedLlamaTwoWikiThroughput",
+      "value": "3.57"
+    },
+    {
+      "name": "FusedLlamaTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

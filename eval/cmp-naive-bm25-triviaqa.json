@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPaired",
+      "value": "11312"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchA",
+      "value": "0.5700"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchB",
+      "value": "0.5356"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchDiff",
+      "value": "-0.0344"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchCILow",
+      "value": "-0.0423"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchCIHigh",
+      "value": "-0.0263"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFA",
+      "value": "0.6594"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFB",
+      "value": "0.6220"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFDiff",
+      "value": "-0.0375"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFCILow",
+      "value": "-0.0449"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFCIHigh",
+      "value": "-0.0299"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionA",
+      "value": "0.0796"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionB",
+      "value": "0.0994"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionDiff",
+      "value": "+0.0198"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionCILow",
+      "value": "+0.0136"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionCIHigh",
+      "value": "+0.0258"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredA",
+      "value": "0.6369"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredB",
+      "value": "0.6086"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredDiff",
+      "value": "-0.0282"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredCILow",
+      "value": "-0.0367"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredCIHigh",
+      "value": "-0.0201"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextA",
+      "value": "0.7359"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextB",
+      "value": "0.6706"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextDiff",
+      "value": "-0.0652"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextCILow",
+      "value": "-0.0728"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextCIHigh",
+      "value": "-0.0575"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPassagesinctxPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensA",
+      "value": "840.4384"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensB",
+      "value": "840.4781"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensDiff",
+      "value": "+0.0397"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensCILow",
+      "value": "-0.9211"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensCIHigh",
+      "value": "+1.0002"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensP",
+      "value": "0.6480"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQAPrompttokensPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysA",
+      "value": "17.5060"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysB",
+      "value": "7.3461"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysDiff",
+      "value": "-10.1599"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysCILow",
+      "value": "-10.2673"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysCIHigh",
+      "value": "-10.0544"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsBMTwentyFiveTriviaQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

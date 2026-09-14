@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "RerankLlamaTriviaQAQuestions",
+      "value": "11297"
+    },
+    {
+      "name": "RerankLlamaTriviaQAEM",
+      "value": "0.6100"
+    },
+    {
+      "name": "RerankLlamaTriviaQAFOne",
+      "value": "0.7030"
+    },
+    {
+      "name": "RerankLlamaTriviaQAAbstentionRate",
+      "value": "0.0324"
+    },
+    {
+      "name": "RerankLlamaTriviaQAAnsweredQuestions",
+      "value": "10931"
+    },
+    {
+      "name": "RerankLlamaTriviaQAEMAnswered",
+      "value": "0.6304"
+    },
+    {
+      "name": "RerankLlamaTriviaQAFOneAnswered",
+      "value": "0.7247"
+    },
+    {
+      "name": "RerankLlamaTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "RerankLlamaTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "RerankLlamaTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "RerankLlamaTriviaQAAnswerInContext",
+      "value": "0.7624"
+    },
+    {
+      "name": "RerankLlamaTriviaQAAnswerInContextQuestions",
+      "value": "11297"
+    },
+    {
+      "name": "RerankLlamaTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "RerankLlamaTriviaQAPromptTokens",
+      "value": "792"
+    },
+    {
+      "name": "RerankLlamaTriviaQACompletionTokens",
+      "value": "5"
+    },
+    {
+      "name": "RerankLlamaTriviaQAThroughput",
+      "value": "3.48"
+    },
+    {
+      "name": "RerankLlamaTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

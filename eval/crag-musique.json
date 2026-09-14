@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGMuSiQueQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "CRAGMuSiQueEM",
+      "value": "0.0832"
+    },
+    {
+      "name": "CRAGMuSiQueFOne",
+      "value": "0.1634"
+    },
+    {
+      "name": "CRAGMuSiQueAbstentionRate",
+      "value": "0.2315"
+    },
+    {
+      "name": "CRAGMuSiQueAnsweredQuestions",
+      "value": "1856"
+    },
+    {
+      "name": "CRAGMuSiQueEMAnswered",
+      "value": "0.1083"
+    },
+    {
+      "name": "CRAGMuSiQueFOneAnswered",
+      "value": "0.2046"
+    },
+    {
+      "name": "CRAGMuSiQueMeanPassagesInContext",
+      "value": "5.35"
+    },
+    {
+      "name": "CRAGMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CRAGMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGMuSiQueAnswerInContext",
+      "value": "0.2646"
+    },
+    {
+      "name": "CRAGMuSiQueAnswerInContextQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "CRAGMuSiQueRecallInContext",
+      "value": "0.2326"
+    },
+    {
+      "name": "CRAGMuSiQueMRR",
+      "value": "0.3613"
+    },
+    {
+      "name": "CRAGMuSiQueRetrievalEvalQuestions",
+      "value": "2415"
+    },
+    {
+      "name": "CRAGMuSiQueLLMCalls",
+      "value": "2.99"
+    },
+    {
+      "name": "CRAGMuSiQuePromptTokens",
+      "value": "1866"
+    },
+    {
+      "name": "CRAGMuSiQueCompletionTokens",
+      "value": "43"
+    },
+    {
+      "name": "CRAGMuSiQueThroughput",
+      "value": "1.55"
+    },
+    {
+      "name": "CRAGMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGMuSiQueBranchAmbiguous",
+      "value": "999"
+    },
+    {
+      "name": "CRAGMuSiQueBranchCorrect",
+      "value": "18"
+    },
+    {
+      "name": "CRAGMuSiQueBranchIncorrect",
+      "value": "1398"
+    }
+  ]
+}

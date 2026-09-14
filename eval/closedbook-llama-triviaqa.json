@@ -1,0 +1,53 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "ClosedBookLlamaTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAEM",
+      "value": "0.5839"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAFOne",
+      "value": "0.6535"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAAbstentionRate",
+      "value": "0.0055"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAAnsweredQuestions",
+      "value": "11251"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAEMAnswered",
+      "value": "0.5871"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAFOneAnswered",
+      "value": "0.6566"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAPromptTokens",
+      "value": "48"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQACompletionTokens",
+      "value": "5"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAThroughput",
+      "value": "59.08"
+    },
+    {
+      "name": "ClosedBookLlamaTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

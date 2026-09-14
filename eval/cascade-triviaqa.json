@@ -1,0 +1,89 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeTriviaQAQuestions",
+      "value": "11294"
+    },
+    {
+      "name": "CascadeTriviaQAEM",
+      "value": "0.6032"
+    },
+    {
+      "name": "CascadeTriviaQAFOne",
+      "value": "0.6933"
+    },
+    {
+      "name": "CascadeTriviaQAAbstentionRate",
+      "value": "0.0044"
+    },
+    {
+      "name": "CascadeTriviaQAAnsweredQuestions",
+      "value": "11244"
+    },
+    {
+      "name": "CascadeTriviaQAEMAnswered",
+      "value": "0.6059"
+    },
+    {
+      "name": "CascadeTriviaQAFOneAnswered",
+      "value": "0.6960"
+    },
+    {
+      "name": "CascadeTriviaQAMeanPassagesInContext",
+      "value": "4.84"
+    },
+    {
+      "name": "CascadeTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeTriviaQAAnswerInContext",
+      "value": "0.7617"
+    },
+    {
+      "name": "CascadeTriviaQAAnswerInContextQuestions",
+      "value": "11294"
+    },
+    {
+      "name": "CascadeTriviaQALLMCalls",
+      "value": "1.16"
+    },
+    {
+      "name": "CascadeTriviaQAPromptTokens",
+      "value": "899"
+    },
+    {
+      "name": "CascadeTriviaQACompletionTokens",
+      "value": "19"
+    },
+    {
+      "name": "CascadeTriviaQAThroughput",
+      "value": "1.63"
+    },
+    {
+      "name": "CascadeTriviaQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeTriviaQAStageClosedbook",
+      "value": "365"
+    },
+    {
+      "name": "CascadeTriviaQAStageFused",
+      "value": "10589"
+    },
+    {
+      "name": "CascadeTriviaQAStageHyde",
+      "value": "340"
+    },
+    {
+      "name": "CascadeTriviaQAStagesRun",
+      "value": "1.09"
+    }
+  ]
+}

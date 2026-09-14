@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPaired",
+      "value": "12576"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchA",
+      "value": "0.2516"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchB",
+      "value": "0.2395"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchDiff",
+      "value": "-0.0121"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchCILow",
+      "value": "-0.0176"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchCIHigh",
+      "value": "-0.0065"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFA",
+      "value": "0.3198"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFB",
+      "value": "0.3083"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFDiff",
+      "value": "-0.0114"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFCILow",
+      "value": "-0.0167"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFCIHigh",
+      "value": "-0.0063"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFP",
+      "value": "0.0002"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiFPHolm",
+      "value": "0.0006"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionA",
+      "value": "0.1172"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionB",
+      "value": "0.1483"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionDiff",
+      "value": "+0.0311"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionCILow",
+      "value": "+0.0250"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionCIHigh",
+      "value": "+0.0372"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredA",
+      "value": "0.2969"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredB",
+      "value": "0.2889"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredDiff",
+      "value": "-0.0080"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredCILow",
+      "value": "-0.0141"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredCIHigh",
+      "value": "-0.0019"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredP",
+      "value": "0.0109"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiEMbothansweredPHolm",
+      "value": "0.0218"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextA",
+      "value": "0.4264"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextB",
+      "value": "0.3703"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextDiff",
+      "value": "-0.0561"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextCILow",
+      "value": "-0.0617"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextCIHigh",
+      "value": "-0.0506"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextA",
+      "value": "0.3960"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextB",
+      "value": "0.3542"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextDiff",
+      "value": "-0.0419"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextCILow",
+      "value": "-0.0443"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextCIHigh",
+      "value": "-0.0396"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiRecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRA",
+      "value": "0.5916"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRB",
+      "value": "0.5684"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRDiff",
+      "value": "-0.0232"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRCILow",
+      "value": "-0.0243"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRCIHigh",
+      "value": "-0.0222"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxA",
+      "value": "12.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxB",
+      "value": "10.7229"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxDiff",
+      "value": "-1.2771"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxCILow",
+      "value": "-1.3098"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxCIHigh",
+      "value": "-1.2454"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensA",
+      "value": "2098.3611"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensB",
+      "value": "1823.8562"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensDiff",
+      "value": "-274.5049"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensCILow",
+      "value": "-279.8767"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensCIHigh",
+      "value": "-269.2153"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysA",
+      "value": "19.5453"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysB",
+      "value": "17.3499"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysDiff",
+      "value": "-2.1954"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysCILow",
+      "value": "-2.3102"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysCIHigh",
+      "value": "-2.0809"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTwelveVsNeighbourTwoWikiLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

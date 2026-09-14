@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "RerankTriviaQAQuestions",
+      "value": "11298"
+    },
+    {
+      "name": "RerankTriviaQAEM",
+      "value": "0.5962"
+    },
+    {
+      "name": "RerankTriviaQAFOne",
+      "value": "0.6847"
+    },
+    {
+      "name": "RerankTriviaQAAbstentionRate",
+      "value": "0.0631"
+    },
+    {
+      "name": "RerankTriviaQAAnsweredQuestions",
+      "value": "10585"
+    },
+    {
+      "name": "RerankTriviaQAEMAnswered",
+      "value": "0.6364"
+    },
+    {
+      "name": "RerankTriviaQAFOneAnswered",
+      "value": "0.7263"
+    },
+    {
+      "name": "RerankTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "RerankTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "RerankTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "RerankTriviaQAAnswerInContext",
+      "value": "0.7625"
+    },
+    {
+      "name": "RerankTriviaQAAnswerInContextQuestions",
+      "value": "11298"
+    },
+    {
+      "name": "RerankTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "RerankTriviaQAPromptTokens",
+      "value": "840"
+    },
+    {
+      "name": "RerankTriviaQACompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "RerankTriviaQAThroughput",
+      "value": "1.88"
+    },
+    {
+      "name": "RerankTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

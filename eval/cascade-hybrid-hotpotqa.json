@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeHybridHotpotQAQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "CascadeHybridHotpotQAEM",
+      "value": "0.3456"
+    },
+    {
+      "name": "CascadeHybridHotpotQAFOne",
+      "value": "0.4610"
+    },
+    {
+      "name": "CascadeHybridHotpotQAAbstentionRate",
+      "value": "0.0045"
+    },
+    {
+      "name": "CascadeHybridHotpotQAAnsweredQuestions",
+      "value": "7371"
+    },
+    {
+      "name": "CascadeHybridHotpotQAEMAnswered",
+      "value": "0.3472"
+    },
+    {
+      "name": "CascadeHybridHotpotQAFOneAnswered",
+      "value": "0.4628"
+    },
+    {
+      "name": "CascadeHybridHotpotQAMeanPassagesInContext",
+      "value": "4.80"
+    },
+    {
+      "name": "CascadeHybridHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeHybridHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeHybridHotpotQAAnswerInContext",
+      "value": "0.5569"
+    },
+    {
+      "name": "CascadeHybridHotpotQAAnswerInContextQuestions",
+      "value": "6946"
+    },
+    {
+      "name": "CascadeHybridHotpotQARecallInContext",
+      "value": "0.5546"
+    },
+    {
+      "name": "CascadeHybridHotpotQAMRR",
+      "value": "0.7223"
+    },
+    {
+      "name": "CascadeHybridHotpotQARetrievalEvalQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "CascadeHybridHotpotQALLMCalls",
+      "value": "1.22"
+    },
+    {
+      "name": "CascadeHybridHotpotQAPromptTokens",
+      "value": "960"
+    },
+    {
+      "name": "CascadeHybridHotpotQACompletionTokens",
+      "value": "25"
+    },
+    {
+      "name": "CascadeHybridHotpotQAThroughput",
+      "value": "1.52"
+    },
+    {
+      "name": "CascadeHybridHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeHybridHotpotQAStageClosedbook",
+      "value": "296"
+    },
+    {
+      "name": "CascadeHybridHotpotQAStageHybrid",
+      "value": "6732"
+    },
+    {
+      "name": "CascadeHybridHotpotQAStageHyde",
+      "value": "376"
+    },
+    {
+      "name": "CascadeHybridHotpotQAStagesRun",
+      "value": "1.13"
+    }
+  ]
+}

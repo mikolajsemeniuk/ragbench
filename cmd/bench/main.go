@@ -21,6 +21,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 	"github.com/mikolajsemeniuk/ragbench/pkg/flashrag"
 	"github.com/mikolajsemeniuk/ragbench/pkg/metrics"
 	"github.com/mikolajsemeniuk/ragbench/pkg/provider"
@@ -189,8 +190,8 @@ func main() {
 
 		dumpPath  = flag.String("dump", "", "path of a JSONL file to write per-question detail to - required to compare two runs with cmd/compare, and the only way to recompute a retrieval metric without re-running the split")
 		resamples = flag.Int("bootstrap", 10000, "bootstrap resamples for the 95% confidence intervals; 0 disables them")
-		texOut    = flag.String("tex-out", "", "path of the .tex file to generate with the results (e.g. paper/baseline.gen.tex) - optional")
-		name      = flag.String("name", "NaiveRAG", "baseline name used in the generated .tex")
+		jsonOut   = flag.String("json-out", "", "path of the eval .json file to write the aggregates to (e.g. eval/naive-nq.json); cmd/render turns it into the paper's LaTeX fragment - optional")
+		name      = flag.String("name", "NaiveRAG", "run name; it prefixes every aggregate, and cmd/render turns it into the generated LaTeX command names")
 	)
 	flag.Parse()
 
@@ -484,16 +485,16 @@ func main() {
 		fmt.Printf("stages run:         %.2f per question\n", sum.meanStagesRun)
 	}
 
-	if *texOut != "" {
+	if *jsonOut != "" {
 		sum.name = *name
 		sum.topK = *topK
 		sum.hnswEf = *hnswEf
 		sum.concurrency = *concurrency
 		sum.throughput = float64(sum.answered) / wall.Seconds()
-		if err := writeTex(*texOut, sum); err != nil {
-			log.Fatalf("writing the tex file: %v", err)
+		if err := writeJSON(*jsonOut, sum); err != nil {
+			log.Fatalf("writing the eval file: %v", err)
 		}
-		log.Printf("results written to %s", *texOut)
+		log.Printf("aggregates written to %s (run cmd/render to refresh the LaTeX fragments)", *jsonOut)
 	}
 }
 
@@ -715,79 +716,71 @@ func aggregate(results []result) summary {
 	return s
 }
 
-// writeTex writes the results as a LaTeX fragment (\newcommand definitions),
-// ready to \input{} from the body of the paper, e.g.:
-//
-//	\input{baseline.gen.tex}
-//	Exact Match: \NaiveRAGEM, F1: \NaiveRAGFOne
+// writeJSON writes the aggregates as an eval document: ordered (LaTeX macro
+// name, value) pairs that cmd/render turns into the paper's fragment.
 //
 // A measurement that was not made is not emitted as zero. ClosedBook retrieves
 // nothing, so a \ClosedBookRecall of 0.0000 in a table reads as a measured
 // failure when it is a definition; those commands are simply absent, and a
 // table that references one fails to compile instead of printing a fiction.
-func writeTex(path string, s summary) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return fmt.Errorf("create dir: %w", err)
-	}
-
+func writeJSON(path string, s summary) error {
 	id := texSafeID(s.name)
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/bench - do not edit by hand\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sQuestions}{%d}\n", id, s.answered)
-	fmt.Fprintf(&b, "\\newcommand{\\%sEM}{%.4f}\n", id, s.em)
-	fmt.Fprintf(&b, "\\newcommand{\\%sFOne}{%.4f}\n", id, s.f1)
-	fmt.Fprintf(&b, "\\newcommand{\\%sAbstentionRate}{%.4f}\n", id, s.abstention)
+	doc := eval.Doc{Generator: "cmd/bench"}
+	doc.Addf(id+"Questions", "%d", s.answered)
+	doc.Addf(id+"EM", "%.4f", s.em)
+	doc.Addf(id+"FOne", "%.4f", s.f1)
+	doc.Addf(id+"AbstentionRate", "%.4f", s.abstention)
 	if s.answeredOnly > 0 {
-		fmt.Fprintf(&b, "\\newcommand{\\%sAnsweredQuestions}{%d}\n", id, s.answeredOnly)
-		fmt.Fprintf(&b, "\\newcommand{\\%sEMAnswered}{%.4f}\n", id, s.emAnswered)
-		fmt.Fprintf(&b, "\\newcommand{\\%sFOneAnswered}{%.4f}\n", id, s.f1Answered)
+		doc.Addf(id+"AnsweredQuestions", "%d", s.answeredOnly)
+		doc.Addf(id+"EMAnswered", "%.4f", s.emAnswered)
+		doc.Addf(id+"FOneAnswered", "%.4f", s.f1Answered)
 	}
 
 	if s.meanPassages > 0 {
-		fmt.Fprintf(&b, "\\newcommand{\\%sMeanPassagesInContext}{%.2f}\n", id, s.meanPassages)
-		fmt.Fprintf(&b, "\\newcommand{\\%sTopK}{%d}\n", id, s.topK)
-		fmt.Fprintf(&b, "\\newcommand{\\%sHNSWEf}{%d}\n", id, s.hnswEf)
+		doc.Addf(id+"MeanPassagesInContext", "%.2f", s.meanPassages)
+		doc.Addf(id+"TopK", "%d", s.topK)
+		doc.Addf(id+"HNSWEf", "%d", s.hnswEf)
 		if s.inCtxN > 0 {
-			fmt.Fprintf(&b, "\\newcommand{\\%sAnswerInContext}{%.4f}\n", id, s.inCtx)
-			fmt.Fprintf(&b, "\\newcommand{\\%sAnswerInContextQuestions}{%d}\n", id, s.inCtxN)
+			doc.Addf(id+"AnswerInContext", "%.4f", s.inCtx)
+			doc.Addf(id+"AnswerInContextQuestions", "%d", s.inCtxN)
 		}
 		if s.goldN > 0 {
 			// Named for what it measures: recall over the passages that were
 			// in context, whose mean size is reported next to it. Calling it
 			// Recall@K next to a TopK of 5 would claim a same-K comparison
 			// that a multi-round architecture does not make.
-			fmt.Fprintf(&b, "\\newcommand{\\%sRecallInContext}{%.4f}\n", id, s.recall)
-			fmt.Fprintf(&b, "\\newcommand{\\%sMRR}{%.4f}\n", id, s.mrr)
-			fmt.Fprintf(&b, "\\newcommand{\\%sRetrievalEvalQuestions}{%d}\n", id, s.goldN)
+			doc.Addf(id+"RecallInContext", "%.4f", s.recall)
+			doc.Addf(id+"MRR", "%.4f", s.mrr)
+			doc.Addf(id+"RetrievalEvalQuestions", "%d", s.goldN)
 		}
 	}
 
-	fmt.Fprintf(&b, "\\newcommand{\\%sLLMCalls}{%.2f}\n", id, s.llmCalls)
-	fmt.Fprintf(&b, "\\newcommand{\\%sPromptTokens}{%.0f}\n", id, s.promptTokens)
-	fmt.Fprintf(&b, "\\newcommand{\\%sCompletionTokens}{%.0f}\n", id, s.completionTokens)
-	fmt.Fprintf(&b, "\\newcommand{\\%sThroughput}{%.2f}\n", id, s.throughput)
-	fmt.Fprintf(&b, "\\newcommand{\\%sConcurrency}{%d}\n", id, s.concurrency)
+	doc.Addf(id+"LLMCalls", "%.2f", s.llmCalls)
+	doc.Addf(id+"PromptTokens", "%.0f", s.promptTokens)
+	doc.Addf(id+"CompletionTokens", "%.0f", s.completionTokens)
+	doc.Addf(id+"Throughput", "%.2f", s.throughput)
+	doc.Addf(id+"Concurrency", "%d", s.concurrency)
 	// Latency is only a latency at concurrency 1. Above it the per-question
 	// timing includes queueing behind the other in-flight questions, so the
 	// command is not emitted and a table cannot quote it by accident.
 	if s.concurrency == 1 {
-		fmt.Fprintf(&b, "\\newcommand{\\%sLatency}{%s}\n", id, s.latency.Round(time.Millisecond))
+		doc.Addf(id+"Latency", "%s", s.latency.Round(time.Millisecond))
 	}
 
 	for _, key := range slices.Sorted(maps.Keys(s.routes)) {
-		fmt.Fprintf(&b, "\\newcommand{\\%sRoute%s}{%d}\n", id, texSafeID(capitalise(key)), s.routes[key])
+		doc.Addf(id+"Route"+texSafeID(capitalise(key)), "%d", s.routes[key])
 	}
 	for _, key := range slices.Sorted(maps.Keys(s.branches)) {
-		fmt.Fprintf(&b, "\\newcommand{\\%sBranch%s}{%d}\n", id, texSafeID(capitalise(key)), s.branches[key])
+		doc.Addf(id+"Branch"+texSafeID(capitalise(key)), "%d", s.branches[key])
 	}
 	for _, key := range slices.Sorted(maps.Keys(s.stages)) {
-		fmt.Fprintf(&b, "\\newcommand{\\%sStage%s}{%d}\n", id, texSafeID(capitalise(key)), s.stages[key])
+		doc.Addf(id+"Stage"+texSafeID(capitalise(key)), "%d", s.stages[key])
 	}
 	if len(s.stages) > 0 {
-		fmt.Fprintf(&b, "\\newcommand{\\%sStagesRun}{%.2f}\n", id, s.meanStagesRun)
+		doc.Addf(id+"StagesRun", "%.2f", s.meanStagesRun)
 	}
 
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	return eval.Write(path, &doc)
 }
 
 func capitalise(s string) string {

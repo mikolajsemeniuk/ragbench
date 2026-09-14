@@ -1,0 +1,117 @@
+{
+  "generator": "cmd/diagnose",
+  "commands": [
+    {
+      "name": "DiagHotpotQAQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "DiagHotpotQAFailed",
+      "value": "3180"
+    },
+    {
+      "name": "DiagHotpotQAFailedPct",
+      "value": "42.9"
+    },
+    {
+      "name": "DiagHotpotQADiagnosed",
+      "value": "300"
+    },
+    {
+      "name": "DiagHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "DiagHotpotQADeep",
+      "value": "1000"
+    },
+    {
+      "name": "DiagHotpotQAWrongSlice",
+      "value": "31"
+    },
+    {
+      "name": "DiagHotpotQAWrongSlicePct",
+      "value": "10.3"
+    },
+    {
+      "name": "DiagHotpotQAAnswerAbsent",
+      "value": "46"
+    },
+    {
+      "name": "DiagHotpotQAAnswerAbsentPct",
+      "value": "15.3"
+    },
+    {
+      "name": "DiagHotpotQARankedLow",
+      "value": "161"
+    },
+    {
+      "name": "DiagHotpotQARankedLowPct",
+      "value": "53.7"
+    },
+    {
+      "name": "DiagHotpotQAUnreachable",
+      "value": "59"
+    },
+    {
+      "name": "DiagHotpotQAUnreachablePct",
+      "value": "19.7"
+    },
+    {
+      "name": "DiagHotpotQANotInCorpus",
+      "value": "3"
+    },
+    {
+      "name": "DiagHotpotQANotInCorpusPct",
+      "value": "1.0"
+    },
+    {
+      "name": "DiagHotpotQARetrievedN",
+      "value": "3767"
+    },
+    {
+      "name": "DiagHotpotQARetrievedEM",
+      "value": "0.5230"
+    },
+    {
+      "name": "DiagHotpotQARetrievedClosedBookEM",
+      "value": "0.2299"
+    },
+    {
+      "name": "DiagHotpotQARetrievedAbstention",
+      "value": "0.0494"
+    },
+    {
+      "name": "DiagHotpotQANotRetrievedN",
+      "value": "3638"
+    },
+    {
+      "name": "DiagHotpotQANotRetrievedEM",
+      "value": "0.1196"
+    },
+    {
+      "name": "DiagHotpotQANotRetrievedClosedBookEM",
+      "value": "0.1460"
+    },
+    {
+      "name": "DiagHotpotQANotRetrievedAbstention",
+      "value": "0.1776"
+    },
+    {
+      "name": "DiagHotpotQAClosedBookAbstention",
+      "value": "0.0204"
+    },
+    {
+      "name": "DiagHotpotQAClosedBookEM",
+      "value": "0.1887"
+    },
+    {
+      "name": "DiagHotpotQAOracleEM",
+      "value": "0.3764"
+    },
+    {
+      "name": "DiagHotpotQAOracleGain",
+      "value": "0.0516"
+    }
+  ]
+}

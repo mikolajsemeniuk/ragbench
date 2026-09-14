@@ -33,9 +33,10 @@ import (
 	"math"
 	"math/rand"
 	"os"
-	"path/filepath"
 	"slices"
 	"strings"
+
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 )
 
 type record struct {
@@ -85,8 +86,8 @@ func main() {
 		nameB     = flag.String("name-b", "B", "label for the compared run")
 		resamples = flag.Int("bootstrap", 10000, "bootstrap resamples for the confidence interval of the difference")
 		seed      = flag.Int64("seed", 42, "bootstrap seed, so the reported interval is reproducible")
-		texOut    = flag.String("tex-out", "", "path of a .tex file to write the differences and their intervals to - optional")
-		name      = flag.String("name", "", "name used in the generated .tex commands (defaults to name-a vs name-b)")
+		jsonOut   = flag.String("json-out", "", "path of the eval .json file to write the differences and their intervals to (rendered to LaTeX by cmd/render) - optional")
+		name      = flag.String("name", "", "name prefixing the aggregates (defaults to name-a vs name-b)")
 	)
 	flag.Parse()
 
@@ -159,15 +160,15 @@ func main() {
 	fmt.Printf("Paired tests use only the questions where the two systems disagree.\n")
 	fmt.Printf("p (Holm) is adjusted across the %d metrics above; read Exact Match as the primary endpoint and the rest as descriptive.\n", countTested(rows))
 
-	if *texOut != "" {
+	if *jsonOut != "" {
 		label := *name
 		if label == "" {
 			label = *nameA + "Vs" + *nameB
 		}
-		if err := writeTex(*texOut, label, len(pa), rows); err != nil {
-			log.Fatalf("writing tex: %v", err)
+		if err := writeJSON(*jsonOut, label, len(pa), rows); err != nil {
+			log.Fatalf("writing eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 }
 
@@ -290,33 +291,26 @@ func countTested(rows []*row) int {
 	return n
 }
 
-func writeTex(path, label string, paired int, rows []*row) error {
+func writeJSON(path, label string, paired int, rows []*row) error {
 	id := texSafeID(label)
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/compare - do not edit by hand\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sPaired}{%d}\n", id, paired)
+	doc := eval.Doc{Generator: "cmd/compare"}
+	doc.Addf(id+"Paired", "%d", paired)
 	for _, r := range rows {
 		if r.empty {
 			continue
 		}
-		key := texSafeID(r.name)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sA}{%.4f}\n", id, key, r.meanA)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sB}{%.4f}\n", id, key, r.meanB)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sDiff}{%+.4f}\n", id, key, r.meanB-r.meanA)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sCILow}{%+.4f}\n", id, key, r.lo)
-		fmt.Fprintf(&b, "\\newcommand{\\%s%sCIHigh}{%+.4f}\n", id, key, r.hi)
+		key := id + texSafeID(r.name)
+		doc.Addf(key+"A", "%.4f", r.meanA)
+		doc.Addf(key+"B", "%.4f", r.meanB)
+		doc.Addf(key+"Diff", "%+.4f", r.meanB-r.meanA)
+		doc.Addf(key+"CILow", "%+.4f", r.lo)
+		doc.Addf(key+"CIHigh", "%+.4f", r.hi)
 		if !math.IsNaN(r.p) {
-			fmt.Fprintf(&b, "\\newcommand{\\%s%sP}{%s}\n", id, key, formatP(r.p))
-			fmt.Fprintf(&b, "\\newcommand{\\%s%sPHolm}{%s}\n", id, key, formatP(r.pAdjusted))
+			doc.Add(key+"P", formatP(r.p))
+			doc.Add(key+"PHolm", formatP(r.pAdjusted))
 		}
 	}
-
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return fmt.Errorf("create dir: %w", err)
-		}
-	}
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	return eval.Write(path, &doc)
 }
 
 // texSafeID drops every character outside [A-Za-z], because a LaTeX

@@ -129,14 +129,14 @@ questions pay for the next stage, which is why the whole thing runs at about
 ### Generating and comparing its runs
 
 `cascade` is part of `make bench`, so `make bench` (or `make cascade` alone)
-produces `runs/cascade-<set>.jsonl` and `paper/generated/cascade-<set>.gen.tex`. It needs
+produces `runs/cascade-<set>.jsonl` and `eval/cascade-<set>.json`. It needs
 both collections - the dense one and the BM25 one - and the reranker
 container, because stage 1 fuses all three. The fragment carries, on top of the
 usual metrics, how many questions each stage answered
 (`\Cascade<Set>StageFused`, `StageHyde`, `StageClosedbook`) and the mean
 number of stages run. `make compare` then writes the two paired tests the
-paper reads it from, `paper/generated/cmp-rerank-cascade-<set>.gen.tex` and
-`paper/generated/cmp-naive-cascade-<set>.gen.tex`. Every cascade row in the per-question
+paper reads it from, `eval/cmp-rerank-cascade-<set>.json` and
+`eval/cmp-naive-cascade-<set>.json`. Every cascade row in the per-question
 dump names the stage that answered, so per-stage Exact Match is a one-line
 aggregation over `stage`.
 
@@ -168,7 +168,7 @@ many stage-1 answers were escalated, how many of those were correct
 is chosen for all sets; put it in `TAU`. The test run writes
 `runs/cascade-lp-<set>.jsonl` and is compared with the abstention-only
 cascade, naive and rerank, and rendered as its own summary table
-(`paper/generated/result-lp.gen.tex`).
+(`eval/result-lp.json`).
 
 Measured, it does not pay. The sweep over 4,988 train questions put the best
 threshold at -0.15 for +0.0018 Exact Match (McNemar p = 0.42) at +0.25 calls.
@@ -183,18 +183,18 @@ the proposed row; `cascade-lp` is the ablation that says so.
 
 ### The summary table
 
-`make result` renders `paper/generated/result.gen.tex`: the proposed architecture against
+`make result` renders `eval/result.json`: the proposed architecture against
 every baseline on every set, one cell per pair, each cell the paired Exact
 Match difference marked as a win (bold), a loss (underlined) or a tie (plain).
 The test is McNemar's, as in `cmd/compare`, but Holm-adjusted over every cell
 of the table at once, because the sentence the table supports - "wins W,
 loses L, ties T of P pairs" - is one family of tests. That is stricter than
-the per-pair figures in `paper/generated/cmp-*.gen.tex`, and a few narrow wins there
+the per-pair figures in `eval/cmp-*.json`, and a few narrow wins there
 are ties here.
 
 ### The cost table
 
-`make cost` renders `paper/generated/cost.gen.tex`: generation calls, prompt tokens,
+`make cost` renders `eval/cost.json`: generation calls, prompt tokens,
 completion tokens and passages per question for every architecture, averaged
 over the sets it ran on, plus the prompt-token ratio to NaiveRAG. It reads the
 dumps, so it is tokens and calls only - the comparable cost. The throughput in
@@ -226,7 +226,7 @@ make cascade-ablations   # after make cascade; ~4 benchmark runs per set plus co
 | `cascade-hybrid` | hybrid -> hyde -> closedbook | fusion without the cross-encoder |
 
 The target ends with the paired comparisons of each variant against `cascade`
-(`paper/generated/cmp-<variant>-cascade-<set>.gen.tex`) and of `fused` against `rerank`.
+(`eval/cmp-<variant>-cascade-<set>.json`) and of `fused` against `rerank`.
 
 The `fused` run is optional for Exact Match. Stage 1 answers every question in
 the cascade, and every escalated question is one where stage 1 abstained -
@@ -263,7 +263,7 @@ Three things to keep in mind:
 
 ### Where it stands
 
-Paired Exact Match differences from `paper/generated/cmp-*-cascade-*.gen.tex` (Holm-adjusted
+Paired Exact Match differences from `eval/cmp-*-cascade-*.json` (Holm-adjusted
 p on the primary endpoint), generation calls per question in brackets:
 
 | set | vs NaiveRAG [1.0] | vs Rerank [1.0] | cascade calls |
@@ -320,9 +320,9 @@ The service pulls `NousResearch/Meta-Llama-3.1-8B-Instruct`, a byte-identical
 mirror of Meta's gated repository, so no Hugging Face token is needed; cite
 the Meta model in the paper. The runs are
 written as `runs/<architecture>-llama-<set>.jsonl`, their fragments as
-`paper/generated/<architecture>-llama-<set>.gen.tex` with `Llama` in the command names,
-the six comparisons that matter as `paper/generated/cmp-*-llama-*.gen.tex`, and the
-summary table as `paper/generated/result-llama.gen.tex`. Another model is
+`eval/<architecture>-llama-<set>.json` with `Llama` in the command names,
+the six comparisons that matter as `eval/cmp-*-llama-*.json`, and the
+summary table as `eval/result-llama.json`. Another model is
 `make reader READER_MODEL=... READER_URL=... READER_TAG=... READER_NAME=...`.
 
 ## Diagnose retrieval failures
@@ -339,6 +339,36 @@ make diagnose
 
 It needs `runs/naive-<slug>.jsonl` and `runs/closedbook-<slug>.jsonl`, so run
 `make closedbook naive-rag` first.
+
+## Aggregates and rendering
+
+Three layers, strictly one-way:
+
+```
+runs/*.jsonl  --cmd/bench (live) or cmd/aggregate (offline)-->  eval/*.json  --cmd/render-->  paper/*.gen.tex
+raw, per question                                               aggregates                    LaTeX macros the paper reads
+```
+
+Every measuring command writes its aggregates to `eval/` as ordered
+(LaTeX macro name, value) pairs, and `make render` turns the whole
+directory into `paper/` in milliseconds. The fragments are a
+cache; `eval/` is the source of truth, readable by anything that is not
+LaTeX. `make pdf` renders before compiling, so the article can never read
+a stale fragment.
+
+`cmd/aggregate` recomputes a benchmark run's eval document from its dump
+without touching the GPU - renaming a macro or changing a format never
+means re-running a benchmark:
+
+```sh
+go run ./cmd/aggregate -dump runs/naive-nq.jsonl -name NaiveRAGNQ -json-out eval/naive-nq.json
+make render
+```
+
+The only figures it cannot recover are the ones that describe the run
+rather than the questions (throughput, concurrency, top-k, HNSW ef,
+latency); those come only from a live `cmd/bench` run, and the paper cites
+none of them.
 
 ## Compare runs
 

@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeTwoWikiQuestions",
+      "value": "12567"
+    },
+    {
+      "name": "CascadeTwoWikiEM",
+      "value": "0.2783"
+    },
+    {
+      "name": "CascadeTwoWikiFOne",
+      "value": "0.3436"
+    },
+    {
+      "name": "CascadeTwoWikiAbstentionRate",
+      "value": "0.0052"
+    },
+    {
+      "name": "CascadeTwoWikiAnsweredQuestions",
+      "value": "12502"
+    },
+    {
+      "name": "CascadeTwoWikiEMAnswered",
+      "value": "0.2797"
+    },
+    {
+      "name": "CascadeTwoWikiFOneAnswered",
+      "value": "0.3453"
+    },
+    {
+      "name": "CascadeTwoWikiMeanPassagesInContext",
+      "value": "4.67"
+    },
+    {
+      "name": "CascadeTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeTwoWikiAnswerInContext",
+      "value": "0.3745"
+    },
+    {
+      "name": "CascadeTwoWikiAnswerInContextQuestions",
+      "value": "11261"
+    },
+    {
+      "name": "CascadeTwoWikiRecallInContext",
+      "value": "0.3808"
+    },
+    {
+      "name": "CascadeTwoWikiMRR",
+      "value": "0.6574"
+    },
+    {
+      "name": "CascadeTwoWikiRetrievalEvalQuestions",
+      "value": "12567"
+    },
+    {
+      "name": "CascadeTwoWikiLLMCalls",
+      "value": "1.32"
+    },
+    {
+      "name": "CascadeTwoWikiPromptTokens",
+      "value": "1042"
+    },
+    {
+      "name": "CascadeTwoWikiCompletionTokens",
+      "value": "33"
+    },
+    {
+      "name": "CascadeTwoWikiThroughput",
+      "value": "2.13"
+    },
+    {
+      "name": "CascadeTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeTwoWikiStageClosedbook",
+      "value": "835"
+    },
+    {
+      "name": "CascadeTwoWikiStageFused",
+      "value": "10945"
+    },
+    {
+      "name": "CascadeTwoWikiStageHyde",
+      "value": "787"
+    },
+    {
+      "name": "CascadeTwoWikiStagesRun",
+      "value": "1.20"
+    }
+  ]
+}

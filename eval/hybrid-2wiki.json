@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HybridTwoWikiQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "HybridTwoWikiEM",
+      "value": "0.2696"
+    },
+    {
+      "name": "HybridTwoWikiFOne",
+      "value": "0.3338"
+    },
+    {
+      "name": "HybridTwoWikiAbstentionRate",
+      "value": "0.1374"
+    },
+    {
+      "name": "HybridTwoWikiAnsweredQuestions",
+      "value": "10848"
+    },
+    {
+      "name": "HybridTwoWikiEMAnswered",
+      "value": "0.3125"
+    },
+    {
+      "name": "HybridTwoWikiFOneAnswered",
+      "value": "0.3804"
+    },
+    {
+      "name": "HybridTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HybridTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "HybridTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HybridTwoWikiAnswerInContext",
+      "value": "0.3932"
+    },
+    {
+      "name": "HybridTwoWikiAnswerInContextQuestions",
+      "value": "11268"
+    },
+    {
+      "name": "HybridTwoWikiRecallInContext",
+      "value": "0.4081"
+    },
+    {
+      "name": "HybridTwoWikiMRR",
+      "value": "0.6717"
+    },
+    {
+      "name": "HybridTwoWikiRetrievalEvalQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "HybridTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "HybridTwoWikiPromptTokens",
+      "value": "906"
+    },
+    {
+      "name": "HybridTwoWikiCompletionTokens",
+      "value": "13"
+    },
+    {
+      "name": "HybridTwoWikiThroughput",
+      "value": "3.18"
+    },
+    {
+      "name": "HybridTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

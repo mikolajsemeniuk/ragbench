@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NaiveRAGMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NaiveRAGMuSiQueEM",
+      "value": "0.0596"
+    },
+    {
+      "name": "NaiveRAGMuSiQueFOne",
+      "value": "0.1322"
+    },
+    {
+      "name": "NaiveRAGMuSiQueAbstentionRate",
+      "value": "0.2607"
+    },
+    {
+      "name": "NaiveRAGMuSiQueAnsweredQuestions",
+      "value": "1787"
+    },
+    {
+      "name": "NaiveRAGMuSiQueEMAnswered",
+      "value": "0.0806"
+    },
+    {
+      "name": "NaiveRAGMuSiQueFOneAnswered",
+      "value": "0.1707"
+    },
+    {
+      "name": "NaiveRAGMuSiQueMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "NaiveRAGMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "NaiveRAGMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NaiveRAGMuSiQueAnswerInContext",
+      "value": "0.2197"
+    },
+    {
+      "name": "NaiveRAGMuSiQueAnswerInContextQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NaiveRAGMuSiQueRecallInContext",
+      "value": "0.2209"
+    },
+    {
+      "name": "NaiveRAGMuSiQueMRR",
+      "value": "0.3454"
+    },
+    {
+      "name": "NaiveRAGMuSiQueRetrievalEvalQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NaiveRAGMuSiQueLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NaiveRAGMuSiQuePromptTokens",
+      "value": "852"
+    },
+    {
+      "name": "NaiveRAGMuSiQueCompletionTokens",
+      "value": "18"
+    },
+    {
+      "name": "NaiveRAGMuSiQueThroughput",
+      "value": "4.26"
+    },
+    {
+      "name": "NaiveRAGMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

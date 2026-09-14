@@ -1,8 +1,8 @@
-# LaTeX build artifacts; main.pdf stays tracked on purpose.
+# LaTeX build artifacts; main.pdf and the rendered *.gen.tex fragments stay
+# tracked on purpose.
 *.aux
 *.log
 *.out
 *.bbl
 *.blg
 *.toc
-*.log

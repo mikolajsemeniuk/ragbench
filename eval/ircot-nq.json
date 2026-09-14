@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "IRCoTNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "IRCoTNQEM",
+      "value": "0.3357"
+    },
+    {
+      "name": "IRCoTNQFOne",
+      "value": "0.4451"
+    },
+    {
+      "name": "IRCoTNQAbstentionRate",
+      "value": "0.1657"
+    },
+    {
+      "name": "IRCoTNQAnsweredQuestions",
+      "value": "3012"
+    },
+    {
+      "name": "IRCoTNQEMAnswered",
+      "value": "0.4024"
+    },
+    {
+      "name": "IRCoTNQFOneAnswered",
+      "value": "0.5195"
+    },
+    {
+      "name": "IRCoTNQMeanPassagesInContext",
+      "value": "5.29"
+    },
+    {
+      "name": "IRCoTNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "IRCoTNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "IRCoTNQAnswerInContext",
+      "value": "0.7298"
+    },
+    {
+      "name": "IRCoTNQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "IRCoTNQLLMCalls",
+      "value": "2.09"
+    },
+    {
+      "name": "IRCoTNQPromptTokens",
+      "value": "1868"
+    },
+    {
+      "name": "IRCoTNQCompletionTokens",
+      "value": "87"
+    },
+    {
+      "name": "IRCoTNQThroughput",
+      "value": "1.77"
+    },
+    {
+      "name": "IRCoTNQConcurrency",
+      "value": "48"
+    }
+  ]
+}

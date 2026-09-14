@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "IRCoTOneShotVsCascadeNQPaired",
+      "value": "3602"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchA",
+      "value": "0.3362"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchB",
+      "value": "0.3418"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchDiff",
+      "value": "+0.0056"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchCILow",
+      "value": "-0.0064"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchCIHigh",
+      "value": "+0.0175"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchP",
+      "value": "0.3917"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQExactMatchPHolm",
+      "value": "0.5083"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFA",
+      "value": "0.4455"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFB",
+      "value": "0.4603"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFDiff",
+      "value": "+0.0147"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFCILow",
+      "value": "+0.0035"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFCIHigh",
+      "value": "+0.0264"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFP",
+      "value": "0.0036"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQFPHolm",
+      "value": "0.0107"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionA",
+      "value": "0.1635"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionB",
+      "value": "0.0316"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionDiff",
+      "value": "-0.1319"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionCILow",
+      "value": "-0.1435"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionCIHigh",
+      "value": "-0.1202"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredA",
+      "value": "0.4037"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredB",
+      "value": "0.3953"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredDiff",
+      "value": "-0.0083"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredCILow",
+      "value": "-0.0224"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredCIHigh",
+      "value": "+0.0057"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredP",
+      "value": "0.2542"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQEMbothansweredPHolm",
+      "value": "0.5083"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextA",
+      "value": "0.7311"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextB",
+      "value": "0.6750"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextDiff",
+      "value": "-0.0561"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextCILow",
+      "value": "-0.0694"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextCIHigh",
+      "value": "-0.0428"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxA",
+      "value": "5.2735"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxB",
+      "value": "4.5155"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxDiff",
+      "value": "-0.7579"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxCILow",
+      "value": "-0.8220"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxCIHigh",
+      "value": "-0.6946"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsA",
+      "value": "2.0919"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsB",
+      "value": "1.4378"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsDiff",
+      "value": "-0.6541"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsCILow",
+      "value": "-0.6885"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsCIHigh",
+      "value": "-0.6188"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensA",
+      "value": "2037.1924"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensB",
+      "value": "985.9681"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensDiff",
+      "value": "-1051.2243"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensCILow",
+      "value": "-1084.2582"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensCIHigh",
+      "value": "-1018.4969"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysA",
+      "value": "32.3617"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysB",
+      "value": "32.2649"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysDiff",
+      "value": "-0.0969"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysCILow",
+      "value": "-0.7491"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysCIHigh",
+      "value": "+0.5506"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysP",
+      "value": "0.0019"
+    },
+    {
+      "name": "IRCoTOneShotVsCascadeNQLatencysPHolm",
+      "value": "0.0078"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "ClosedBookHotpotQAQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "ClosedBookHotpotQAEM",
+      "value": "0.1887"
+    },
+    {
+      "name": "ClosedBookHotpotQAFOne",
+      "value": "0.2740"
+    },
+    {
+      "name": "ClosedBookHotpotQAAbstentionRate",
+      "value": "0.0204"
+    },
+    {
+      "name": "ClosedBookHotpotQAAnsweredQuestions",
+      "value": "7254"
+    },
+    {
+      "name": "ClosedBookHotpotQAEMAnswered",
+      "value": "0.1926"
+    },
+    {
+      "name": "ClosedBookHotpotQAFOneAnswered",
+      "value": "0.2790"
+    },
+    {
+      "name": "ClosedBookHotpotQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "ClosedBookHotpotQAPromptTokens",
+      "value": "69"
+    },
+    {
+      "name": "ClosedBookHotpotQACompletionTokens",
+      "value": "6"
+    },
+    {
+      "name": "ClosedBookHotpotQAThroughput",
+      "value": "61.61"
+    },
+    {
+      "name": "ClosedBookHotpotQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

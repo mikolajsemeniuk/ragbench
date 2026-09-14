@@ -1,0 +1,256 @@
+{
+  "generator": "cmd/cost",
+  "commands": [
+    {
+      "name": "CostRelativeTo",
+      "value": "NaiveRAG, 5 passages"
+    },
+    {
+      "name": "CostclosedbookCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostclosedbookPromptTokens",
+      "value": "66"
+    },
+    {
+      "name": "CostclosedbookCompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "CostclosedbookPromptRatio",
+      "value": "0.08"
+    },
+    {
+      "name": "CostbmTwoFiveCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostbmTwoFivePromptTokens",
+      "value": "855"
+    },
+    {
+      "name": "CostbmTwoFiveCompletionTokens",
+      "value": "14"
+    },
+    {
+      "name": "CostbmTwoFivePromptRatio",
+      "value": "0.99"
+    },
+    {
+      "name": "CostnaiveCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostnaivePromptTokens",
+      "value": "860"
+    },
+    {
+      "name": "CostnaiveCompletionTokens",
+      "value": "13"
+    },
+    {
+      "name": "CostnaivePromptRatio",
+      "value": "1.00"
+    },
+    {
+      "name": "CostnaiveOneZeroCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostnaiveOneZeroPromptTokens",
+      "value": "1685"
+    },
+    {
+      "name": "CostnaiveOneZeroCompletionTokens",
+      "value": "12"
+    },
+    {
+      "name": "CostnaiveOneZeroPromptRatio",
+      "value": "1.96"
+    },
+    {
+      "name": "CostnaiveOneTwoCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostnaiveOneTwoPromptTokens",
+      "value": "2009"
+    },
+    {
+      "name": "CostnaiveOneTwoCompletionTokens",
+      "value": "11"
+    },
+    {
+      "name": "CostnaiveOneTwoPromptRatio",
+      "value": "2.34"
+    },
+    {
+      "name": "CosthybridCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CosthybridPromptTokens",
+      "value": "857"
+    },
+    {
+      "name": "CosthybridCompletionTokens",
+      "value": "12"
+    },
+    {
+      "name": "CosthybridPromptRatio",
+      "value": "1.00"
+    },
+    {
+      "name": "CosthydeCalls",
+      "value": "2.00"
+    },
+    {
+      "name": "CosthydePromptTokens",
+      "value": "965"
+    },
+    {
+      "name": "CosthydeCompletionTokens",
+      "value": "158"
+    },
+    {
+      "name": "CosthydePromptRatio",
+      "value": "1.12"
+    },
+    {
+      "name": "CostrerankCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostrerankPromptTokens",
+      "value": "858"
+    },
+    {
+      "name": "CostrerankCompletionTokens",
+      "value": "12"
+    },
+    {
+      "name": "CostrerankPromptRatio",
+      "value": "1.00"
+    },
+    {
+      "name": "CostneighbourCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostneighbourPromptTokens",
+      "value": "1879"
+    },
+    {
+      "name": "CostneighbourCompletionTokens",
+      "value": "13"
+    },
+    {
+      "name": "CostneighbourPromptRatio",
+      "value": "2.18"
+    },
+    {
+      "name": "CostcragCalls",
+      "value": "2.98"
+    },
+    {
+      "name": "CostcragPromptTokens",
+      "value": "1878"
+    },
+    {
+      "name": "CostcragCompletionTokens",
+      "value": "37"
+    },
+    {
+      "name": "CostcragPromptRatio",
+      "value": "2.18"
+    },
+    {
+      "name": "CostcragOneZeroCalls",
+      "value": "3.00"
+    },
+    {
+      "name": "CostcragOneZeroPromptTokens",
+      "value": "3476"
+    },
+    {
+      "name": "CostcragOneZeroCompletionTokens",
+      "value": "39"
+    },
+    {
+      "name": "CostcragOneZeroPromptRatio",
+      "value": "4.04"
+    },
+    {
+      "name": "CostircotCalls",
+      "value": "2.31"
+    },
+    {
+      "name": "CostircotPromptTokens",
+      "value": "2481"
+    },
+    {
+      "name": "CostircotCompletionTokens",
+      "value": "110"
+    },
+    {
+      "name": "CostircotPromptRatio",
+      "value": "2.88"
+    },
+    {
+      "name": "CostadaptiveCalls",
+      "value": "2.30"
+    },
+    {
+      "name": "CostadaptivePromptTokens",
+      "value": "1410"
+    },
+    {
+      "name": "CostadaptiveCompletionTokens",
+      "value": "41"
+    },
+    {
+      "name": "CostadaptivePromptRatio",
+      "value": "1.64"
+    },
+    {
+      "name": "CostfusedCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "CostfusedPromptTokens",
+      "value": "857"
+    },
+    {
+      "name": "CostfusedCompletionTokens",
+      "value": "12"
+    },
+    {
+      "name": "CostfusedPromptRatio",
+      "value": "1.00"
+    },
+    {
+      "name": "CostcascadeCalls",
+      "value": "1.34"
+    },
+    {
+      "name": "CostcascadePromptTokens",
+      "value": "992"
+    },
+    {
+      "name": "CostcascadeCompletionTokens",
+      "value": "38"
+    },
+    {
+      "name": "CostcascadePromptRatio",
+      "value": "1.15"
+    },
+    {
+      "name": "CostTable",
+      "value": "%\n\\begin{tabular}{lrrrrr}\n\\toprule\nArchitecture & LLM calls & Prompt tokens & Completion tokens & Passages & $\\times$ NaiveRAG, 5 passages \\\\\n\\midrule\nClosedBook (no retrieval) & 1.00 & 66 & 8 & 0.0 & 0.08 \\\\\nBM25 & 1.00 & 855 & 14 & 5.0 & 0.99 \\\\\nNaiveRAG, 5 passages & 1.00 & 860 & 13 & 5.0 & 1.00 \\\\\nNaiveRAG, 10 passages & 1.00 & 1685 & 12 & 10.0 & 1.96 \\\\\nNaiveRAG, 12 passages & 1.00 & 2009 & 11 & 12.0 & 2.34 \\\\\nHybrid (dense + BM25) & 1.00 & 857 & 12 & 5.0 & 1.00 \\\\\nHyDE & 2.00 & 965 & 158 & 5.0 & 1.12 \\\\\nRerank (cross-encoder) & 1.00 & 858 & 12 & 5.0 & 1.00 \\\\\nNeighbour expansion & 1.00 & 1879 & 13 & 11.4 & 2.18 \\\\\nCRAG (offline), 5 passages & 2.94-3.00 & 1878 & 37 & 5.4 & 2.18 \\\\\nCRAG (offline), 10 passages & 3.00 & 3476 & 39 & 10.0 & 4.04 \\\\\nIRCoT & 2.09-2.54 & 2481 & 110 & 6.2 & 2.88 \\\\\nAdaptive-RAG & 2.05-2.96 & 1410 & 41 & 5.4 & 1.64 \\\\\nFused retrieval (stage 1 alone) & 1.00 & 857 & 12 & 5.0 & 1.00 \\\\\nCascade & 1.16-1.58 & 992 & 38 & 4.6 & 1.15 \\\\\n\\bottomrule\n\\end{tabular}"
+    }
+  ],
+  "comments": [
+    "Per-question means over the sets each architecture ran on. Calls are a range when they differ across sets."
+  ]
+}

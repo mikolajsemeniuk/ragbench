@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NeighbourTwoWikiQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "NeighbourTwoWikiEM",
+      "value": "0.2395"
+    },
+    {
+      "name": "NeighbourTwoWikiFOne",
+      "value": "0.3083"
+    },
+    {
+      "name": "NeighbourTwoWikiAbstentionRate",
+      "value": "0.1483"
+    },
+    {
+      "name": "NeighbourTwoWikiAnsweredQuestions",
+      "value": "10711"
+    },
+    {
+      "name": "NeighbourTwoWikiEMAnswered",
+      "value": "0.2812"
+    },
+    {
+      "name": "NeighbourTwoWikiFOneAnswered",
+      "value": "0.3510"
+    },
+    {
+      "name": "NeighbourTwoWikiMeanPassagesInContext",
+      "value": "10.72"
+    },
+    {
+      "name": "NeighbourTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "NeighbourTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NeighbourTwoWikiAnswerInContext",
+      "value": "0.3703"
+    },
+    {
+      "name": "NeighbourTwoWikiAnswerInContextQuestions",
+      "value": "11268"
+    },
+    {
+      "name": "NeighbourTwoWikiRecallInContext",
+      "value": "0.3542"
+    },
+    {
+      "name": "NeighbourTwoWikiMRR",
+      "value": "0.5684"
+    },
+    {
+      "name": "NeighbourTwoWikiRetrievalEvalQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "NeighbourTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NeighbourTwoWikiPromptTokens",
+      "value": "1824"
+    },
+    {
+      "name": "NeighbourTwoWikiCompletionTokens",
+      "value": "13"
+    },
+    {
+      "name": "NeighbourTwoWikiThroughput",
+      "value": "2.76"
+    },
+    {
+      "name": "NeighbourTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

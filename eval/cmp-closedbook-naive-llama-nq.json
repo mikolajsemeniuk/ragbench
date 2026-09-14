@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPaired",
+      "value": "3610"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchA",
+      "value": "0.2463"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchB",
+      "value": "0.3493"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchDiff",
+      "value": "+0.1030"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchCILow",
+      "value": "+0.0867"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchCIHigh",
+      "value": "+0.1194"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFA",
+      "value": "0.3599"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFB",
+      "value": "0.4691"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFDiff",
+      "value": "+0.1093"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFCILow",
+      "value": "+0.0933"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFCIHigh",
+      "value": "+0.1252"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionA",
+      "value": "0.0571"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionB",
+      "value": "0.0690"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionDiff",
+      "value": "+0.0119"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionCILow",
+      "value": "+0.0019"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionCIHigh",
+      "value": "+0.0219"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionP",
+      "value": "0.0221"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAbstentionPHolm",
+      "value": "0.0443"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredA",
+      "value": "0.2688"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredB",
+      "value": "0.3886"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredDiff",
+      "value": "+0.1198"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredCILow",
+      "value": "+0.1021"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredCIHigh",
+      "value": "+0.1381"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextB",
+      "value": "0.7262"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextDiff",
+      "value": "+0.7262"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextCILow",
+      "value": "+0.7115"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextCIHigh",
+      "value": "+0.7406"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxDiff",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxCILow",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxCIHigh",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensA",
+      "value": "39.2950"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensB",
+      "value": "775.4956"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensDiff",
+      "value": "+736.2006"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensCILow",
+      "value": "+734.6634"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensCIHigh",
+      "value": "+737.7349"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysA",
+      "value": "1.0311"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysB",
+      "value": "11.7336"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysDiff",
+      "value": "+10.7025"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysCILow",
+      "value": "+10.6303"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysCIHigh",
+      "value": "+10.7749"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPaired",
+      "value": "3609"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchA",
+      "value": "0.3358"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchB",
+      "value": "0.3358"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchCILow",
+      "value": "-0.0028"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchCIHigh",
+      "value": "+0.0028"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchP",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQExactMatchPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFA",
+      "value": "0.4451"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFB",
+      "value": "0.4449"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFDiff",
+      "value": "-0.0002"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFCILow",
+      "value": "-0.0028"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFCIHigh",
+      "value": "+0.0024"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFP",
+      "value": "0.1249"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQFPHolm",
+      "value": "0.8746"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionA",
+      "value": "0.1657"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionB",
+      "value": "0.1632"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionDiff",
+      "value": "-0.0025"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionCILow",
+      "value": "-0.0072"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionCIHigh",
+      "value": "+0.0025"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionP",
+      "value": "0.3681"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAbstentionPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredA",
+      "value": "0.4066"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredB",
+      "value": "0.4073"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredDiff",
+      "value": "+0.0007"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredCILow",
+      "value": "-0.0027"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredCIHigh",
+      "value": "+0.0040"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredP",
+      "value": "0.8445"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQEMbothansweredPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextA",
+      "value": "0.7300"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextB",
+      "value": "0.7305"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextDiff",
+      "value": "+0.0006"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextCILow",
+      "value": "-0.0019"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextCIHigh",
+      "value": "+0.0033"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextP",
+      "value": "0.8383"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQAnswerincontextPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxA",
+      "value": "5.2882"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxB",
+      "value": "5.2743"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxDiff",
+      "value": "-0.0139"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxCILow",
+      "value": "-0.0654"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxCIHigh",
+      "value": "+0.0371"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxP",
+      "value": "0.4307"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPassagesinctxPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsA",
+      "value": "2.0906"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsB",
+      "value": "2.0920"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsDiff",
+      "value": "+0.0014"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsCILow",
+      "value": "-0.0158"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsCIHigh",
+      "value": "+0.0183"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsP",
+      "value": "0.9453"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensA",
+      "value": "1867.8565"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensB",
+      "value": "2037.5478"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensDiff",
+      "value": "+169.6913"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensCILow",
+      "value": "+132.8326"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensCIHigh",
+      "value": "+206.5090"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysA",
+      "value": "27.0446"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysB",
+      "value": "32.3606"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysDiff",
+      "value": "+5.3160"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysCILow",
+      "value": "+4.7792"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysCIHigh",
+      "value": "+5.8639"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

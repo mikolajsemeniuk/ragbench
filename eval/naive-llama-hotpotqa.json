@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NaiveRAGLlamaHotpotQAQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAEM",
+      "value": "0.3355"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAFOne",
+      "value": "0.4410"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAAbstentionRate",
+      "value": "0.0700"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAAnsweredQuestions",
+      "value": "6886"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAEMAnswered",
+      "value": "0.3607"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAFOneAnswered",
+      "value": "0.4721"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAAnswerInContext",
+      "value": "0.5422"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAAnswerInContextQuestions",
+      "value": "6946"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQARecallInContext",
+      "value": "0.5405"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAMRR",
+      "value": "0.6958"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQARetrievalEvalQuestions",
+      "value": "7404"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAPromptTokens",
+      "value": "815"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQACompletionTokens",
+      "value": "6"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAThroughput",
+      "value": "3.66"
+    },
+    {
+      "name": "NaiveRAGLlamaHotpotQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

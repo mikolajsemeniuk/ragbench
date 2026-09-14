@@ -24,10 +24,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/mikolajsemeniuk/ragbench/pkg/eval"
 	"github.com/mikolajsemeniuk/ragbench/pkg/flashrag"
 )
 
@@ -35,8 +35,8 @@ func main() {
 	var (
 		datasetPath = flag.String("dataset", "", "FlashRAG question file to measure (required)")
 		corpusPath  = flag.String("corpus", "dataset/wiki18_100w.jsonl", "FlashRAG corpus the collection was built from")
-		texOut      = flag.String("tex-out", "", "path of the .tex file to write (e.g. paper/coverage-2wiki.gen.tex)")
-		name        = flag.String("name", "Coverage", "name used in the generated .tex commands")
+		jsonOut     = flag.String("json-out", "", "path of the eval .json file to write (e.g. eval/coverage-2wiki.json); rendered to LaTeX by cmd/render")
+		name        = flag.String("name", "Coverage", "prefix of the aggregate names")
 	)
 	flag.Parse()
 
@@ -119,11 +119,11 @@ func main() {
 	fmt.Printf("  exact match:                  %d (%.1f%%)\n", fullExact, 100*float64(fullExact)/n)
 	fmt.Printf("  normalised match:             %d (%.1f%%)\n", fullNorm, 100*float64(fullNorm)/n)
 
-	if *texOut != "" {
-		if err := writeTex(*texOut, *name, len(questions), len(wantedExact), titlesExact, titlesNorm, ceilingExact, ceilingNorm, fullExact, fullNorm); err != nil {
-			log.Fatalf("writing the tex file: %v", err)
+	if *jsonOut != "" {
+		if err := writeJSON(*jsonOut, *name, len(questions), len(wantedExact), titlesExact, titlesNorm, ceilingExact, ceilingNorm, fullExact, fullNorm); err != nil {
+			log.Fatalf("writing the eval file: %v", err)
 		}
-		log.Printf("written to %s", *texOut)
+		log.Printf("written to %s", *jsonOut)
 	}
 }
 
@@ -185,25 +185,18 @@ func loadGold(path string) ([][]string, error) {
 	return out, scanner.Err()
 }
 
-func writeTex(path, name string, questions, titles, presentExact, presentNorm int, ceilingExact, ceilingNorm float64, fullExact, fullNorm int) error {
-	if dir := filepath.Dir(path); dir != "." {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return err
-		}
-	}
-
+func writeJSON(path, name string, questions, titles, presentExact, presentNorm int, ceilingExact, ceilingNorm float64, fullExact, fullNorm int) error {
 	id := texSafeID(name)
-	var b strings.Builder
-	fmt.Fprintf(&b, "%% generated automatically by cmd/coverage - do not edit by hand\n")
-	fmt.Fprintf(&b, "\\newcommand{\\%sAnnotatedQuestions}{%d}\n", id, questions)
-	fmt.Fprintf(&b, "\\newcommand{\\%sGoldTitles}{%d}\n", id, titles)
-	fmt.Fprintf(&b, "\\newcommand{\\%sGoldTitlesPresent}{%d}\n", id, presentNorm)
-	fmt.Fprintf(&b, "\\newcommand{\\%sGoldTitlesPresentExact}{%d}\n", id, presentExact)
-	fmt.Fprintf(&b, "\\newcommand{\\%sRecallCeiling}{%.4f}\n", id, ceilingNorm)
-	fmt.Fprintf(&b, "\\newcommand{\\%sRecallCeilingExact}{%.4f}\n", id, ceilingExact)
-	fmt.Fprintf(&b, "\\newcommand{\\%sQuestionsFullyCovered}{%d}\n", id, fullNorm)
-	fmt.Fprintf(&b, "\\newcommand{\\%sQuestionsFullyCoveredPct}{%.1f}\n", id, 100*float64(fullNorm)/float64(questions))
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	doc := eval.Doc{Generator: "cmd/coverage"}
+	doc.Addf(id+"AnnotatedQuestions", "%d", questions)
+	doc.Addf(id+"GoldTitles", "%d", titles)
+	doc.Addf(id+"GoldTitlesPresent", "%d", presentNorm)
+	doc.Addf(id+"GoldTitlesPresentExact", "%d", presentExact)
+	doc.Addf(id+"RecallCeiling", "%.4f", ceilingNorm)
+	doc.Addf(id+"RecallCeilingExact", "%.4f", ceilingExact)
+	doc.Addf(id+"QuestionsFullyCovered", "%d", fullNorm)
+	doc.Addf(id+"QuestionsFullyCoveredPct", "%.1f", 100*float64(fullNorm)/float64(questions))
+	return eval.Write(path, &doc)
 }
 
 // texSafeID drops every character outside [A-Za-z], because a LaTeX

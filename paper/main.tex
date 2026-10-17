@@ -23,6 +23,14 @@
 
 \input{tikzstyles}
 
+% Let a page carry more float material (figures/tables) before text is
+% pushed to the next page; the defaults leave large gaps when a figure and a
+% table with a long caption land on the same page.
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\setcounter{topnumber}{3}
+
 % Fragments are input only when they exist, so the skeleton still builds
 % while a run is half finished. A table that references a command from a
 % fragment that is missing WILL fail, which is the intended signal.

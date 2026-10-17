@@ -7,7 +7,7 @@ stated otherwise, differences quoted below are paired Exact Match
 differences with Holm-adjusted p-values, and ``significant'' means
 $p<0.05$ after adjustment.
 
-\subsection{RQ1: Is retrieval worth anything at all?}
+\subsection{RQ1: is retrieval worth anything at all?}
 \label{sec:results-worth}
 
 Against the closed-book bottom line, naive retrieval is worth
@@ -29,7 +29,7 @@ evaluation that reports EM without abstention would publish the wrong
 conclusion on this set --- which is why every table in this article
 carries both.
 
-\subsection{RQ2: What does each single refinement buy?}
+\subsection{RQ2: what does each single refinement buy?}
 \label{sec:results-single}
 
 \paragraph{Lexical and hybrid retrieval.} BM25 alone is well below the
@@ -87,7 +87,7 @@ own single-hop branch (\NaiveVsAdaptiveTwoWikiExactMatchDiff{} vs.\ naive
 on 2WikiMultihopQA): predicting difficulty from the question alone sends
 92\% of a multi-hop set down the single-hop path.
 
-\subsection{RQ3: Why does retrieval fail?}
+\subsection{RQ3: why does retrieval fail?}
 \label{sec:results-diagnosis}
 
 \begin{table}[t]
@@ -130,7 +130,7 @@ fuse rankings (largest bucket), escalate to a query-side method
 (second bucket), fall back to no retrieval (the questions where
 retrieval cannot help but a guess might).
 
-\subsection{RQ4: The cascade against every baseline}
+\subsection{RQ4: the cascade against every baseline}
 \label{sec:results-main}
 
 \begin{table}[t]
@@ -181,7 +181,7 @@ to questions both systems answered is at or below zero against reranking
 on four of five sets: the cascade wins by rescuing declined questions,
 not by answering differently where its first stage already answered.
 
-\subsection{RQ5: What does it cost?}
+\subsection{RQ5: what does it cost?}
 \label{sec:results-cost}
 
 \begin{table}[t]
@@ -207,7 +207,7 @@ expensive strategies by the questions that need them: HyDE costs two
 calls \emph{per escalated question}, and only 10--30\% of questions
 escalate.
 
-\subsection{RQ6: Which parts of the cascade matter?}
+\subsection{RQ6: which parts of the cascade matter?}
 \label{sec:results-ablations}
 
 \paragraph{What the fusion adds.} Stage one alone against plain reranking:
@@ -264,7 +264,7 @@ to the zero-shot loop, and the cascade's comparison against it
 $2.4$ vs.\ $1.3$ calls) is materially the same as against the zero-shot
 row. The multi-hop baseline was not under-prompted.
 
-\subsection{RQ7: Does it survive a different reader?}
+\subsection{RQ7: does it survive a different reader?}
 \label{sec:results-reader}
 
 Everything the cascade claims rests on how a reader behaves when the

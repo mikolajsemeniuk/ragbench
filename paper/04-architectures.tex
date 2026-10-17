@@ -1,22 +1,7 @@
-\section{The architectures under study}
-\label{sec:architectures}
-
-We compare thirteen architectures: a no-retrieval bottom line, the naive
-baseline at three context budgets, and nine refinements drawn from the
-families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
-them by the shape of their control flow, following the taxonomy of
-\cite{jin2024flashrag}: \emph{sequential} architectures run the pipeline of
-Figure~\ref{fig:naive-pipeline} once, changing only which passages reach
-the generator; \emph{branching} architectures add a generation step before
-retrieval; \emph{conditional} architectures inspect intermediate state and
-choose among actions; \emph{iterative} architectures loop.
-Table~\ref{tab:qualitative} summarises what each one changes and what it
-costs. Each architecture below is described with the same template ---
-what it changes, how it works step by step, and what it costs --- and each
-description states the measured failure mode it targets, anticipating the
-diagnosis of Section~\ref{sec:results-diagnosis}.
-
-\begin{figure}[t]
+% The taxonomy figure and Table 1 are placed before the section heading so
+% that LaTeX meets them early enough to put them at the top of the page on
+% which Section 4 starts.
+\begin{figure}[!t]
 \centering
 \begin{tikzpicture}[node distance=3mm and 5mm]
 \node[comp, fill=black!10, minimum width=32mm] (root) {13 architectures};
@@ -36,11 +21,13 @@ $^{*}$ClosedBook retrieves nothing and serves as a bottom line method for
 comparisons. The two
 architectures in bold are introduced in Section~\ref{sec:cascade}.}
 \label{fig:taxonomy}
-\end{figure}
 
-\begin{table}[t]
-\centering\small
-\caption{Qualitative comparison. ``Modifies'' names the part of the naive
+% The table shares the float with Figure 3 so the two always stay together
+% on the page that introduces them; as a separate float the table drifted
+% into the middle of Section 4.2.
+\vspace{3mm}
+\small
+\captionof{table}{Qualitative comparison. ``Modifies'' names the part of the naive
 pipeline (Figure~\ref{fig:naive-pipeline}) that the architecture changes;
 ``Calls'' is the number of generator calls per question; ``Budget'' is the
 number of passages placed in the generator's context; ``Targets'' is the
@@ -67,7 +54,25 @@ Adaptive-RAG & routes between strategies & 2--7 & 0--15 & heterogeneous difficul
 Cascade (proposed) & retrieval + escalation & $\sim$1.3 & $\le$5 & all of the above \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{figure}
+
+\section{The architectures under study}
+\label{sec:architectures}
+
+We compare thirteen architectures: a no-retrieval bottom line, the naive
+baseline at three context budgets, and nine refinements drawn from the
+families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
+them by the shape of their control flow, following the taxonomy of
+\cite{jin2024flashrag}: \emph{sequential} architectures run the pipeline of
+Figure~\ref{fig:naive-pipeline} once, changing only which passages reach
+the generator; \emph{branching} architectures add a generation step before
+retrieval; \emph{conditional} architectures inspect intermediate state and
+choose among actions; \emph{iterative} architectures loop.
+Table~\ref{tab:qualitative} summarises what each one changes and what it
+costs. Each architecture below is described with the same template ---
+what it changes, how it works step by step, and what it costs --- and each
+description states the measured failure mode it targets, anticipating the
+diagnosis of Section~\ref{sec:results-diagnosis}.
 
 \subsection{ClosedBook: the bottom line method for comparisons}
 \label{sec:arch-closedbook}
@@ -96,7 +101,7 @@ passages against a five-passage baseline would credit the architecture with
 what is merely a larger budget. Throughout the article, every comparison
 is made at a matched budget.
 
-\subsection{BM25 and Hybrid retrieval}
+\subsection{BM25 and hybrid retrieval}
 \label{sec:arch-hybrid}
 
 \begin{figure}[t]

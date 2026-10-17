@@ -136,7 +136,7 @@ verified exhaustively over all 887{,}917 (question, architecture) pairs
 measured in this study, with zero exceptions. Escalating a declined
 question therefore \emph{cannot discard a correct answer}: it can only
 move a question from certainly-wrong to possibly-right. In the vocabulary
-of selective prediction~\cite{chow1970reject,geifman2017selective}, the
+of selective prediction~\citep{chow1970reject,geifman2017selective}, the
 refusal is a reject option whose selective risk is provably zero under
 this metric. This is what makes the cascade safe by construction where
 confidence-threshold deferral is a gamble; it is exact for Exact Match and approximate for token-level F1,
@@ -156,8 +156,8 @@ one-call stage.
 The abstention trigger is blind to the failure it cannot see: a wrong
 answer given \emph{without} hesitation. The one free signal about those is
 the generator's own certainty --- a signal language models are reported
-to carry~\cite{kadavath2022know}, though eliciting it reliably is
-hard~\cite{xiong2024uncertainty} --- here the mean log-probability of the
+to carry~\citep{kadavath2022know}, though eliciting it reliably is
+hard~\citep{xiong2024uncertainty} --- here the mean log-probability of the
 answer's tokens under greedy decoding, which the serving engine reports
 at no extra cost. As an extension, the cascade also escalates any answer whose mean
 token log-probability falls below a threshold $\tau$. Unlike the

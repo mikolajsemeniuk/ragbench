@@ -1,11 +1,24 @@
-% The article. Every number in it comes from a generated fragment
-% (*.gen.tex, written by cmd/bench, cmd/compare, cmd/diagnose, cmd/coverage,
-% cmd/result, cmd/cost, cmd/sweep); none is typed by hand. A \newcommand that
-% is renamed, dropped or never generated shows up as a build failure here
-% instead of as a stale number in a table nobody re-checked.
+% The article, prepared for submission to the Journal of the Association for
+% Information Science and Technology (JASIST, Wiley). Every number in it
+% comes from a generated fragment (*.gen.tex, written by cmd/bench,
+% cmd/compare, cmd/diagnose, cmd/coverage, cmd/result, cmd/cost, cmd/sweep);
+% none is typed by hand. A \newcommand that is renamed, dropped or never
+% generated shows up as a build failure here instead of as a stale number in
+% a table nobody re-checked.
 %
 % Each section lives in its own .tex file next to this one; this file
-% assembles them.
+% assembles them. The former appendix is built separately as
+% supplement.tex (JASIST counts supplemental material outside the word
+% limit and asks for it as a separate file).
+%
+% JASIST requirements this file implements (abbreviated author guidelines,
+% August 2021, and the journal's "for authors" page):
+%   - APA style citations and reference list      -> apacite
+%   - abstract of at most 200 words, then keywords
+%   - title page with affiliations, addresses, e-mail and corresponding author
+%   - single or 1.5 line spacing                   -> single
+%   - figures and tables after the paragraph that first mentions them -> [H]
+%   - data availability, conflict of interest and funding statements
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage[T1]{fontenc}
@@ -15,21 +28,21 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{float}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
-\usepackage[numbers,sort&compress]{natbib}
+% APA 7 style references with natbib-compatible \citep / \citet commands.
+\usepackage[natbibapa]{apacite}
 \usepackage[hidelinks]{hyperref}
 
 \input{tikzstyles}
 
-% Let a page carry more float material (figures/tables) before text is
-% pushed to the next page; the defaults leave large gaps when a figure and a
-% table with a long caption land on the same page.
-\renewcommand{\topfraction}{0.95}
-\renewcommand{\floatpagefraction}{0.9}
-\renewcommand{\textfraction}{0.05}
-\setcounter{topnumber}{3}
+% JASIST: "Figures and tables should be positioned in the manuscript after
+% the paragraph in which they are first mentioned." [H] puts every float
+% exactly where it stands in the source.
+\floatplacement{figure}{H}
+\floatplacement{table}{H}
 
 % Fragments are input only when they exist, so the skeleton still builds
 % while a run is half finished. A table that references a command from a
@@ -42,46 +55,46 @@
 \title{CascadeRAG: Abstention-Triggered Escalation\\
 that Outperforms Costlier Retrieval-Augmented Generation\\
 Architectures at a Fraction of their Cost}
-\author{Miko{\l}aj Semeniuk\\ Warsaw University of Technology \and Agnieszka Jastrz{\k{e}}bska\\ Warsaw University of Technology}
+\author{Miko{\l}aj Semeniuk$^{1,*}$ \and Agnieszka Jastrz{\k{e}}bska$^{1}$\\[2ex]
+\normalsize $^{1}$Faculty of Mathematics and Information Science,
+Warsaw University of Technology,\\
+\normalsize Koszykowa 75, 00-662 Warsaw, Poland\\[1ex]
+\normalsize $^{*}$Corresponding author: \href{mailto:m.semeniuk@icloud.com}{m.semeniuk@icloud.com},
+ORCID \href{https://orcid.org/0009-0001-2247-2004}{0009-0001-2247-2004}}
 \date{}
 
 \begin{document}
 
 \maketitle
 
+% JASIST: an informative abstract of at most 200 words.
 \begin{abstract}
 Retrieval-Augmented Generation (RAG) grounds a language model's answers in
-an external document collection, and a large family of architectural
-refinements --- hybrid retrieval, cross-encoder reranking, hypothetical
-document embeddings, corrective retrieval, iterative retrieval, routing
---- competes for a place in practical systems. Published evaluations of
-these refinements are rarely comparable: each uses its own corpus,
-retriever, generator, and context budget. We present a controlled
-comparison of thirteen RAG architectures on a single stack --- one
-21-million-passage corpus, one embedding model, one generator, one answer
-prompt --- over five question sets and more than 37{,}000 questions, with
-paired significance tests under multiplicity control, budget-matched
-controls, abstention measured separately from error, and retrieval read
-against the ceiling the corpus imposes, which we measure. No refinement is
-universally safe: the strongest one, cross-encoder reranking, gains
-$+0.051$ Exact Match on one question set and loses $-0.100$ on another. A
-per-question diagnosis of \emph{why} retrieval fails explains these
-reversals and yields a novel design we call CascadeRAG: retrieve with a fusion
-of dense, lexical, and cross-encoder rankings, and escalate to a more
-expensive strategy only when the reader itself, having seen the evidence,
-declines to answer --- a posterior signal that is provably lossless under
-Exact Match, so escalation cannot discard a correct answer. Across
-\ResultPairs{} paired (baseline, question set) comparisons CascadeRAG
-wins \ResultWins{},
-loses \ResultLosses{}, and ties \ResultTies{}, at 1.16--1.58 generator
-calls per question against 2.3--3.0 for iterative and corrective methods,
-and the result replicates under a second, unrelated generator. Two
-negative results are documented along the way: neighbour-chunk expansion
-adds nothing once context size is controlled, and answer-token confidence
-adds nothing over the abstention signal it accompanies. Every number in
-the article is generated from the per-question logs by the released
-benchmark pipeline.
+an external document collection, and many architectural refinements
+compete for a place in practical systems. Their published evaluations are
+rarely comparable, because each uses its own corpus, retriever, generator,
+and context budget. We present a controlled comparison of thirteen RAG
+architectures on a single stack (one 21-million-passage corpus, one
+embedding model, one generator, one prompt) over five question sets and
+more than 37{,}000 questions, with paired significance tests under
+multiplicity control, budget-matched controls, abstention measured
+separately from error, and retrieval read against the measured ceiling the
+corpus imposes. No refinement is universally safe: cross-encoder reranking
+gains $+0.051$ Exact Match on one question set and loses $0.100$ on
+another. A per-question diagnosis of why retrieval fails explains these
+reversals and yields a novel design, CascadeRAG: retrieve with a fusion of
+dense, lexical, and cross-encoder rankings, and escalate to a costlier
+strategy only when the reader itself declines to answer, a posterior signal
+that is provably lossless under Exact Match. Across \ResultPairs{} paired
+comparisons CascadeRAG wins \ResultWins{}, loses \ResultLosses{}, and ties
+\ResultTies{}, at 1.16--1.58 generator calls per question against 2.3--3.0
+for iterative and corrective methods, and replicates under a second
+generator.
 \end{abstract}
+
+\noindent\textbf{Keywords:} retrieval-augmented generation; large language
+models; question answering; information retrieval; evaluation methodology;
+cascade architectures
 
 \input{01-introduction}
 \input{02-background}
@@ -93,9 +106,28 @@ benchmark pipeline.
 \input{08-discussion}
 \input{09-conclusion}
 
-\input{appendix}
+% Declarations required by the journal.
+\section*{Acknowledgements}
+% TODO before submission: add acknowledgements or delete this section.
+[Acknowledgements, if any.]
 
-\bibliographystyle{unsrtnat}
+\section*{Funding}
+% TODO before submission: name the funding source or keep the sentence below.
+This research received no specific grant from any funding agency in the
+public, commercial, or not-for-profit sectors.
+
+\section*{Conflict of interest}
+The authors declare no conflict of interest.
+
+\section*{Data availability statement}
+The benchmark code, the analysis tools, the per-question logs of every
+run, the generated result fragments, and the source of this manuscript and
+of its Supplementary Material are openly available at
+\url{https://github.com/mikolajsemeniuk/ragbench}. The corpus and the
+question sets are the publicly released FlashRAG versions
+\citep{jin2024flashrag}.
+
+\bibliographystyle{apacite}
 \bibliography{references}
 
 \end{document}

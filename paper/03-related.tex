@@ -1,4 +1,4 @@
-\section{Related Work}
+\section{Related work}
 \label{sec:related}
 
 \paragraph{Retrieval-augmented generation.}
@@ -57,7 +57,7 @@ indexing step itself involves large-scale LLM calls over the corpus --- and
 systematic evaluation finds their advantage concentrated in query-focused
 summarisation rather than factoid QA~\cite{han2025ragvsgraphrag}; we
 therefore exclude them from a comparison whose corpus is 21M passages, and
-note the exclusion as a limitation (Section~\ref{sec:limitations}).
+note the exclusion as a limitation (see Section~\ref{sec:limitations}).
 
 \paragraph{Benchmarks and evaluation.}
 FlashRAG~\cite{jin2024flashrag} standardises datasets, corpora, and
@@ -75,7 +75,7 @@ ceiling and of abstention as a behaviour distinct from error; and a
 per-question failure diagnosis that connects each architecture's gain to
 the failure mode it repairs.
 
-\paragraph{Cascades.}
+\paragraph{Cascades (the new approach).}
 Deferring expensive computation until a cheap stage proves insufficient has
 a long history --- boosted detector cascades in
 vision~\cite{viola2001cascade} and cascade ranking in

@@ -1,7 +1,7 @@
-\section{The Architectures Under Study}
+\section{The architectures under study}
 \label{sec:architectures}
 
-We compare thirteen architectures: a no-retrieval floor, the naive
+We compare thirteen architectures: a no-retrieval bottom line, the naive
 baseline at three context budgets, and nine refinements drawn from the
 families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
 them by the shape of their control flow, following the taxonomy of
@@ -26,28 +26,33 @@ diagnosis of Section~\ref{sec:results-diagnosis}.
 \node[comp, fill=orange!15, below right=8mm and 30mm of root, minimum width=24mm] (ite) {Iterative\\ \scriptsize loop};
 \draw[arr] (root) -- (seq); \draw[arr] (root) -- (bra);
 \draw[arr] (root) -- (con); \draw[arr] (root) -- (ite);
-\node[lbl, below=2mm of seq, text width=34mm] {ClosedBook$^{*}$\\ NaiveRAG (5/10/12)\\ BM25 \quad Hybrid\\ Rerank \quad Neighbour\\ \textbf{Fused} (\S\ref{sec:cascade})};
+\node[lbl, below=2mm of seq, text width=34mm] {ClosedBook$^{*}$\\ NaiveRAG (5/10/12)\\ BM25 \quad Hybrid\\ Rerank \quad Neighbour\\ \textbf{Fused} (Section~\ref{sec:cascade})};
 \node[lbl, below=2mm of bra, text width=26mm] {HyDE};
-\node[lbl, below=2mm of con, text width=30mm] {CRAG (5/10)\\ Adaptive-RAG\\ \textbf{Cascade} (\S\ref{sec:cascade})};
+\node[lbl, below=2mm of con, text width=30mm] {CRAG (5/10)\\ Adaptive-RAG\\ \textbf{Cascade} (Section~\ref{sec:cascade})};
 \node[lbl, below=2mm of ite, text width=24mm] {IRCoT\\ (zero- and one-shot)};
 \end{tikzpicture}
 \caption{The compared architectures grouped by control flow.
-$^{*}$ClosedBook retrieves nothing and serves as the floor. The two
+$^{*}$ClosedBook retrieves nothing and serves as a bottom line method for
+comparisons. The two
 architectures in bold are introduced in Section~\ref{sec:cascade}.}
 \label{fig:taxonomy}
 \end{figure}
 
 \begin{table}[t]
 \centering\small
-\caption{Qualitative comparison. ``Calls'' is generator calls per question;
-``budget'' is passages placed in the generator's context. The measured
+\caption{Qualitative comparison. ``Modifies'' names the part of the naive
+pipeline (Figure~\ref{fig:naive-pipeline}) that the architecture changes;
+``Calls'' is the number of generator calls per question; ``Budget'' is the
+number of passages placed in the generator's context; ``Targets'' is the
+retrieval failure cause (Section~\ref{sec:results-diagnosis}) the
+architecture is meant to repair. The measured
 per-question costs are in Table~\ref{tab:cost}.}
 \label{tab:qualitative}
 \begin{tabular}{lllll}
 \toprule
 Architecture & Modifies & Calls & Budget & Targets \\
 \midrule
-ClosedBook & removes retrieval & 1 & 0 & (cost floor) \\
+ClosedBook & removes retrieval & 1 & 0 & (bottom line) \\
 NaiveRAG & --- (baseline) & 1 & 5 & --- \\
 NaiveRAG 10/12 & context budget & 1 & 10/12 & (budget controls) \\
 BM25 & retriever (lexical) & 1 & 5 & rare surface forms \\
@@ -64,12 +69,12 @@ Cascade (proposed) & retrieval + escalation & $\sim$1.3 & $\le$5 & all of the ab
 \end{tabular}
 \end{table}
 
-\subsection{ClosedBook: the floor}
+\subsection{ClosedBook: the bottom line method for comparisons}
 \label{sec:arch-closedbook}
 
 The generator answers from parametric knowledge alone, with the same
 answer-only prompt as every other row minus the documents. This is the
-floor each retrieval number must be read against: a 7B model has memorised
+bottom line each retrieval number must be read against: a 7B model has memorised
 a large amount of Wikipedia-scale trivia (it answers
 \ClosedBookTriviaQAEM{} of TriviaQA without any retrieval), so a high RAG
 score does not by itself show that retrieval contributed anything. The
@@ -81,15 +86,15 @@ out to be an artefact of abstention behaviour rather than knowledge
 \subsection{NaiveRAG: the baseline and its budget controls}
 \label{sec:arch-naive}
 
-The pipeline of Figure~\ref{fig:naive-pipeline} verbatim: embed the
-question, retrieve the top five passages, generate. Two further rows run
+The pipeline shown in Figure~\ref{fig:naive-pipeline}, used without any
+change: embed the question, retrieve the top five passages, generate. Two further rows run
 the identical pipeline with ten and twelve passages. These exist because
 several refinements below place more than five passages in the context, and
 context size alone is worth measurable Exact Match (naive-10 gains $+0.022$
 over naive-5 on 2WikiMultihopQA); comparing an architecture that reads ten
 passages against a five-passage baseline would credit the architecture with
 what is merely a larger budget. Throughout the article, every comparison
-is made at matched budget.
+is made at a matched budget.
 
 \subsection{BM25 and Hybrid retrieval}
 \label{sec:arch-hybrid}
@@ -98,9 +103,9 @@ is made at matched budget.
 \centering
 \begin{tikzpicture}[node distance=4mm and 7mm]
 \node[q] (q) {Question};
-\node[ret, above right=2mm and 9mm of q] (dense) {Dense search\\ \scriptsize bi-encoder, top 50};
-\node[ret, below right=2mm and 9mm of q] (lex) {Lexical search\\ \scriptsize BM25, top 50};
-\node[comp, fill=blue!6, right=30mm of q] (rrf) {RRF\\ \scriptsize merge ranks};
+\node[ret, above right=5mm and 9mm of q] (dense) {Dense search\\ \scriptsize bi-encoder, top 50};
+\node[ret, below right=5mm and 9mm of q] (lex) {Lexical search\\ \scriptsize BM25, top 50};
+\node[comp, fill=blue!6, right=44mm of q] (rrf) {RRF\\ \scriptsize merge ranks};
 \node[llm, right=of rrf] (gen) {Generator};
 \node[ans, right=of gen] (a) {Answer};
 \draw[arr] (q) -- (dense); \draw[arr] (q) -- (lex);
@@ -114,7 +119,7 @@ the dense branch removed.}
 \label{fig:arch-hybrid}
 \end{figure}
 
-The two retrievers fail in opposite ways. The dense retriever understands
+The two retrievers fail in different ways. The dense retriever understands
 paraphrase but blurs rare surface forms (the lossy compression of
 Section~\ref{sec:embeddings}); the lexical one matches names exactly but is
 blind to a question that never uses the passage's vocabulary. Hybrid
@@ -168,15 +173,15 @@ shortlist.
 \subsection{Neighbour expansion}
 \label{sec:arch-neighbour}
 
-Wikipedia articles are chunked into $\sim$100-word passages with no regard
+Wikipedia articles are chunked into approx.\ 100-word passages with no regard
 for where a fact ends, so the retriever can land on the paragraph about the
 right entity while the sentence carrying the answer sits in the next chunk.
 Neighbour expansion retrieves as NaiveRAG does, then adds, for every hit,
 the passages adjacent to it in the same article (radius one, capped at
-fifteen passages, $\sim$11.5 in practice). It is included to \emph{test}
-the chunking hypothesis rather than because our diagnosis supports it ---
-the ``wrong slice'' bucket is only 5--14\% of failures --- and it is read
-against the twelve-passage control, because its expanded context would
+fifteen passages, $\sim$11.5 in practice). It is included in order to \emph{test}
+the chunking hypothesis, not because our diagnosis supports it: the
+``wrong slice'' bucket is only 5--14\% of failures. It is read against
+the twelve-passage control, because its expanded context would
 otherwise masquerade as a retrieval gain.
 
 \subsection{HyDE: search with a hypothetical document}
@@ -204,7 +209,7 @@ discarded --- only its vector is used.}
 \label{fig:arch-hyde}
 \end{figure}
 
-A question and the passage that answers it are different kinds of text:
+A question and a passage that answers it are different kinds of text:
 ``Where was the place of death of the director of film Beat Girl?'' shares
 almost no vocabulary with a paragraph about Edmond T.\ Gr\'eville. HyDE
 \cite{gao2022hyde} removes the mismatch by asking the generator to write

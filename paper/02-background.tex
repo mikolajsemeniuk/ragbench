@@ -1,4 +1,4 @@
-\section{Background: How Retrieval-Augmented Generation Works}
+\section{Background: how Retrieval-Augmented Generation works}
 \label{sec:background}
 
 This section is a self-contained primer. Readers familiar with dense
@@ -191,9 +191,8 @@ $k=5$), and the generator receives a prompt of the form ``Answer the
 question based on the given documents\ldots'' followed by the passages and
 the question.
 
-Everything that can go wrong in this pipeline goes wrong in one of a few
-ways: the passage that answers the question is in the corpus but ranked
-below the top~$k$; it is unreachable because the question's own words are
+This pipeline can fail in one of a few ways: the passage that answers the
+question is in the corpus but ranked below the top~$k$; it is unreachable because the question's own words are
 too far from it in embedding space; the right article was found but the
 wrong hundred-word slice of it was taken; or the answer simply is not in
 the corpus. Which of these dominates depends on the question distribution,

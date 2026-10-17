@@ -1,46 +1,63 @@
 This is BibTeX, Version 0.99e (TeX Live 2026)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
-The style file: unsrtnat.bst
+The style file: apacite.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: references.bib
+apacite.bst [2013/07/21 v6.03 APA bibliography style]
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
 You've used 70 entries,
-            2481 wiz_defined-function locations,
-            840 strings with 19228 characters,
-and the built_in function-call counts, 27050 in all, are:
-= -- 1701
-> -- 2256
-< -- 23
-+ -- 826
-- -- 686
-* -- 2162
-:= -- 4678
-add.period$ -- 210
+            6951 wiz_defined-function locations,
+            1557 strings with 25566 characters,
+and the built_in function-call counts, 155289 in all, are:
+= -- 19356
+> -- 1528
+< -- 7127
++ -- 7538
+- -- 154
+* -- 9528
+:= -- 26389
+add.period$ -- 330
 call.type$ -- 70
-change.case$ -- 140
-chr.to.int$ -- 70
-cite$ -- 70
-duplicate$ -- 1404
-empty$ -- 2330
-format.name$ -- 778
-if$ -- 5554
-int.to.chr$ -- 1
-int.to.str$ -- 71
-missing$ -- 70
-newline$ -- 358
-num.names$ -- 210
-pop$ -- 739
+change.case$ -- 1225
+chr.to.int$ -- 0
+cite$ -- 140
+duplicate$ -- 4797
+empty$ -- 5973
+format.name$ -- 2923
+if$ -- 29573
+int.to.chr$ -- 0
+int.to.str$ -- 210
+missing$ -- 0
+newline$ -- 1879
+num.names$ -- 560
+pop$ -- 3406
 preamble$ -- 1
-purify$ -- 70
+purify$ -- 280
 quote$ -- 0
-skip$ -- 754
+skip$ -- 10236
 stack$ -- 0
-substring$ -- 140
-swap$ -- 179
-text.length$ -- 3
+substring$ -- 8095
+swap$ -- 2489
+text.length$ -- 156
 text.prefix$ -- 0
-top$ -- 0
-type$ -- 490
-warning$ -- 0
-while$ -- 140
+top$ -- 1
+type$ -- 7840
+warning$ -- 6
+while$ -- 969
 width$ -- 0
-write$ -- 866
+write$ -- 2510
+(There were 6 warnings)

@@ -1,10 +1,8 @@
-\appendix
-
 \section{Full per-set results}
 \label{app:full-tables}
 
 Recall is measured over the passages actually in the generator's context,
-whose mean size is reported beside it (Section~\ref{sec:setup-metrics});
+whose mean size is reported beside it (Section~6.3 of the article);
 ``EM answ.''\ is Exact Match restricted to the questions the system did
 not decline. Dashes mark metrics that are undefined for a row (ClosedBook
 retrieves nothing; NaturalQuestions and TriviaQA annotate no gold
@@ -169,7 +167,7 @@ Cascade, calls/question & \CascadeLlamaMuSiQueLLMCalls & \CascadeLlamaHotpotQALL
 
 Swept offline over \SweepQuestions{} sampled train questions by composing
 the three independently-run stages question by question
-(Section~\ref{sec:cascade-confidence}). ``Escalated'' counts stage-1
+(Section~5.3 of the article). ``Escalated'' counts stage-1
 answers handed on at that threshold, ``discarded'' the correct answers
 among them, ``missed'' those no later stage recovered. Exact Match peaks
 at \SweepBestEM{} (threshold \SweepBestThreshold) against
@@ -190,7 +188,7 @@ Threshold & EM & F1 & Calls & Escalated & Discarded & Missed \\
 
 All prompts, verbatim from the implementation. The reader prompt is shared
 by every architecture; the instruction to output only the answer exists
-because the gold answers are short spans (Section~\ref{sec:setup-metrics}).
+because the gold answers are short spans (Section~6.3 of the article).
 
 \paragraph{Reader (all architectures).}
 \begin{quote}\small\ttfamily\raggedright

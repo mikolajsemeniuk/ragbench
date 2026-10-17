@@ -1,0 +1,50 @@
+% Supplementary Material for the JASIST submission. It holds what used to be
+% the appendix of the article (appendix.tex): full per-set result tables,
+% the confidence-threshold sweep and the prompts. JASIST asks for
+% supplemental material as a separate file, and does not count it towards
+% the 7,000-word limit. Sections are numbered S1, S2, S3 and the article
+% refers to them by those numbers.
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage[natbibapa]{apacite}
+\usepackage[hidelinks]{hyperref}
+
+\floatplacement{figure}{H}
+\floatplacement{table}{H}
+
+% Number everything with an S prefix so that it cannot be confused with the
+% article's own sections, tables and figures.
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\newcommand{\useresults}[1]{\IfFileExists{#1.gen.tex}{\input{#1.gen.tex}}{}}
+\input{fragments}
+
+\title{Supplementary Material for\\
+``CascadeRAG: Abstention-Triggered Escalation\\
+that Outperforms Costlier Retrieval-Augmented Generation\\
+Architectures at a Fraction of their Cost''}
+\author{Miko{\l}aj Semeniuk \and Agnieszka Jastrz{\k{e}}bska\\[1ex]
+\normalsize Faculty of Mathematics and Information Science,
+Warsaw University of Technology, Warsaw, Poland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{appendix}
+
+\bibliographystyle{apacite}
+\bibliography{references}
+
+\end{document}

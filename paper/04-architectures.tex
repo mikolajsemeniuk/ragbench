@@ -1,7 +1,22 @@
-% The taxonomy figure and Table 1 are placed before the section heading so
-% that LaTeX meets them early enough to put them at the top of the page on
-% which Section 4 starts.
-\begin{figure}[!t]
+\section{The architectures under study}
+\label{sec:architectures}
+
+We compare thirteen architectures: a no-retrieval bottom line, the naive
+baseline at three context budgets, and nine refinements drawn from the
+families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
+them by the shape of their control flow, following the taxonomy of
+\citet{jin2024flashrag}: \emph{sequential} architectures run the pipeline of
+Figure~\ref{fig:naive-pipeline} once, changing only which passages reach
+the generator; \emph{branching} architectures add a generation step before
+retrieval; \emph{conditional} architectures inspect intermediate state and
+choose among actions; \emph{iterative} architectures loop.
+Table~\ref{tab:qualitative} summarises what each one changes and what it
+costs. Each architecture below is described with the same template ---
+what it changes, how it works step by step, and what it costs --- and each
+description states the measured failure mode it targets, anticipating the
+diagnosis of Section~\ref{sec:results-diagnosis}.
+
+\begin{figure}
 \centering
 \begin{tikzpicture}[node distance=3mm and 5mm]
 \node[comp, fill=black!10, minimum width=32mm] (root) {13 architectures};
@@ -55,24 +70,6 @@ Cascade (proposed) & retrieval + escalation & $\sim$1.3 & $\le$5 & all of the ab
 \bottomrule
 \end{tabular}
 \end{figure}
-
-\section{The architectures under study}
-\label{sec:architectures}
-
-We compare thirteen architectures: a no-retrieval bottom line, the naive
-baseline at three context budgets, and nine refinements drawn from the
-families of Section~\ref{sec:related}. Figure~\ref{fig:taxonomy} groups
-them by the shape of their control flow, following the taxonomy of
-\cite{jin2024flashrag}: \emph{sequential} architectures run the pipeline of
-Figure~\ref{fig:naive-pipeline} once, changing only which passages reach
-the generator; \emph{branching} architectures add a generation step before
-retrieval; \emph{conditional} architectures inspect intermediate state and
-choose among actions; \emph{iterative} architectures loop.
-Table~\ref{tab:qualitative} summarises what each one changes and what it
-costs. Each architecture below is described with the same template ---
-what it changes, how it works step by step, and what it costs --- and each
-description states the measured failure mode it targets, anticipating the
-diagnosis of Section~\ref{sec:results-diagnosis}.
 
 \subsection{ClosedBook: the bottom line method for comparisons}
 \label{sec:arch-closedbook}
@@ -129,7 +126,7 @@ paraphrase but blurs rare surface forms (the lossy compression of
 Section~\ref{sec:embeddings}); the lexical one matches names exactly but is
 blind to a question that never uses the passage's vocabulary. Hybrid
 retrieval runs both and merges the rankings with Reciprocal Rank
-Fusion~\cite{cormack2009rrf}:
+Fusion~\citep{cormack2009rrf}:
 \begin{equation}
 \mathrm{RRF}(d) \;=\; \sum_{r \,\in\, \text{rankings}} \frac{1}{k + r(d)},
 \qquad k = 60,
@@ -217,7 +214,7 @@ discarded --- only its vector is used.}
 A question and a passage that answers it are different kinds of text:
 ``Where was the place of death of the director of film Beat Girl?'' shares
 almost no vocabulary with a paragraph about Edmond T.\ Gr\'eville. HyDE
-\cite{gao2022hyde} removes the mismatch by asking the generator to write
+\citep{gao2022hyde} removes the mismatch by asking the generator to write
 the passage it \emph{thinks} would answer the question and searching with
 that instead. The draft is usually wrong in its details and it does not
 matter: it only has to look like the right passage so that the encoder
@@ -259,7 +256,7 @@ that answers it. Measured on the baseline, recall over the context falls
 from \NaiveRAGHotpotQARecallInContext{} on HotpotQA to
 \NaiveRAGTwoWikiRecallInContext{} on 2WikiMultihopQA to
 \NaiveRAGMuSiQueRecallInContext{} on MuSiQue as the number of required hops
-grows. IRCoT~\cite{trivedi2023ircot} alternates: reason one sentence over
+grows. IRCoT~\citep{trivedi2023ircot} alternates: reason one sentence over
 what has been retrieved, use that sentence as the next query, add what
 comes back, repeat (up to four rounds or fifteen passages). The final
 answer is produced by the same reader prompt as NaiveRAG over the
@@ -302,7 +299,7 @@ NaiveRAG hands the generator whatever came back and hopes it is relevant;
 the baseline measurements say how often that hope is misplaced (a gold
 answer appears in the retrieved context for only
 \NaiveRAGTwoWikiAnswerInContext{} of 2WikiMultihopQA questions).
-CRAG~\cite{yan2024crag} adds the missing step: judge the retrieval before
+CRAG~\citep{yan2024crag} adds the missing step: judge the retrieval before
 using it, and act when it is bad. Our implementation deviates from the
 paper in three deliberate, named ways, and is labelled ``CRAG (offline,
 corpus-only)'' throughout: the generator itself grades relevance in one
@@ -342,7 +339,7 @@ say that is wrong in both directions: on TriviaQA the generator already
 knows \ClosedBookTriviaQAEM{} of the answers with no retrieval, so running
 IRCoT over them spends up to six calls to arrive where one would have
 done, while on MuSiQue a single query reaches the answer-bearing article
-for barely a fifth of questions. Adaptive-RAG~\cite{jeong2024adaptiverag}
+for barely a fifth of questions. Adaptive-RAG~\citep{jeong2024adaptiverag}
 routes each question --- here with a single generator classification call
 rather than the paper's trained classifier, for the same
 no-extra-models reason as CRAG --- to closed-book, single-step, or IRCoT.

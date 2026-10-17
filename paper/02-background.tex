@@ -9,28 +9,28 @@ introduced here is used later to explain a measured result.
 \label{sec:why-rag}
 
 A large language model stores what it knows in its
-weights~\cite{brown2020gpt3,petroni2019lmkb} --- so-called
+weights~\citep{brown2020gpt3,petroni2019lmkb} --- so-called
 \emph{parametric} knowledge, acquired once, during training. Three
 consequences follow. First, the knowledge is \emph{frozen}: a model trained
 in 2024 knows nothing that happened afterwards. Second, it is
 \emph{incomplete and unreliable}: how much a model retains depends on how
-often it saw a fact~\cite{roberts2020knowledge,kandpal2023longtail} ---
+often it saw a fact~\citep{roberts2020knowledge,kandpal2023longtail} ---
 popular facts appear thousands of times where rare facts appear once or
-never~\cite{mallen2023popqa} --- and when asked about the latter it tends
+never~\citep{mallen2023popqa} --- and when asked about the latter it tends
 to produce fluent, plausible, wrong answers ---
-hallucinations~\cite{ji2023hallucination,zhang2023sirens}. Third, it is
+hallucinations~\citep{ji2023hallucination,zhang2023sirens}. Third, it is
 \emph{closed}: an
 organisation's internal documentation, product catalogue, or case history
 was never in the training data at all.
 
 The obvious remedy --- continue training the model on the missing documents
 --- is rarely practical. Full retraining of even a mid-sized model costs
-GPU-months; parameter-efficient fine-tuning~\cite{hu2022lora} is cheaper
+GPU-months; parameter-efficient fine-tuning~\citep{hu2022lora} is cheaper
 but must be repeated every time the documents change, offers no
 attribution (the model still cannot say \emph{where} an answer came
 from), and injects new factual knowledge less reliably than simply
-retrieving it~\cite{ovadia2024finetuning}. Retrieval-Augmented
-Generation~\cite{lewis2020rag} sidesteps the problem: the documents stay
+retrieving it~\citep{ovadia2024finetuning}. Retrieval-Augmented
+Generation~\citep{lewis2020rag} sidesteps the problem: the documents stay
 outside the model, in a searchable index that can be updated by inserting
 or deleting a record, and at question time the system retrieves the few
 passages most relevant to the question and prepends them to the model's
@@ -48,10 +48,10 @@ just by shared words --- ``Where did the director of Beat Girl die?'' shares
 almost no vocabulary with the encyclopedia paragraph that answers it. The
 standard tool is the \emph{text embedding}: a neural network (the
 \emph{embedding model} or \emph{encoder}, typically a Transformer
-encoder~\cite{vaswani2017attention,devlin2019bert}) that maps a piece of
+encoder~\citep{vaswani2017attention,devlin2019bert}) that maps a piece of
 text to a vector of a few hundred real numbers, trained so that texts
 with similar meaning land close together in that vector
-space~\cite{reimers2019sbert}.
+space~\citep{reimers2019sbert}.
 
 Closeness is measured by \emph{cosine similarity}: the cosine of the angle
 between two vectors, which is $1$ for parallel vectors, $0$ for orthogonal
@@ -104,7 +104,7 @@ milliseconds. The price is that the encoder never sees the question and the
 passage \emph{together}, so it cannot model their interaction; it matches
 what a question is \emph{about}.
 
-A \emph{cross-encoder}~\cite{nogueira2019passage} reads the concatenated
+A \emph{cross-encoder}~\citep{nogueira2019passage} reads the concatenated
 (question, passage) pair through one network and outputs a relevance score.
 Seeing both texts jointly, it can judge whether the passage actually
 answers the question --- what the question is \emph{asking for} --- far
@@ -123,10 +123,10 @@ Storing millions of embedding vectors and answering ``which stored vectors
 are most similar to this query vector'' is the job of a \emph{vector
 database}. Comparing the query against every stored vector (exact search)
 is linear in corpus size; even GPU-accelerated exact
-search~\cite{johnson2019faiss} is a poor fit for serving interactive
+search~\citep{johnson2019faiss} is a poor fit for serving interactive
 queries at the 21-million-passage scale used here. Vector databases therefore build an
 \emph{approximate nearest neighbour} (ANN) index --- most commonly a
-Hierarchical Navigable Small World graph (HNSW)~\cite{malkov2020hnsw}, a
+Hierarchical Navigable Small World graph (HNSW)~\citep{malkov2020hnsw}, a
 layered proximity graph walked greedily from an entry point towards the
 query. The walk inspects a small fraction of the corpus and returns the
 nearest vectors it visited, trading a tunable amount of recall for orders of
@@ -139,7 +139,7 @@ Alongside each vector, the database stores the passage text and its
 identifier, so a search returns readable passages, ready to be placed in a
 prompt. The same database can also host a \emph{sparse} (lexical) index, in
 which a passage is represented by weighted term counts and matching is by
-exact term overlap under BM25 scoring~\cite{robertson2009bm25} --- the
+exact term overlap under BM25 scoring~\citep{robertson2009bm25} --- the
 modern packaging of classical keyword search, and the complement to dense
 retrieval used by the hybrid architectures below.
 
@@ -200,9 +200,9 @@ and measuring that split --- rather than guessing it --- is what
 Section~\ref{sec:results-diagnosis} contributes; the architectures of
 Section~\ref{sec:architectures} are, in effect, one remedy per failure
 mode. The generation side has failure modes of its own --- readers use
-passages unevenly by position in the context~\cite{liu2024lost}, react
-measurably to irrelevant passages~\cite{cuconasu2024noise}, and
+passages unevenly by position in the context~\citep{liu2024lost}, react
+measurably to irrelevant passages~\citep{cuconasu2024noise}, and
 engineering surveys catalogue further failure points across the
-pipeline~\cite{barnett2024seven} --- but on this benchmark the bulk of
+pipeline~\citep{barnett2024seven} --- but on this benchmark the bulk of
 the measurable headroom sits in retrieval, which is where the diagnosis
 looks.

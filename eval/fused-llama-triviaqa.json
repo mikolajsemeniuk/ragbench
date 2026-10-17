@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "FusedLlamaTriviaQAQuestions",
+      "value": "11298"
+    },
+    {
+      "name": "FusedLlamaTriviaQAEM",
+      "value": "0.6086"
+    },
+    {
+      "name": "FusedLlamaTriviaQAFOne",
+      "value": "0.7023"
+    },
+    {
+      "name": "FusedLlamaTriviaQAAbstentionRate",
+      "value": "0.0316"
+    },
+    {
+      "name": "FusedLlamaTriviaQAAnsweredQuestions",
+      "value": "10941"
+    },
+    {
+      "name": "FusedLlamaTriviaQAEMAnswered",
+      "value": "0.6285"
+    },
+    {
+      "name": "FusedLlamaTriviaQAFOneAnswered",
+      "value": "0.7237"
+    },
+    {
+      "name": "FusedLlamaTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "FusedLlamaTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "FusedLlamaTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "FusedLlamaTriviaQAAnswerInContext",
+      "value": "0.7630"
+    },
+    {
+      "name": "FusedLlamaTriviaQAAnswerInContextQuestions",
+      "value": "11298"
+    },
+    {
+      "name": "FusedLlamaTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "FusedLlamaTriviaQAPromptTokens",
+      "value": "792"
+    },
+    {
+      "name": "FusedLlamaTriviaQACompletionTokens",
+      "value": "6"
+    },
+    {
+      "name": "FusedLlamaTriviaQAThroughput",
+      "value": "2.54"
+    },
+    {
+      "name": "FusedLlamaTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

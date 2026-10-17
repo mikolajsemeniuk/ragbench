@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "RerankVsCascadeNQPaired",
+      "value": "3603"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchA",
+      "value": "0.2351"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchB",
+      "value": "0.3417"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchDiff",
+      "value": "+0.1066"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchCILow",
+      "value": "+0.0916"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchCIHigh",
+      "value": "+0.1213"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQFA",
+      "value": "0.3177"
+    },
+    {
+      "name": "RerankVsCascadeNQFB",
+      "value": "0.4603"
+    },
+    {
+      "name": "RerankVsCascadeNQFDiff",
+      "value": "+0.1426"
+    },
+    {
+      "name": "RerankVsCascadeNQFCILow",
+      "value": "+0.1285"
+    },
+    {
+      "name": "RerankVsCascadeNQFCIHigh",
+      "value": "+0.1571"
+    },
+    {
+      "name": "RerankVsCascadeNQFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionA",
+      "value": "0.2773"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionB",
+      "value": "0.0316"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionDiff",
+      "value": "-0.2456"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionCILow",
+      "value": "-0.2601"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionCIHigh",
+      "value": "-0.2309"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredA",
+      "value": "0.3273"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredB",
+      "value": "0.3923"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredDiff",
+      "value": "+0.0651"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredCILow",
+      "value": "+0.0480"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredCIHigh",
+      "value": "+0.0821"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextA",
+      "value": "0.5099"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextB",
+      "value": "0.6748"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextDiff",
+      "value": "+0.1650"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextCILow",
+      "value": "+0.1475"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextCIHigh",
+      "value": "+0.1827"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxB",
+      "value": "4.5157"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxDiff",
+      "value": "-0.4843"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxCILow",
+      "value": "-0.5329"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxCIHigh",
+      "value": "-0.4371"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsB",
+      "value": "1.4377"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsDiff",
+      "value": "+0.4377"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsCILow",
+      "value": "+0.4061"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsCIHigh",
+      "value": "+0.4699"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensA",
+      "value": "836.5853"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensB",
+      "value": "985.9142"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensDiff",
+      "value": "+149.3289"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensCILow",
+      "value": "+137.5729"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensCIHigh",
+      "value": "+161.0033"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysA",
+      "value": "25.3039"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysB",
+      "value": "32.2624"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysDiff",
+      "value": "+6.9585"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysCILow",
+      "value": "+6.4925"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysCIHigh",
+      "value": "+7.4275"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

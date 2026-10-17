@@ -1,0 +1,29 @@
+{
+  "generator": "cmd/result",
+  "commands": [
+    {
+      "name": "ResultLlamaPairs",
+      "value": "20"
+    },
+    {
+      "name": "ResultLlamaWins",
+      "value": "16"
+    },
+    {
+      "name": "ResultLlamaLosses",
+      "value": "2"
+    },
+    {
+      "name": "ResultLlamaTies",
+      "value": "2"
+    },
+    {
+      "name": "ResultLlamaTable",
+      "value": "%\n\\begin{tabular}{lrrrrr}\n\\toprule\nBaseline (calls/q) & NQ & TriviaQA & HotpotQA & 2Wiki & MuSiQue \\\\\n\\midrule\nClosedBook (no retrieval) (1.0) & \\textbf{+0.119} & \\textbf{+0.033} & \\textbf{+0.152} & \\underline{-0.016} & \\textbf{+0.051} \\\\\nNaiveRAG, 5 passages (1.0) & \\textbf{+0.016} & \\textbf{+0.028} & \\textbf{+0.035} & \\textbf{+0.054} & \\textbf{+0.023} \\\\\nRerank (cross-encoder) (1.0) & \\textbf{+0.104} & +0.007 & \\underline{-0.016} & \\textbf{+0.017} & -0.007 \\\\\nFused retrieval (stage 1 alone) (1.0) & \\textbf{+0.009} & \\textbf{+0.008} & \\textbf{+0.007} & \\textbf{+0.022} & \\textbf{+0.009} \\\\\n\\midrule\nCascade calls/q & 1.16 & 1.08 & 1.14 & 1.29 & 1.41 \\\\\n\\bottomrule\n\\end{tabular}"
+    }
+  ],
+  "comments": [
+    "A cell is the paired Exact Match difference (Cascade minus baseline). Bold: Cascade is significantly better;",
+    "underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell."
+  ]
+}

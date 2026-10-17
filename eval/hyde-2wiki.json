@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HyDETwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "HyDETwoWikiEM",
+      "value": "0.2449"
+    },
+    {
+      "name": "HyDETwoWikiFOne",
+      "value": "0.3132"
+    },
+    {
+      "name": "HyDETwoWikiAbstentionRate",
+      "value": "0.1573"
+    },
+    {
+      "name": "HyDETwoWikiAnsweredQuestions",
+      "value": "10597"
+    },
+    {
+      "name": "HyDETwoWikiEMAnswered",
+      "value": "0.2906"
+    },
+    {
+      "name": "HyDETwoWikiFOneAnswered",
+      "value": "0.3603"
+    },
+    {
+      "name": "HyDETwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HyDETwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "HyDETwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HyDETwoWikiAnswerInContext",
+      "value": "0.3565"
+    },
+    {
+      "name": "HyDETwoWikiAnswerInContextQuestions",
+      "value": "11267"
+    },
+    {
+      "name": "HyDETwoWikiRecallInContext",
+      "value": "0.3686"
+    },
+    {
+      "name": "HyDETwoWikiMRR",
+      "value": "0.6044"
+    },
+    {
+      "name": "HyDETwoWikiRetrievalEvalQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "HyDETwoWikiLLMCalls",
+      "value": "2.00"
+    },
+    {
+      "name": "HyDETwoWikiPromptTokens",
+      "value": "1014"
+    },
+    {
+      "name": "HyDETwoWikiCompletionTokens",
+      "value": "152"
+    },
+    {
+      "name": "HyDETwoWikiThroughput",
+      "value": "2.49"
+    },
+    {
+      "name": "HyDETwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

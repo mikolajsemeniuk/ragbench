@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "AdaptiveNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "AdaptiveNQEM",
+      "value": "0.3352"
+    },
+    {
+      "name": "AdaptiveNQFOne",
+      "value": "0.4433"
+    },
+    {
+      "name": "AdaptiveNQAbstentionRate",
+      "value": "0.1704"
+    },
+    {
+      "name": "AdaptiveNQAnsweredQuestions",
+      "value": "2995"
+    },
+    {
+      "name": "AdaptiveNQEMAnswered",
+      "value": "0.4040"
+    },
+    {
+      "name": "AdaptiveNQFOneAnswered",
+      "value": "0.5200"
+    },
+    {
+      "name": "AdaptiveNQMeanPassagesInContext",
+      "value": "5.01"
+    },
+    {
+      "name": "AdaptiveNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "AdaptiveNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "AdaptiveNQAnswerInContext",
+      "value": "0.7253"
+    },
+    {
+      "name": "AdaptiveNQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "AdaptiveNQLLMCalls",
+      "value": "2.05"
+    },
+    {
+      "name": "AdaptiveNQPromptTokens",
+      "value": "999"
+    },
+    {
+      "name": "AdaptiveNQCompletionTokens",
+      "value": "22"
+    },
+    {
+      "name": "AdaptiveNQThroughput",
+      "value": "1.99"
+    },
+    {
+      "name": "AdaptiveNQConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "AdaptiveNQRouteClosedbook",
+      "value": "3"
+    },
+    {
+      "name": "AdaptiveNQRouteMulti",
+      "value": "181"
+    },
+    {
+      "name": "AdaptiveNQRouteSingle",
+      "value": "3426"
+    }
+  ]
+}

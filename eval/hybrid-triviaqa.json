@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HybridTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "HybridTriviaQAEM",
+      "value": "0.5835"
+    },
+    {
+      "name": "HybridTriviaQAFOne",
+      "value": "0.6732"
+    },
+    {
+      "name": "HybridTriviaQAAbstentionRate",
+      "value": "0.0666"
+    },
+    {
+      "name": "HybridTriviaQAAnsweredQuestions",
+      "value": "10559"
+    },
+    {
+      "name": "HybridTriviaQAEMAnswered",
+      "value": "0.6252"
+    },
+    {
+      "name": "HybridTriviaQAFOneAnswered",
+      "value": "0.7170"
+    },
+    {
+      "name": "HybridTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HybridTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "HybridTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HybridTriviaQAAnswerInContext",
+      "value": "0.7494"
+    },
+    {
+      "name": "HybridTriviaQAAnswerInContextQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "HybridTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "HybridTriviaQAPromptTokens",
+      "value": "839"
+    },
+    {
+      "name": "HybridTriviaQACompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "HybridTriviaQAThroughput",
+      "value": "1.94"
+    },
+    {
+      "name": "HybridTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

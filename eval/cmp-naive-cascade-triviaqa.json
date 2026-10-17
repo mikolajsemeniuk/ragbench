@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveVsCascadeTriviaQAPaired",
+      "value": "11294"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchA",
+      "value": "0.5699"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchB",
+      "value": "0.6032"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchDiff",
+      "value": "+0.0333"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchCILow",
+      "value": "+0.0268"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchCIHigh",
+      "value": "+0.0399"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFA",
+      "value": "0.6592"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFB",
+      "value": "0.6933"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFDiff",
+      "value": "+0.0341"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFCILow",
+      "value": "+0.0284"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFCIHigh",
+      "value": "+0.0400"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionA",
+      "value": "0.0796"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionB",
+      "value": "0.0044"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionDiff",
+      "value": "-0.0752"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionCILow",
+      "value": "-0.0801"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionCIHigh",
+      "value": "-0.0703"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredA",
+      "value": "0.6195"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredB",
+      "value": "0.6351"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredDiff",
+      "value": "+0.0156"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredCILow",
+      "value": "+0.0091"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredCIHigh",
+      "value": "+0.0221"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextA",
+      "value": "0.7359"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextB",
+      "value": "0.7617"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextDiff",
+      "value": "+0.0259"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextCILow",
+      "value": "+0.0202"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextCIHigh",
+      "value": "+0.0313"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxB",
+      "value": "4.8384"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxDiff",
+      "value": "-0.1616"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxCILow",
+      "value": "-0.1784"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxCIHigh",
+      "value": "-0.1452"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsB",
+      "value": "1.1572"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsDiff",
+      "value": "+0.1572"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsCILow",
+      "value": "+0.1457"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsCIHigh",
+      "value": "+0.1689"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensA",
+      "value": "840.4410"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensB",
+      "value": "898.7015"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensDiff",
+      "value": "+58.2605"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensCILow",
+      "value": "+53.8914"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensCIHigh",
+      "value": "+62.7124"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysA",
+      "value": "17.5059"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysB",
+      "value": "29.2933"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysDiff",
+      "value": "+11.7874"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysCILow",
+      "value": "+11.6059"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysCIHigh",
+      "value": "+11.9706"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsCascadeTriviaQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

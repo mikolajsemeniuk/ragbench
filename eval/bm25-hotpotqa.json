@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "BMTwentyFiveHotpotQAQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAEM",
+      "value": "0.3063"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAFOne",
+      "value": "0.4096"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAAbstentionRate",
+      "value": "0.1164"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAAnsweredQuestions",
+      "value": "6543"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAEMAnswered",
+      "value": "0.3466"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAFOneAnswered",
+      "value": "0.4591"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAAnswerInContext",
+      "value": "0.4766"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAAnswerInContextQuestions",
+      "value": "6947"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQARecallInContext",
+      "value": "0.4810"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAMRR",
+      "value": "0.6690"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQARetrievalEvalQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAPromptTokens",
+      "value": "870"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQACompletionTokens",
+      "value": "11"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAThroughput",
+      "value": "6.16"
+    },
+    {
+      "name": "BMTwentyFiveHotpotQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "AdaptiveTwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "AdaptiveTwoWikiEM",
+      "value": "0.2289"
+    },
+    {
+      "name": "AdaptiveTwoWikiFOne",
+      "value": "0.2978"
+    },
+    {
+      "name": "AdaptiveTwoWikiAbstentionRate",
+      "value": "0.1678"
+    },
+    {
+      "name": "AdaptiveTwoWikiAnsweredQuestions",
+      "value": "10465"
+    },
+    {
+      "name": "AdaptiveTwoWikiEMAnswered",
+      "value": "0.2750"
+    },
+    {
+      "name": "AdaptiveTwoWikiFOneAnswered",
+      "value": "0.3456"
+    },
+    {
+      "name": "AdaptiveTwoWikiMeanPassagesInContext",
+      "value": "5.14"
+    },
+    {
+      "name": "AdaptiveTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "AdaptiveTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "AdaptiveTwoWikiAnswerInContext",
+      "value": "0.3356"
+    },
+    {
+      "name": "AdaptiveTwoWikiAnswerInContextQuestions",
+      "value": "11267"
+    },
+    {
+      "name": "AdaptiveTwoWikiRecallInContext",
+      "value": "0.3560"
+    },
+    {
+      "name": "AdaptiveTwoWikiMRR",
+      "value": "0.5877"
+    },
+    {
+      "name": "AdaptiveTwoWikiRetrievalEvalQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "AdaptiveTwoWikiLLMCalls",
+      "value": "2.11"
+    },
+    {
+      "name": "AdaptiveTwoWikiPromptTokens",
+      "value": "1203"
+    },
+    {
+      "name": "AdaptiveTwoWikiCompletionTokens",
+      "value": "26"
+    },
+    {
+      "name": "AdaptiveTwoWikiThroughput",
+      "value": "2.91"
+    },
+    {
+      "name": "AdaptiveTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "AdaptiveTwoWikiRouteMulti",
+      "value": "982"
+    },
+    {
+      "name": "AdaptiveTwoWikiRouteSingle",
+      "value": "11593"
+    }
+  ]
+}

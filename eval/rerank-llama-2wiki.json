@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "RerankLlamaTwoWikiQuestions",
+      "value": "12570"
+    },
+    {
+      "name": "RerankLlamaTwoWikiEM",
+      "value": "0.2603"
+    },
+    {
+      "name": "RerankLlamaTwoWikiFOne",
+      "value": "0.3361"
+    },
+    {
+      "name": "RerankLlamaTwoWikiAbstentionRate",
+      "value": "0.1034"
+    },
+    {
+      "name": "RerankLlamaTwoWikiAnsweredQuestions",
+      "value": "11270"
+    },
+    {
+      "name": "RerankLlamaTwoWikiEMAnswered",
+      "value": "0.2903"
+    },
+    {
+      "name": "RerankLlamaTwoWikiFOneAnswered",
+      "value": "0.3612"
+    },
+    {
+      "name": "RerankLlamaTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "RerankLlamaTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "RerankLlamaTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "RerankLlamaTwoWikiAnswerInContext",
+      "value": "0.3883"
+    },
+    {
+      "name": "RerankLlamaTwoWikiAnswerInContextQuestions",
+      "value": "11263"
+    },
+    {
+      "name": "RerankLlamaTwoWikiRecallInContext",
+      "value": "0.3941"
+    },
+    {
+      "name": "RerankLlamaTwoWikiMRR",
+      "value": "0.6907"
+    },
+    {
+      "name": "RerankLlamaTwoWikiRetrievalEvalQuestions",
+      "value": "12570"
+    },
+    {
+      "name": "RerankLlamaTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "RerankLlamaTwoWikiPromptTokens",
+      "value": "844"
+    },
+    {
+      "name": "RerankLlamaTwoWikiCompletionTokens",
+      "value": "7"
+    },
+    {
+      "name": "RerankLlamaTwoWikiThroughput",
+      "value": "3.66"
+    },
+    {
+      "name": "RerankLlamaTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeNaiveNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "CascadeNaiveNQEM",
+      "value": "0.3474"
+    },
+    {
+      "name": "CascadeNaiveNQFOne",
+      "value": "0.4639"
+    },
+    {
+      "name": "CascadeNaiveNQAbstentionRate",
+      "value": "0.0302"
+    },
+    {
+      "name": "CascadeNaiveNQAnsweredQuestions",
+      "value": "3501"
+    },
+    {
+      "name": "CascadeNaiveNQEMAnswered",
+      "value": "0.3582"
+    },
+    {
+      "name": "CascadeNaiveNQFOneAnswered",
+      "value": "0.4762"
+    },
+    {
+      "name": "CascadeNaiveNQMeanPassagesInContext",
+      "value": "4.52"
+    },
+    {
+      "name": "CascadeNaiveNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeNaiveNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeNaiveNQAnswerInContext",
+      "value": "0.6802"
+    },
+    {
+      "name": "CascadeNaiveNQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "CascadeNaiveNQLLMCalls",
+      "value": "1.44"
+    },
+    {
+      "name": "CascadeNaiveNQPromptTokens",
+      "value": "986"
+    },
+    {
+      "name": "CascadeNaiveNQCompletionTokens",
+      "value": "51"
+    },
+    {
+      "name": "CascadeNaiveNQThroughput",
+      "value": "1.52"
+    },
+    {
+      "name": "CascadeNaiveNQConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeNaiveNQStageClosedbook",
+      "value": "349"
+    },
+    {
+      "name": "CascadeNaiveNQStageHyde",
+      "value": "264"
+    },
+    {
+      "name": "CascadeNaiveNQStageNaive",
+      "value": "2997"
+    },
+    {
+      "name": "CascadeNaiveNQStagesRun",
+      "value": "1.27"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "ClosedBookLlamaNQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "ClosedBookLlamaNQEM",
+      "value": "0.2463"
+    },
+    {
+      "name": "ClosedBookLlamaNQFOne",
+      "value": "0.3599"
+    },
+    {
+      "name": "ClosedBookLlamaNQAbstentionRate",
+      "value": "0.0571"
+    },
+    {
+      "name": "ClosedBookLlamaNQAnsweredQuestions",
+      "value": "3404"
+    },
+    {
+      "name": "ClosedBookLlamaNQEMAnswered",
+      "value": "0.2612"
+    },
+    {
+      "name": "ClosedBookLlamaNQFOneAnswered",
+      "value": "0.3769"
+    },
+    {
+      "name": "ClosedBookLlamaNQLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "ClosedBookLlamaNQPromptTokens",
+      "value": "39"
+    },
+    {
+      "name": "ClosedBookLlamaNQCompletionTokens",
+      "value": "9"
+    },
+    {
+      "name": "ClosedBookLlamaNQThroughput",
+      "value": "44.64"
+    },
+    {
+      "name": "ClosedBookLlamaNQConcurrency",
+      "value": "48"
+    }
+  ]
+}

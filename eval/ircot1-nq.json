@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "IRCoTOneShotNQQuestions",
+      "value": "3609"
+    },
+    {
+      "name": "IRCoTOneShotNQEM",
+      "value": "0.3358"
+    },
+    {
+      "name": "IRCoTOneShotNQFOne",
+      "value": "0.4449"
+    },
+    {
+      "name": "IRCoTOneShotNQAbstentionRate",
+      "value": "0.1632"
+    },
+    {
+      "name": "IRCoTOneShotNQAnsweredQuestions",
+      "value": "3020"
+    },
+    {
+      "name": "IRCoTOneShotNQEMAnswered",
+      "value": "0.4013"
+    },
+    {
+      "name": "IRCoTOneShotNQFOneAnswered",
+      "value": "0.5178"
+    },
+    {
+      "name": "IRCoTOneShotNQMeanPassagesInContext",
+      "value": "5.27"
+    },
+    {
+      "name": "IRCoTOneShotNQTopK",
+      "value": "5"
+    },
+    {
+      "name": "IRCoTOneShotNQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "IRCoTOneShotNQAnswerInContext",
+      "value": "0.7305"
+    },
+    {
+      "name": "IRCoTOneShotNQAnswerInContextQuestions",
+      "value": "3607"
+    },
+    {
+      "name": "IRCoTOneShotNQLLMCalls",
+      "value": "2.09"
+    },
+    {
+      "name": "IRCoTOneShotNQPromptTokens",
+      "value": "2038"
+    },
+    {
+      "name": "IRCoTOneShotNQCompletionTokens",
+      "value": "81"
+    },
+    {
+      "name": "IRCoTOneShotNQThroughput",
+      "value": "1.47"
+    },
+    {
+      "name": "IRCoTOneShotNQConcurrency",
+      "value": "48"
+    }
+  ]
+}

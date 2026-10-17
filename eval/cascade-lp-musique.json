@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLogprobMuSiQueQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueEM",
+      "value": "0.0841"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueFOne",
+      "value": "0.1728"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueAbstentionRate",
+      "value": "0.0456"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueAnsweredQuestions",
+      "value": "2304"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueEMAnswered",
+      "value": "0.0881"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueFOneAnswered",
+      "value": "0.1796"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueMeanPassagesInContext",
+      "value": "3.97"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueAnswerInContext",
+      "value": "0.2216"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueAnswerInContextQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueRecallInContext",
+      "value": "0.2176"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueMRR",
+      "value": "0.3532"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueRetrievalEvalQuestions",
+      "value": "2414"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueLLMCalls",
+      "value": "1.94"
+    },
+    {
+      "name": "CascadeLogprobMuSiQuePromptTokens",
+      "value": "1213"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueCompletionTokens",
+      "value": "86"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueThroughput",
+      "value": "1.55"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueStageClosedbook",
+      "value": "498"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueStageFused",
+      "value": "1526"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueStageHyde",
+      "value": "390"
+    },
+    {
+      "name": "CascadeLogprobMuSiQueStagesRun",
+      "value": "1.57"
+    }
+  ]
+}

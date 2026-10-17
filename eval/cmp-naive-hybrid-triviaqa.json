@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveVsHybridTriviaQAPaired",
+      "value": "11313"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchA",
+      "value": "0.5700"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchB",
+      "value": "0.5835"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchDiff",
+      "value": "+0.0135"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchCILow",
+      "value": "+0.0070"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchCIHigh",
+      "value": "+0.0202"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAExactMatchPHolm",
+      "value": "0.0003"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFA",
+      "value": "0.6594"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFB",
+      "value": "0.6732"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFDiff",
+      "value": "+0.0138"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFCILow",
+      "value": "+0.0077"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFCIHigh",
+      "value": "+0.0198"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAFPHolm",
+      "value": "0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionA",
+      "value": "0.0796"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionB",
+      "value": "0.0666"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionDiff",
+      "value": "-0.0130"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionCILow",
+      "value": "-0.0181"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionCIHigh",
+      "value": "-0.0079"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredA",
+      "value": "0.6339"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredB",
+      "value": "0.6404"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredDiff",
+      "value": "+0.0065"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredCILow",
+      "value": "-0.0003"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredCIHigh",
+      "value": "+0.0132"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredP",
+      "value": "0.0663"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAEMbothansweredPHolm",
+      "value": "0.1990"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextA",
+      "value": "0.7358"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextB",
+      "value": "0.7494"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextDiff",
+      "value": "+0.0136"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextCILow",
+      "value": "+0.0080"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextCIHigh",
+      "value": "+0.0194"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPassagesinctxPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensA",
+      "value": "840.4392"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensB",
+      "value": "839.1179"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensDiff",
+      "value": "-1.3213"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensCILow",
+      "value": "-2.0143"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensCIHigh",
+      "value": "-0.6351"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensP",
+      "value": "0.0007"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQAPrompttokensPHolm",
+      "value": "0.0028"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysA",
+      "value": "17.5062"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysB",
+      "value": "24.7131"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysDiff",
+      "value": "+7.2069"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysCILow",
+      "value": "+7.1364"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysCIHigh",
+      "value": "+7.2780"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsHybridTriviaQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

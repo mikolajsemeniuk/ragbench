@@ -1,0 +1,37 @@
+{
+  "generator": "cmd/coverage",
+  "commands": [
+    {
+      "name": "CoverageMuSiQueAnnotatedQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CoverageMuSiQueGoldTitles",
+      "value": "2328"
+    },
+    {
+      "name": "CoverageMuSiQueGoldTitlesPresent",
+      "value": "1950"
+    },
+    {
+      "name": "CoverageMuSiQueGoldTitlesPresentExact",
+      "value": "1903"
+    },
+    {
+      "name": "CoverageMuSiQueRecallCeiling",
+      "value": "0.8867"
+    },
+    {
+      "name": "CoverageMuSiQueRecallCeilingExact",
+      "value": "0.8724"
+    },
+    {
+      "name": "CoverageMuSiQueQuestionsFullyCovered",
+      "value": "1743"
+    },
+    {
+      "name": "CoverageMuSiQueQuestionsFullyCoveredPct",
+      "value": "72.1"
+    }
+  ]
+}

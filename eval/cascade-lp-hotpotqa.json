@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLogprobHotpotQAQuestions",
+      "value": "7394"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAEM",
+      "value": "0.3562"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAFOne",
+      "value": "0.4699"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAAbstentionRate",
+      "value": "0.0051"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAAnsweredQuestions",
+      "value": "7356"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAEMAnswered",
+      "value": "0.3581"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAFOneAnswered",
+      "value": "0.4722"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAMeanPassagesInContext",
+      "value": "4.49"
+    },
+    {
+      "name": "CascadeLogprobHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAAnswerInContext",
+      "value": "0.5584"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAAnswerInContextQuestions",
+      "value": "6938"
+    },
+    {
+      "name": "CascadeLogprobHotpotQARecallInContext",
+      "value": "0.5480"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAMRR",
+      "value": "0.7083"
+    },
+    {
+      "name": "CascadeLogprobHotpotQARetrievalEvalQuestions",
+      "value": "7394"
+    },
+    {
+      "name": "CascadeLogprobHotpotQALLMCalls",
+      "value": "1.51"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAPromptTokens",
+      "value": "1075"
+    },
+    {
+      "name": "CascadeLogprobHotpotQACompletionTokens",
+      "value": "42"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAThroughput",
+      "value": "1.30"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAStageClosedbook",
+      "value": "752"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAStageFused",
+      "value": "5878"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAStageHyde",
+      "value": "764"
+    },
+    {
+      "name": "CascadeLogprobHotpotQAStagesRun",
+      "value": "1.31"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGTopTenTwoWikiQuestions",
+      "value": "12573"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiEM",
+      "value": "0.2535"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiFOne",
+      "value": "0.3205"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiAbstentionRate",
+      "value": "0.1350"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiAnsweredQuestions",
+      "value": "10876"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiEMAnswered",
+      "value": "0.2930"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiFOneAnswered",
+      "value": "0.3615"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiMeanPassagesInContext",
+      "value": "10.00"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiTopK",
+      "value": "10"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiAnswerInContext",
+      "value": "0.3945"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiAnswerInContextQuestions",
+      "value": "11266"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiRecallInContext",
+      "value": "0.3758"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiMRR",
+      "value": "0.5790"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiRetrievalEvalQuestions",
+      "value": "12573"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiLLMCalls",
+      "value": "3.00"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiPromptTokens",
+      "value": "3620"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiCompletionTokens",
+      "value": "38"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiThroughput",
+      "value": "1.41"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiBranchAmbiguous",
+      "value": "5414"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiBranchCorrect",
+      "value": "4"
+    },
+    {
+      "name": "CRAGTopTenTwoWikiBranchIncorrect",
+      "value": "7155"
+    }
+  ]
+}

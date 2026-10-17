@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "RerankVsCascadeTwoWikiPaired",
+      "value": "12566"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchA",
+      "value": "0.2675"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchB",
+      "value": "0.2783"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchDiff",
+      "value": "+0.0108"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchCILow",
+      "value": "+0.0049"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchCIHigh",
+      "value": "+0.0169"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchP",
+      "value": "0.0004"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiExactMatchPHolm",
+      "value": "0.0007"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFA",
+      "value": "0.3311"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFB",
+      "value": "0.3436"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFDiff",
+      "value": "+0.0125"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFCILow",
+      "value": "+0.0065"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFCIHigh",
+      "value": "+0.0183"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFP",
+      "value": "0.0002"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiFPHolm",
+      "value": "0.0007"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionA",
+      "value": "0.1273"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionB",
+      "value": "0.0052"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionDiff",
+      "value": "-0.1222"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionCILow",
+      "value": "-0.1280"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionCIHigh",
+      "value": "-0.1164"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredA",
+      "value": "0.3072"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredB",
+      "value": "0.3051"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredDiff",
+      "value": "-0.0022"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredCILow",
+      "value": "-0.0087"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredCIHigh",
+      "value": "+0.0041"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredP",
+      "value": "0.5190"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiEMbothansweredPHolm",
+      "value": "0.5190"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextA",
+      "value": "0.3885"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextB",
+      "value": "0.3745"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextDiff",
+      "value": "-0.0139"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextCILow",
+      "value": "-0.0198"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextCIHigh",
+      "value": "-0.0082"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextA",
+      "value": "0.3941"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextB",
+      "value": "0.3808"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextDiff",
+      "value": "-0.0133"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextCILow",
+      "value": "-0.0162"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextCIHigh",
+      "value": "-0.0104"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiRecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRA",
+      "value": "0.6909"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRB",
+      "value": "0.6574"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRDiff",
+      "value": "-0.0335"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRCILow",
+      "value": "-0.0377"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRCIHigh",
+      "value": "-0.0291"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxB",
+      "value": "4.6678"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxDiff",
+      "value": "-0.3322"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxCILow",
+      "value": "-0.3541"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxCIHigh",
+      "value": "-0.3108"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsB",
+      "value": "1.3244"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsDiff",
+      "value": "+0.3244"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsCILow",
+      "value": "+0.3092"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsCIHigh",
+      "value": "+0.3392"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensA",
+      "value": "903.7021"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensB",
+      "value": "1042.2733"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensDiff",
+      "value": "+138.5712"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensCILow",
+      "value": "+132.2111"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensCIHigh",
+      "value": "+144.8009"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysA",
+      "value": "16.1443"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysB",
+      "value": "22.4670"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysDiff",
+      "value": "+6.3227"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysCILow",
+      "value": "+6.0797"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysCIHigh",
+      "value": "+6.5631"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeTwoWikiLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

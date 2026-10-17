@@ -1,69 +1,60 @@
-// Package rag zawiera implementacje baseline'owych architektur RAG
-// (Retrieval-Augmented Generation) porównywanych w artykule.
+// Package rag contains the baseline Retrieval-Augmented Generation
+// architectures compared in the paper.
 package rag
 
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+
+	"github.com/mikolajsemeniuk/ragbench/pkg/storage"
 )
 
-// Document to pojedynczy fragment korpusu, który trafia do bazy wektorowej.
+type Embedder interface {
+	Embed(ctx context.Context, texts []string) ([][]float32, error)
+}
+
+type Generator interface {
+	Generate(ctx context.Context, prompt string) (string, error)
+}
+
 type Document struct {
 	ID   uint64
 	Text string
 }
 
-// NaiveRAG to najprostszy, klasyczny pipeline RAG: embed -> retrieve top-K -> generate.
-// Nie ma tu żadnej pętli, oceny jakości kontekstu ani decyzji agenta - to punkt
-// odniesienia (baseline) dla bardziej zaawansowanych architektur (Self-RAG, CRAG, ...).
 type NaiveRAG struct {
-	QdrantURL  string // np. http://localhost:6333
-	Collection string // nazwa kolekcji w Qdrant
+	Store      storage.VectorStore
+	Collection string
 
-	EmbedURL   string // np. http://localhost:8001 (vLLM, OpenAI-compatible /v1/embeddings)
-	EmbedModel string // np. bge-base-en-v1.5
+	Embedder  Embedder
+	Generator Generator
 
-	LLMURL   string // np. http://localhost:8000 (vLLM, OpenAI-compatible /v1/chat/completions)
-	LLMModel string // np. qwen2.5-7b-instruct
+	TopK int
 
-	TopK int // ile fragmentów kontekstu pobrać przed generacją
-
-	Client *http.Client
+	// QueryPrefix and DocumentPrefix are the asymmetric instructions the
+	// embedding model expects - see PrefixesFor. They are applied to the text
+	// handed to the encoder only: the passage stored in the vector store, and
+	// therefore the context handed to the generator, is always the clean
+	// original.
+	QueryPrefix    string
+	DocumentPrefix string
 }
 
-// NewNaiveRAG tworzy NaiveRAG z rozsądnymi wartościami domyślnymi.
-func NewNaiveRAG(qdrantURL, collection, embedURL, embedModel, llmURL, llmModel string) *NaiveRAG {
+func NewNaiveRAG(store storage.VectorStore, collection string, embedder Embedder, generator Generator) *NaiveRAG {
 	return &NaiveRAG{
-		QdrantURL:  qdrantURL,
+		Store:      store,
 		Collection: collection,
-		EmbedURL:   embedURL,
-		EmbedModel: embedModel,
-		LLMURL:     llmURL,
-		LLMModel:   llmModel,
+		Embedder:   embedder,
+		Generator:  generator,
 		TopK:       5,
-		Client:     http.DefaultClient,
 	}
 }
 
-// EnsureCollection tworzy kolekcję w Qdrant, jeśli jeszcze nie istnieje.
-// vectorSize musi odpowiadać wymiarowi wektorów zwracanych przez model embeddingowy
-// (np. 768 dla BAAI/bge-base-en-v1.5).
 func (r *NaiveRAG) EnsureCollection(ctx context.Context, vectorSize int) error {
-	body := map[string]any{
-		"vectors": map[string]any{
-			"size":     vectorSize,
-			"distance": "Cosine",
-		},
-	}
-	_, err := r.doJSON(ctx, http.MethodPut, r.QdrantURL+"/collections/"+r.Collection, body)
-	return err
+	return r.Store.EnsureCollection(ctx, r.Collection, vectorSize)
 }
 
-// Ingest liczy embeddingi dla dokumentów i zapisuje je (wraz z tekstem) do Qdrant.
 func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 	if len(docs) == 0 {
 		return nil
@@ -71,184 +62,85 @@ func (r *NaiveRAG) Ingest(ctx context.Context, docs []Document) error {
 
 	texts := make([]string, len(docs))
 	for i, d := range docs {
-		texts[i] = d.Text
+		texts[i] = r.DocumentPrefix + d.Text
 	}
 
-	vectors, err := r.embed(ctx, texts)
+	vectors, err := r.Embedder.Embed(ctx, texts)
 	if err != nil {
 		return fmt.Errorf("embed documents: %w", err)
 	}
 
-	points := make([]map[string]any, len(docs))
+	points := make([]storage.Point, len(docs))
 	for i, d := range docs {
-		points[i] = map[string]any{
-			"id":     d.ID,
-			"vector": vectors[i],
-			"payload": map[string]any{
-				"text": d.Text,
-			},
-		}
+		// d.Text, not the prefixed text: the prefix is an instruction to the
+		// encoder, not part of the passage.
+		points[i] = storage.Point{ID: d.ID, Vector: vectors[i], Text: d.Text}
 	}
 
-	body := map[string]any{"points": points}
-	_, err = r.doJSON(ctx, http.MethodPut, r.QdrantURL+"/collections/"+r.Collection+"/points?wait=true", body)
-	if err != nil {
+	if err := r.Store.Upsert(ctx, r.Collection, points); err != nil {
 		return fmt.Errorf("upsert points: %w", err)
 	}
+
 	return nil
 }
 
-// Query to główna metoda baseline'u: dla pytania użytkownika pobiera TopK
-// najbardziej podobnych fragmentów tekstu z Qdrant, wkleja je do promptu
-// i zwraca odpowiedź wygenerowaną przez LLM.
-func (r *NaiveRAG) Query(ctx context.Context, question string) (string, error) {
-	contexts, err := r.retrieve(ctx, question)
+// Query runs the full NaiveRAG pass and returns the model's answer together
+// with the retrieved passages, ordered by decreasing relevance. The passages
+// themselves are returned - not just their IDs - because cmd/bench derives
+// every retrieval metric from them: the article title is the first line of a
+// FlashRAG passage, and answer-in-context recall needs the text.
+func (r *NaiveRAG) Query(ctx context.Context, question string) (answer string, retrieved []storage.Point, err error) {
+	points, err := r.retrieve(ctx, question)
 	if err != nil {
-		return "", fmt.Errorf("retrieve: %w", err)
+		return "", nil, fmt.Errorf("retrieve: %w", err)
 	}
 
-	answer, err := r.generate(ctx, question, contexts)
+	answer, err = r.Generator.Generate(ctx, buildPrompt(question, points))
 	if err != nil {
-		return "", fmt.Errorf("generate: %w", err)
+		return "", nil, fmt.Errorf("generate: %w", err)
 	}
-	return answer, nil
+	return answer, points, nil
 }
 
-// retrieve embeduje pytanie i szuka TopK najbliższych fragmentów w Qdrant.
-func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]string, error) {
-	vectors, err := r.embed(ctx, []string{question})
+func (r *NaiveRAG) retrieve(ctx context.Context, question string) ([]storage.Point, error) {
+	vectors, err := r.Embedder.Embed(ctx, []string{r.QueryPrefix + question})
 	if err != nil {
 		return nil, fmt.Errorf("embed question: %w", err)
 	}
 
-	body := map[string]any{
-		"vector":       vectors[0],
-		"limit":        r.TopK,
-		"with_payload": true,
-	}
-	raw, err := r.doJSON(ctx, http.MethodPost, r.QdrantURL+"/collections/"+r.Collection+"/points/search", body)
+	points, err := r.Store.Search(ctx, r.Collection, vectors[0], r.TopK)
 	if err != nil {
-		return nil, fmt.Errorf("search qdrant: %w", err)
+		return nil, fmt.Errorf("search: %w", err)
 	}
-
-	var resp struct {
-		Result []struct {
-			Payload struct {
-				Text string `json:"text"`
-			} `json:"payload"`
-		} `json:"result"`
-	}
-	if err := json.Unmarshal(raw, &resp); err != nil {
-		return nil, fmt.Errorf("decode search response: %w", err)
-	}
-
-	contexts := make([]string, len(resp.Result))
-	for i, res := range resp.Result {
-		contexts[i] = res.Payload.Text
-	}
-	return contexts, nil
+	return points, nil
 }
 
-// generate wysyła pytanie wraz z pobranym kontekstem do LLM (vLLM, endpoint
-// zgodny z OpenAI) i zwraca wygenerowaną odpowiedź.
-func (r *NaiveRAG) generate(ctx context.Context, question string, contexts []string) (string, error) {
-	prompt := buildPrompt(question, contexts)
-
-	body := map[string]any{
-		"model": r.LLMModel,
-		"messages": []map[string]string{
-			{"role": "user", "content": prompt},
-		},
-	}
-	raw, err := r.doJSON(ctx, http.MethodPost, r.LLMURL+"/v1/chat/completions", body)
-	if err != nil {
-		return "", fmt.Errorf("call llm: %w", err)
-	}
-
-	var resp struct {
-		Choices []struct {
-			Message struct {
-				Content string `json:"content"`
-			} `json:"message"`
-		} `json:"choices"`
-	}
-	if err := json.Unmarshal(raw, &resp); err != nil {
-		return "", fmt.Errorf("decode llm response: %w", err)
-	}
-	if len(resp.Choices) == 0 {
-		return "", fmt.Errorf("llm returned no choices")
-	}
-	return resp.Choices[0].Message.Content, nil
-}
-
-// buildPrompt składa prosty prompt: kontekst z bazy wektorowej + pytanie.
-// To jest "Augment" z pipeline'u retrieve -> augment -> generate.
-func buildPrompt(question string, contexts []string) string {
+// buildPrompt renders the baseline prompt.
+//
+// The instruction to answer with nothing but the answer is not stylistic. The
+// gold answers in these datasets are short spans ("yes", "1994", "Tokyo"),
+// and Exact Match compares against them literally. An instruct model left to
+// answer freely replies "Yes, Scott Derrickson and Ed Wood were both
+// American", which scores EM 0 while being entirely correct. Measured over 50
+// HotpotQA dev questions, constraining the output moves EM from 0.02 to 0.40
+// and token-level F1 from 0.11 to 0.53 - without touching retrieval. The
+// phrasing follows the convention used by FlashRAG and the works it compares.
+//
+// It is in English on purpose: the
+// corpora (FlashRAG wiki18_100w) and the question sets (NQ, TriviaQA,
+// HotpotQA, 2WikiMultihopQA, MuSiQue) are English, the gold answers are
+// English, and Exact Match / token-level F1 are computed against them - a
+// prompt in another language would push the model to answer in that language
+// and depress both metrics for reasons that have nothing to do with retrieval.
+func buildPrompt(question string, contexts []storage.Point) string {
 	var b bytes.Buffer
-	b.WriteString("Odpowiedz na pytanie wyłącznie na podstawie poniższego kontekstu. ")
-	b.WriteString("Jeśli kontekst nie zawiera odpowiedzi, powiedz, że nie wiesz.\n\n")
-	b.WriteString("Kontekst:\n")
+	b.WriteString("Answer the question based on the given documents. ")
+	b.WriteString("Only give me the answer and do not output any other words.\n\n")
+	b.WriteString("Documents:\n")
 	for i, c := range contexts {
-		fmt.Fprintf(&b, "[%d] %s\n", i+1, c)
+		fmt.Fprintf(&b, "[%d] %s\n", i+1, c.Text)
 	}
-	b.WriteString("\nPytanie: ")
+	b.WriteString("\nQuestion: ")
 	b.WriteString(question)
 	return b.String()
-}
-
-// embed woła OpenAI-compatible endpoint /v1/embeddings serwowany przez vLLM.
-func (r *NaiveRAG) embed(ctx context.Context, texts []string) ([][]float32, error) {
-	body := map[string]any{
-		"model": r.EmbedModel,
-		"input": texts,
-	}
-	raw, err := r.doJSON(ctx, http.MethodPost, r.EmbedURL+"/v1/embeddings", body)
-	if err != nil {
-		return nil, err
-	}
-
-	var resp struct {
-		Data []struct {
-			Embedding []float32 `json:"embedding"`
-		} `json:"data"`
-	}
-	if err := json.Unmarshal(raw, &resp); err != nil {
-		return nil, fmt.Errorf("decode embeddings response: %w", err)
-	}
-
-	vectors := make([][]float32, len(resp.Data))
-	for i, d := range resp.Data {
-		vectors[i] = d.Embedding
-	}
-	return vectors, nil
-}
-
-// doJSON to mały helper wysyłający JSON-owe żądanie HTTP i zwracający surową odpowiedź.
-func (r *NaiveRAG) doJSON(ctx context.Context, method, url string, body any) ([]byte, error) {
-	payload, err := json.Marshal(body)
-	if err != nil {
-		return nil, fmt.Errorf("marshal request: %w", err)
-	}
-
-	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(payload))
-	if err != nil {
-		return nil, fmt.Errorf("build request: %w", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := r.Client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("do request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	raw, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("read response body: %w", err)
-	}
-
-	if resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("%s %s returned status %d: %s", method, url, resp.StatusCode, string(raw))
-	}
-	return raw, nil
 }

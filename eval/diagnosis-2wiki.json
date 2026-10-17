@@ -1,0 +1,117 @@
+{
+  "generator": "cmd/diagnose",
+  "commands": [
+    {
+      "name": "DiagTwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "DiagTwoWikiFailed",
+      "value": "7505"
+    },
+    {
+      "name": "DiagTwoWikiFailedPct",
+      "value": "59.7"
+    },
+    {
+      "name": "DiagTwoWikiDiagnosed",
+      "value": "300"
+    },
+    {
+      "name": "DiagTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "DiagTwoWikiDeep",
+      "value": "1000"
+    },
+    {
+      "name": "DiagTwoWikiWrongSlice",
+      "value": "42"
+    },
+    {
+      "name": "DiagTwoWikiWrongSlicePct",
+      "value": "14.0"
+    },
+    {
+      "name": "DiagTwoWikiAnswerAbsent",
+      "value": "67"
+    },
+    {
+      "name": "DiagTwoWikiAnswerAbsentPct",
+      "value": "22.3"
+    },
+    {
+      "name": "DiagTwoWikiRankedLow",
+      "value": "101"
+    },
+    {
+      "name": "DiagTwoWikiRankedLowPct",
+      "value": "33.7"
+    },
+    {
+      "name": "DiagTwoWikiUnreachable",
+      "value": "58"
+    },
+    {
+      "name": "DiagTwoWikiUnreachablePct",
+      "value": "19.3"
+    },
+    {
+      "name": "DiagTwoWikiNotInCorpus",
+      "value": "32"
+    },
+    {
+      "name": "DiagTwoWikiNotInCorpusPct",
+      "value": "10.7"
+    },
+    {
+      "name": "DiagTwoWikiRetrievedN",
+      "value": "3762"
+    },
+    {
+      "name": "DiagTwoWikiRetrievedEM",
+      "value": "0.5569"
+    },
+    {
+      "name": "DiagTwoWikiRetrievedClosedBookEM",
+      "value": "0.3214"
+    },
+    {
+      "name": "DiagTwoWikiRetrievedAbstention",
+      "value": "0.0550"
+    },
+    {
+      "name": "DiagTwoWikiNotRetrievedN",
+      "value": "8813"
+    },
+    {
+      "name": "DiagTwoWikiNotRetrievedEM",
+      "value": "0.0884"
+    },
+    {
+      "name": "DiagTwoWikiNotRetrievedClosedBookEM",
+      "value": "0.2131"
+    },
+    {
+      "name": "DiagTwoWikiNotRetrievedAbstention",
+      "value": "0.2151"
+    },
+    {
+      "name": "DiagTwoWikiClosedBookAbstention",
+      "value": "0.0223"
+    },
+    {
+      "name": "DiagTwoWikiClosedBookEM",
+      "value": "0.2455"
+    },
+    {
+      "name": "DiagTwoWikiOracleEM",
+      "value": "0.3542"
+    },
+    {
+      "name": "DiagTwoWikiOracleGain",
+      "value": "0.1087"
+    }
+  ]
+}

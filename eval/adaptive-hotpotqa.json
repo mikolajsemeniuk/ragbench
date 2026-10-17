@@ -1,0 +1,93 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "AdaptiveHotpotQAQuestions",
+      "value": "7368"
+    },
+    {
+      "name": "AdaptiveHotpotQAEM",
+      "value": "0.3302"
+    },
+    {
+      "name": "AdaptiveHotpotQAFOne",
+      "value": "0.4378"
+    },
+    {
+      "name": "AdaptiveHotpotQAAbstentionRate",
+      "value": "0.1093"
+    },
+    {
+      "name": "AdaptiveHotpotQAAnsweredQuestions",
+      "value": "6563"
+    },
+    {
+      "name": "AdaptiveHotpotQAEMAnswered",
+      "value": "0.3707"
+    },
+    {
+      "name": "AdaptiveHotpotQAFOneAnswered",
+      "value": "0.4869"
+    },
+    {
+      "name": "AdaptiveHotpotQAMeanPassagesInContext",
+      "value": "5.29"
+    },
+    {
+      "name": "AdaptiveHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "AdaptiveHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "AdaptiveHotpotQAAnswerInContext",
+      "value": "0.5514"
+    },
+    {
+      "name": "AdaptiveHotpotQAAnswerInContextQuestions",
+      "value": "6912"
+    },
+    {
+      "name": "AdaptiveHotpotQARecallInContext",
+      "value": "0.5471"
+    },
+    {
+      "name": "AdaptiveHotpotQAMRR",
+      "value": "0.6962"
+    },
+    {
+      "name": "AdaptiveHotpotQARetrievalEvalQuestions",
+      "value": "7368"
+    },
+    {
+      "name": "AdaptiveHotpotQALLMCalls",
+      "value": "2.30"
+    },
+    {
+      "name": "AdaptiveHotpotQAPromptTokens",
+      "value": "1383"
+    },
+    {
+      "name": "AdaptiveHotpotQACompletionTokens",
+      "value": "36"
+    },
+    {
+      "name": "AdaptiveHotpotQAThroughput",
+      "value": "1.71"
+    },
+    {
+      "name": "AdaptiveHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "AdaptiveHotpotQARouteMulti",
+      "value": "1611"
+    },
+    {
+      "name": "AdaptiveHotpotQARouteSingle",
+      "value": "5757"
+    }
+  ]
+}

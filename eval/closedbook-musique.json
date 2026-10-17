@@ -1,0 +1,53 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "ClosedBookMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "ClosedBookMuSiQueEM",
+      "value": "0.0381"
+    },
+    {
+      "name": "ClosedBookMuSiQueFOne",
+      "value": "0.1186"
+    },
+    {
+      "name": "ClosedBookMuSiQueAbstentionRate",
+      "value": "0.1320"
+    },
+    {
+      "name": "ClosedBookMuSiQueAnsweredQuestions",
+      "value": "2098"
+    },
+    {
+      "name": "ClosedBookMuSiQueEMAnswered",
+      "value": "0.0439"
+    },
+    {
+      "name": "ClosedBookMuSiQueFOneAnswered",
+      "value": "0.1336"
+    },
+    {
+      "name": "ClosedBookMuSiQueLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "ClosedBookMuSiQuePromptTokens",
+      "value": "70"
+    },
+    {
+      "name": "ClosedBookMuSiQueCompletionTokens",
+      "value": "11"
+    },
+    {
+      "name": "ClosedBookMuSiQueThroughput",
+      "value": "41.27"
+    },
+    {
+      "name": "ClosedBookMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

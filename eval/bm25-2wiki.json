@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "BMTwentyFiveTwoWikiQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiEM",
+      "value": "0.2614"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiFOne",
+      "value": "0.3222"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiAbstentionRate",
+      "value": "0.1561"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiAnsweredQuestions",
+      "value": "10613"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiEMAnswered",
+      "value": "0.3097"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiFOneAnswered",
+      "value": "0.3739"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiAnswerInContext",
+      "value": "0.3590"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiAnswerInContextQuestions",
+      "value": "11268"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiRecallInContext",
+      "value": "0.3730"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiMRR",
+      "value": "0.6194"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiRetrievalEvalQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiPromptTokens",
+      "value": "899"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiCompletionTokens",
+      "value": "13"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiThroughput",
+      "value": "5.99"
+    },
+    {
+      "name": "BMTwentyFiveTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeRerankMuSiQueQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "CascadeRerankMuSiQueEM",
+      "value": "0.0840"
+    },
+    {
+      "name": "CascadeRerankMuSiQueFOne",
+      "value": "0.1764"
+    },
+    {
+      "name": "CascadeRerankMuSiQueAbstentionRate",
+      "value": "0.0310"
+    },
+    {
+      "name": "CascadeRerankMuSiQueAnsweredQuestions",
+      "value": "2341"
+    },
+    {
+      "name": "CascadeRerankMuSiQueEMAnswered",
+      "value": "0.0867"
+    },
+    {
+      "name": "CascadeRerankMuSiQueFOneAnswered",
+      "value": "0.1811"
+    },
+    {
+      "name": "CascadeRerankMuSiQueMeanPassagesInContext",
+      "value": "4.44"
+    },
+    {
+      "name": "CascadeRerankMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeRerankMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeRerankMuSiQueAnswerInContext",
+      "value": "0.2608"
+    },
+    {
+      "name": "CascadeRerankMuSiQueAnswerInContextQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "CascadeRerankMuSiQueRecallInContext",
+      "value": "0.2482"
+    },
+    {
+      "name": "CascadeRerankMuSiQueMRR",
+      "value": "0.4020"
+    },
+    {
+      "name": "CascadeRerankMuSiQueRetrievalEvalQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "CascadeRerankMuSiQueLLMCalls",
+      "value": "1.54"
+    },
+    {
+      "name": "CascadeRerankMuSiQuePromptTokens",
+      "value": "1058"
+    },
+    {
+      "name": "CascadeRerankMuSiQueCompletionTokens",
+      "value": "58"
+    },
+    {
+      "name": "CascadeRerankMuSiQueThroughput",
+      "value": "2.00"
+    },
+    {
+      "name": "CascadeRerankMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeRerankMuSiQueStageClosedbook",
+      "value": "269"
+    },
+    {
+      "name": "CascadeRerankMuSiQueStageHyde",
+      "value": "248"
+    },
+    {
+      "name": "CascadeRerankMuSiQueStageRerank",
+      "value": "1899"
+    },
+    {
+      "name": "CascadeRerankMuSiQueStagesRun",
+      "value": "1.33"
+    }
+  ]
+}

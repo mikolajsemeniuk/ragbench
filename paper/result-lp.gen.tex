@@ -1,0 +1,29 @@
+% generated automatically by cmd/render from eval/result-lp.json (aggregated by cmd/result) - do not edit by hand
+% A cell is the paired Exact Match difference (Cascade + confidence minus baseline). Bold: Cascade + confidence is significantly better;
+% underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell.
+\newcommand{\ResultLogprobPairs}{57}
+\newcommand{\ResultLogprobWins}{40}
+\newcommand{\ResultLogprobLosses}{1}
+\newcommand{\ResultLogprobTies}{16}
+\newcommand{\ResultLogprobTable}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Baseline (calls/q) & NQ & TriviaQA & HotpotQA & 2Wiki & MuSiQue \\
+\midrule
+ClosedBook (no retrieval) (1.0) & \textbf{+0.201} & \textbf{+0.181} & \textbf{+0.168} & \textbf{+0.029} & \textbf{+0.046} \\
+BM25 (1.0) & \textbf{+0.116} & \textbf{+0.069} & \textbf{+0.050} & \textbf{+0.013} & \textbf{+0.029} \\
+NaiveRAG, 5 passages (1.0) & +0.006 & \textbf{+0.035} & \textbf{+0.031} & \textbf{+0.046} & \textbf{+0.024} \\
+NaiveRAG, 10 passages (1.0) & -- & -- & \textbf{+0.026} & \textbf{+0.022} & +0.011 \\
+NaiveRAG, 12 passages (1.0) & -- & -- & \textbf{+0.020} & \textbf{+0.023} & +0.013 \\
+Hybrid (dense + BM25) (1.0) & \textbf{+0.032} & \textbf{+0.022} & \textbf{+0.019} & +0.005 & \textbf{+0.015} \\
+HyDE (2.0) & -0.007 & \textbf{+0.010} & \textbf{+0.022} & \textbf{+0.030} & +0.009 \\
+Rerank (cross-encoder) (1.0) & \textbf{+0.106} & +0.009 & \underline{-0.019} & +0.007 & +0.003 \\
+Neighbour expansion (1.0) & -- & -- & \textbf{+0.037} & \textbf{+0.035} & +0.015 \\
+CRAG (offline), 5 passages (2.9-3.0) & -0.001 & \textbf{+0.021} & \textbf{+0.028} & \textbf{+0.041} & +0.001 \\
+CRAG (offline), 10 passages (3.0) & -- & -- & \textbf{+0.015} & \textbf{+0.021} & -0.004 \\
+IRCoT (2.1-2.5) & +0.005 & \textbf{+0.033} & \textbf{+0.015} & \textbf{+0.028} & +0.014 \\
+Adaptive-RAG (2.1-3.0) & +0.006 & \textbf{+0.035} & \textbf{+0.027} & \textbf{+0.045} & \textbf{+0.017} \\
+\midrule
+Cascade + confidence calls/q & 1.65 & 1.40 & 1.51 & 1.52 & 1.94 \\
+\bottomrule
+\end{tabular}}

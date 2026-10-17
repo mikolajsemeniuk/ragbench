@@ -1,0 +1,29 @@
+{
+  "generator": "cmd/result",
+  "commands": [
+    {
+      "name": "ResultLogprobPairs",
+      "value": "57"
+    },
+    {
+      "name": "ResultLogprobWins",
+      "value": "40"
+    },
+    {
+      "name": "ResultLogprobLosses",
+      "value": "1"
+    },
+    {
+      "name": "ResultLogprobTies",
+      "value": "16"
+    },
+    {
+      "name": "ResultLogprobTable",
+      "value": "%\n\\begin{tabular}{lrrrrr}\n\\toprule\nBaseline (calls/q) & NQ & TriviaQA & HotpotQA & 2Wiki & MuSiQue \\\\\n\\midrule\nClosedBook (no retrieval) (1.0) & \\textbf{+0.201} & \\textbf{+0.181} & \\textbf{+0.168} & \\textbf{+0.029} & \\textbf{+0.046} \\\\\nBM25 (1.0) & \\textbf{+0.116} & \\textbf{+0.069} & \\textbf{+0.050} & \\textbf{+0.013} & \\textbf{+0.029} \\\\\nNaiveRAG, 5 passages (1.0) & +0.006 & \\textbf{+0.035} & \\textbf{+0.031} & \\textbf{+0.046} & \\textbf{+0.024} \\\\\nNaiveRAG, 10 passages (1.0) & -- & -- & \\textbf{+0.026} & \\textbf{+0.022} & +0.011 \\\\\nNaiveRAG, 12 passages (1.0) & -- & -- & \\textbf{+0.020} & \\textbf{+0.023} & +0.013 \\\\\nHybrid (dense + BM25) (1.0) & \\textbf{+0.032} & \\textbf{+0.022} & \\textbf{+0.019} & +0.005 & \\textbf{+0.015} \\\\\nHyDE (2.0) & -0.007 & \\textbf{+0.010} & \\textbf{+0.022} & \\textbf{+0.030} & +0.009 \\\\\nRerank (cross-encoder) (1.0) & \\textbf{+0.106} & +0.009 & \\underline{-0.019} & +0.007 & +0.003 \\\\\nNeighbour expansion (1.0) & -- & -- & \\textbf{+0.037} & \\textbf{+0.035} & +0.015 \\\\\nCRAG (offline), 5 passages (2.9-3.0) & -0.001 & \\textbf{+0.021} & \\textbf{+0.028} & \\textbf{+0.041} & +0.001 \\\\\nCRAG (offline), 10 passages (3.0) & -- & -- & \\textbf{+0.015} & \\textbf{+0.021} & -0.004 \\\\\nIRCoT (2.1-2.5) & +0.005 & \\textbf{+0.033} & \\textbf{+0.015} & \\textbf{+0.028} & +0.014 \\\\\nAdaptive-RAG (2.1-3.0) & +0.006 & \\textbf{+0.035} & \\textbf{+0.027} & \\textbf{+0.045} & \\textbf{+0.017} \\\\\n\\midrule\nCascade + confidence calls/q & 1.65 & 1.40 & 1.51 & 1.52 & 1.94 \\\\\n\\bottomrule\n\\end{tabular}"
+    }
+  ],
+  "comments": [
+    "A cell is the paired Exact Match difference (Cascade + confidence minus baseline). Bold: Cascade + confidence is significantly better;",
+    "underlined: significantly worse; plain: no significant difference. McNemar, Holm over every cell."
+  ]
+}

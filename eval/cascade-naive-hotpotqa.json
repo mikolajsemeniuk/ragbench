@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeNaiveHotpotQAQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAEM",
+      "value": "0.3353"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAFOne",
+      "value": "0.4473"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAAbstentionRate",
+      "value": "0.0047"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAAnsweredQuestions",
+      "value": "7370"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAEMAnswered",
+      "value": "0.3369"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAFOneAnswered",
+      "value": "0.4493"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAMeanPassagesInContext",
+      "value": "4.74"
+    },
+    {
+      "name": "CascadeNaiveHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAAnswerInContext",
+      "value": "0.5379"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAAnswerInContextQuestions",
+      "value": "6947"
+    },
+    {
+      "name": "CascadeNaiveHotpotQARecallInContext",
+      "value": "0.5326"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAMRR",
+      "value": "0.6832"
+    },
+    {
+      "name": "CascadeNaiveHotpotQARetrievalEvalQuestions",
+      "value": "7405"
+    },
+    {
+      "name": "CascadeNaiveHotpotQALLMCalls",
+      "value": "1.28"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAPromptTokens",
+      "value": "983"
+    },
+    {
+      "name": "CascadeNaiveHotpotQACompletionTokens",
+      "value": "29"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAThroughput",
+      "value": "1.62"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAStageClosedbook",
+      "value": "390"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAStageHyde",
+      "value": "441"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAStageNaive",
+      "value": "6574"
+    },
+    {
+      "name": "CascadeNaiveHotpotQAStagesRun",
+      "value": "1.16"
+    }
+  ]
+}

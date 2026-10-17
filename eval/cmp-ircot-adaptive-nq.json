@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "IRCoTVsAdaptiveNQPaired",
+      "value": "3610"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchA",
+      "value": "0.3357"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchB",
+      "value": "0.3352"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchDiff",
+      "value": "-0.0006"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchCILow",
+      "value": "-0.0028"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchCIHigh",
+      "value": "+0.0017"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchP",
+      "value": "0.8026"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQExactMatchPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFA",
+      "value": "0.4451"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFB",
+      "value": "0.4433"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFDiff",
+      "value": "-0.0018"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFCILow",
+      "value": "-0.0041"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFCIHigh",
+      "value": "+0.0003"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFP",
+      "value": "0.7021"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQFPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionA",
+      "value": "0.1657"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionB",
+      "value": "0.1704"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionDiff",
+      "value": "+0.0047"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionCILow",
+      "value": "+0.0006"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionCIHigh",
+      "value": "+0.0091"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionP",
+      "value": "0.0405"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAbstentionPHolm",
+      "value": "0.1620"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredA",
+      "value": "0.4067"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredB",
+      "value": "0.4070"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredDiff",
+      "value": "+0.0003"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredCILow",
+      "value": "-0.0020"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredCIHigh",
+      "value": "+0.0027"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredP",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQEMbothansweredPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextA",
+      "value": "0.7298"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextB",
+      "value": "0.7253"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextDiff",
+      "value": "-0.0044"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextCILow",
+      "value": "-0.0067"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextCIHigh",
+      "value": "-0.0022"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextP",
+      "value": "0.0004"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQAnswerincontextPHolm",
+      "value": "0.0020"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxA",
+      "value": "5.2881"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxB",
+      "value": "5.0061"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxDiff",
+      "value": "-0.2820"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxCILow",
+      "value": "-0.3249"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxCIHigh",
+      "value": "-0.2413"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsA",
+      "value": "2.0906"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsB",
+      "value": "2.0529"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsDiff",
+      "value": "-0.0377"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsCILow",
+      "value": "-0.0526"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsCIHigh",
+      "value": "-0.0230"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensA",
+      "value": "1867.7881"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensB",
+      "value": "998.5136"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensDiff",
+      "value": "-869.2745"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensCILow",
+      "value": "-898.8773"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensCIHigh",
+      "value": "-841.3083"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysA",
+      "value": "27.0424"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysB",
+      "value": "23.9971"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysDiff",
+      "value": "-3.0454"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysCILow",
+      "value": "-3.4516"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysCIHigh",
+      "value": "-2.6637"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsAdaptiveNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

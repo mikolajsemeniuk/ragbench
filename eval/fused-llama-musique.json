@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "FusedLlamaMuSiQueQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "FusedLlamaMuSiQueEM",
+      "value": "0.0869"
+    },
+    {
+      "name": "FusedLlamaMuSiQueFOne",
+      "value": "0.1626"
+    },
+    {
+      "name": "FusedLlamaMuSiQueAbstentionRate",
+      "value": "0.1623"
+    },
+    {
+      "name": "FusedLlamaMuSiQueAnsweredQuestions",
+      "value": "2024"
+    },
+    {
+      "name": "FusedLlamaMuSiQueEMAnswered",
+      "value": "0.1038"
+    },
+    {
+      "name": "FusedLlamaMuSiQueFOneAnswered",
+      "value": "0.1896"
+    },
+    {
+      "name": "FusedLlamaMuSiQueMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "FusedLlamaMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "FusedLlamaMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "FusedLlamaMuSiQueAnswerInContext",
+      "value": "0.2430"
+    },
+    {
+      "name": "FusedLlamaMuSiQueAnswerInContextQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "FusedLlamaMuSiQueRecallInContext",
+      "value": "0.2619"
+    },
+    {
+      "name": "FusedLlamaMuSiQueMRR",
+      "value": "0.4360"
+    },
+    {
+      "name": "FusedLlamaMuSiQueRetrievalEvalQuestions",
+      "value": "2416"
+    },
+    {
+      "name": "FusedLlamaMuSiQueLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "FusedLlamaMuSiQuePromptTokens",
+      "value": "794"
+    },
+    {
+      "name": "FusedLlamaMuSiQueCompletionTokens",
+      "value": "8"
+    },
+    {
+      "name": "FusedLlamaMuSiQueThroughput",
+      "value": "3.38"
+    },
+    {
+      "name": "FusedLlamaMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGTopTenMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueEM",
+      "value": "0.0877"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueFOne",
+      "value": "0.1711"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueAbstentionRate",
+      "value": "0.1953"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueAnsweredQuestions",
+      "value": "1945"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueEMAnswered",
+      "value": "0.1090"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueFOneAnswered",
+      "value": "0.2052"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueMeanPassagesInContext",
+      "value": "10.00"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueTopK",
+      "value": "10"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueAnswerInContext",
+      "value": "0.3269"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueAnswerInContextQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueRecallInContext",
+      "value": "0.2732"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueMRR",
+      "value": "0.3789"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueRetrievalEvalQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueLLMCalls",
+      "value": "3.00"
+    },
+    {
+      "name": "CRAGTopTenMuSiQuePromptTokens",
+      "value": "3374"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueCompletionTokens",
+      "value": "43"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueThroughput",
+      "value": "1.40"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueBranchAmbiguous",
+      "value": "1234"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueBranchCorrect",
+      "value": "3"
+    },
+    {
+      "name": "CRAGTopTenMuSiQueBranchIncorrect",
+      "value": "1180"
+    }
+  ]
+}

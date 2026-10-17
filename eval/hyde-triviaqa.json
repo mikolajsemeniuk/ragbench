@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HyDETriviaQAQuestions",
+      "value": "11311"
+    },
+    {
+      "name": "HyDETriviaQAEM",
+      "value": "0.5954"
+    },
+    {
+      "name": "HyDETriviaQAFOne",
+      "value": "0.6854"
+    },
+    {
+      "name": "HyDETriviaQAAbstentionRate",
+      "value": "0.0665"
+    },
+    {
+      "name": "HyDETriviaQAAnsweredQuestions",
+      "value": "10559"
+    },
+    {
+      "name": "HyDETriviaQAEMAnswered",
+      "value": "0.6378"
+    },
+    {
+      "name": "HyDETriviaQAFOneAnswered",
+      "value": "0.7300"
+    },
+    {
+      "name": "HyDETriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HyDETriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "HyDETriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HyDETriviaQAAnswerInContext",
+      "value": "0.7681"
+    },
+    {
+      "name": "HyDETriviaQAAnswerInContextQuestions",
+      "value": "11311"
+    },
+    {
+      "name": "HyDETriviaQALLMCalls",
+      "value": "2.00"
+    },
+    {
+      "name": "HyDETriviaQAPromptTokens",
+      "value": "946"
+    },
+    {
+      "name": "HyDETriviaQACompletionTokens",
+      "value": "153"
+    },
+    {
+      "name": "HyDETriviaQAThroughput",
+      "value": "2.05"
+    },
+    {
+      "name": "HyDETriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

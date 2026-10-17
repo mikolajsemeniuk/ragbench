@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NaiveRAGLlamaTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAEM",
+      "value": "0.5885"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAFOne",
+      "value": "0.6794"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAAbstentionRate",
+      "value": "0.0423"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAAnsweredQuestions",
+      "value": "10834"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAEMAnswered",
+      "value": "0.6145"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAFOneAnswered",
+      "value": "0.7075"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAAnswerInContext",
+      "value": "0.7357"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAAnswerInContextQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAPromptTokens",
+      "value": "793"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQACompletionTokens",
+      "value": "6"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAThroughput",
+      "value": "4.02"
+    },
+    {
+      "name": "NaiveRAGLlamaTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

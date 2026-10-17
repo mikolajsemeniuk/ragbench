@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NaiveRAGTwoWikiQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "NaiveRAGTwoWikiEM",
+      "value": "0.2285"
+    },
+    {
+      "name": "NaiveRAGTwoWikiFOne",
+      "value": "0.2974"
+    },
+    {
+      "name": "NaiveRAGTwoWikiAbstentionRate",
+      "value": "0.1672"
+    },
+    {
+      "name": "NaiveRAGTwoWikiAnsweredQuestions",
+      "value": "10472"
+    },
+    {
+      "name": "NaiveRAGTwoWikiEMAnswered",
+      "value": "0.2744"
+    },
+    {
+      "name": "NaiveRAGTwoWikiFOneAnswered",
+      "value": "0.3449"
+    },
+    {
+      "name": "NaiveRAGTwoWikiMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "NaiveRAGTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "NaiveRAGTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NaiveRAGTwoWikiAnswerInContext",
+      "value": "0.3339"
+    },
+    {
+      "name": "NaiveRAGTwoWikiAnswerInContextQuestions",
+      "value": "11267"
+    },
+    {
+      "name": "NaiveRAGTwoWikiRecallInContext",
+      "value": "0.3540"
+    },
+    {
+      "name": "NaiveRAGTwoWikiMRR",
+      "value": "0.5877"
+    },
+    {
+      "name": "NaiveRAGTwoWikiRetrievalEvalQuestions",
+      "value": "12575"
+    },
+    {
+      "name": "NaiveRAGTwoWikiLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NaiveRAGTwoWikiPromptTokens",
+      "value": "913"
+    },
+    {
+      "name": "NaiveRAGTwoWikiCompletionTokens",
+      "value": "14"
+    },
+    {
+      "name": "NaiveRAGTwoWikiThroughput",
+      "value": "5.51"
+    },
+    {
+      "name": "NaiveRAGTwoWikiConcurrency",
+      "value": "48"
+    }
+  ]
+}

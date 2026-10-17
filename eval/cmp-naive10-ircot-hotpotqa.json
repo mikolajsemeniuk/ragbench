@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPaired",
+      "value": "7405"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchA",
+      "value": "0.3299"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchB",
+      "value": "0.3409"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchDiff",
+      "value": "+0.0109"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchCILow",
+      "value": "+0.0041"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchCIHigh",
+      "value": "+0.0178"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchP",
+      "value": "0.0022"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAExactMatchPHolm",
+      "value": "0.0022"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFA",
+      "value": "0.4367"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFB",
+      "value": "0.4493"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFDiff",
+      "value": "+0.0127"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFCILow",
+      "value": "+0.0060"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFCIHigh",
+      "value": "+0.0194"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFP",
+      "value": "0.0003"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAFPHolm",
+      "value": "0.0010"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionA",
+      "value": "0.0905"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionB",
+      "value": "0.1030"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionDiff",
+      "value": "+0.0126"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionCILow",
+      "value": "+0.0059"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionCIHigh",
+      "value": "+0.0190"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionP",
+      "value": "0.0002"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAbstentionPHolm",
+      "value": "0.0008"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredA",
+      "value": "0.3776"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredB",
+      "value": "0.3909"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredDiff",
+      "value": "+0.0133"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredCILow",
+      "value": "+0.0060"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredCIHigh",
+      "value": "+0.0207"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredP",
+      "value": "0.0008"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAEMbothansweredPHolm",
+      "value": "0.0015"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextA",
+      "value": "0.6090"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextB",
+      "value": "0.5719"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextDiff",
+      "value": "-0.0371"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextCILow",
+      "value": "-0.0439"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextCIHigh",
+      "value": "-0.0304"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextA",
+      "value": "0.5994"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextB",
+      "value": "0.5629"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextDiff",
+      "value": "-0.0365"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextCILow",
+      "value": "-0.0408"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextCIHigh",
+      "value": "-0.0322"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQARecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRA",
+      "value": "0.7004"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRB",
+      "value": "0.6969"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRDiff",
+      "value": "-0.0035"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRCILow",
+      "value": "-0.0041"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRCIHigh",
+      "value": "-0.0029"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxA",
+      "value": "10.0000"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxB",
+      "value": "6.1326"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxDiff",
+      "value": "-3.8674"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxCILow",
+      "value": "-3.9259"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxCIHigh",
+      "value": "-3.8092"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsB",
+      "value": "2.3099"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsDiff",
+      "value": "+1.3099"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsCILow",
+      "value": "+1.2945"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsCIHigh",
+      "value": "+1.3257"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensA",
+      "value": "1665.1965"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensB",
+      "value": "2483.2747"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensDiff",
+      "value": "+818.0782"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensCILow",
+      "value": "+781.4539"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensCIHigh",
+      "value": "+855.9479"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysA",
+      "value": "17.8632"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysB",
+      "value": "36.6698"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysDiff",
+      "value": "+18.8066"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysCILow",
+      "value": "+18.3132"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysCIHigh",
+      "value": "+19.2989"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveTenVsIRCoTHotpotQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

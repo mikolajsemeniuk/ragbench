@@ -1,0 +1,19 @@
+% Shared TikZ styles so that every architecture diagram uses the same visual
+% vocabulary: grey = input/output text, blue = retrieval components, teal =
+% storage, orange = LLM calls, yellow diamonds = decisions.
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\tikzset{
+  comp/.style={draw=black!60, rounded corners=2pt, minimum height=6.5mm,
+               minimum width=15mm, align=center, font=\small, inner sep=3pt},
+  q/.style={comp, fill=black!8},
+  ret/.style={comp, fill=blue!12},
+  store/.style={comp, cylinder, shape border rotate=90, aspect=0.12,
+                fill=teal!15, minimum height=9mm},
+  llm/.style={comp, fill=orange!22},
+  ans/.style={comp, fill=green!15},
+  dec/.style={draw=black!60, diamond, aspect=2.2, fill=yellow!25,
+              align=center, font=\small, inner sep=1pt},
+  doc/.style={comp, fill=violet!10, minimum width=12mm},
+  arr/.style={-{Stealth[length=2mm]}, semithick},
+  lbl/.style={font=\scriptsize, align=center}
+}

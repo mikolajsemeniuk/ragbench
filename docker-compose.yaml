@@ -1,44 +1,200 @@
-services:
-  vllm-llm:
-    image: vllm/vllm-openai:latest
-    container_name: vllm-llm
-    ports:
-      - "8000:8000"
-    volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
-    command: --model Qwen/Qwen2.5-7B-Instruct --served-model-name qwen2.5-7b-instruct
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+# Reproducible serving stack for the RAG experiments: one embedding server
+# (retrieval), one generative server (answer synthesis) and one vector store.
+#
+# Both vLLM servers share a single GPU, so each one gets an explicit
+# --gpu-memory-utilization budget. Without it every vLLM process defaults to
+# 0.9 of total device memory, the second server to start finds nothing left
+# and dies during KV-cache profiling.
+#
+# Ingest (cmd/ingest) only needs `qdrant` and `vllm-embed`; `vllm-llm` is only
+# required by cmd/bench. Start the subset you need - see README.
 
+services:
+  # Embedding server used both by cmd/ingest (corpus) and cmd/bench (queries).
   vllm-embed:
-    image: vllm/vllm-openai:latest
+    image: vllm/vllm-openai:v0.25.1
     container_name: vllm-embed
     ports:
       - "8001:8000"
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
-    command: --model BAAI/bge-base-en-v1.5 --served-model-name bge-base-en-v1.5 --task embed
+    # --max-num-seqs / --max-num-batched-tokens are deliberately modest.
+    # A pooling model returns one dense vector per sequence, and the whole
+    # step output is shipped from EngineCore to the API server as a single
+    # MessagePack frame. Batching thousands of sequences per step produces a
+    # frame large enough to trip vLLM's serialization path
+    # ("msgspec.DecodeError: MessagePack data is malformed"), which kills the
+    # output handler; from that moment on every request returns 500 while the
+    # container stays up. Capping the step size keeps frames small.
+    #
+    # --max-model-len 512 pins the context window to what bge-base-en-v1.5
+    # actually supports, so the server-side truncation requested by
+    # cmd/ingest (truncate_prompt_tokens) is exact and reproducible.
+    command: >
+      --model BAAI/bge-base-en-v1.5
+      --served-model-name bge-base-en-v1.5
+      --runner pooling
+      --max-model-len 512
+      --max-num-seqs 256
+      --max-num-batched-tokens 16384
+      --gpu-memory-utilization 0.12
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 300s
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              device_ids: ["0"]
+              capabilities: [gpu]
+
+  # Cross-encoder reranker used by the rerank architecture in cmd/bench.
+  #
+  # cmd/diagnose shows that for a sizeable share of the questions the top-5
+  # baseline gets wrong, the answer-bearing article was retrieved but ranked
+  # too low to survive the cut - see \Diag<Set>RankedLowPct in
+  # paper/diagnosis-<set>.gen.tex for the current figure rather than a number
+  # copied here. A cross-encoder scores the question against each passage
+  # jointly instead of comparing two independently produced vectors, which is
+  # what lets it reorder those results.
+  vllm-rerank:
+    image: vllm/vllm-openai:v0.25.1
+    container_name: vllm-rerank
+    ports:
+      - "8002:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    command: >
+      --model BAAI/bge-reranker-base
+      --served-model-name bge-reranker-base
+      --runner pooling
+      --max-model-len 512
+      --max-num-seqs 256
+      --max-num-batched-tokens 16384
+      --gpu-memory-utilization 0.10
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 300s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+
+  # Generative server used by cmd/bench only.
+  vllm-llm:
+    image: vllm/vllm-openai:v0.25.1
+    container_name: vllm-llm
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    # --max-model-len 8192 is well above the longest baseline prompt (top-k
+    # passages + question) and keeps the KV cache from being sized for the
+    # model's full 32k window.
+    command: >
+      --model Qwen/Qwen2.5-7B-Instruct
+      --served-model-name qwen2.5-7b-instruct
+      --max-model-len 8192
+      --gpu-memory-utilization 0.55
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 600s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+
+  # A second reader, for the check that the abstention behaviour the cascade
+  # relies on is not a property of one model. Same budget as vllm-llm, so the
+  # two cannot run at once: `docker compose stop vllm-llm` first. The
+  # NousResearch repository is a byte-identical mirror of
+  # meta-llama/Llama-3.1-8B-Instruct without the Hugging Face gate, so no
+  # token is needed; cite the Meta model in the paper.
+  vllm-llm-llama:
+    image: vllm/vllm-openai:v0.25.1
+    container_name: vllm-llm-llama
+    ports:
+      - "8003:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    command: >
+      --model NousResearch/Meta-Llama-3.1-8B-Instruct
+      --served-model-name llama-3.1-8b-instruct
+      --max-model-len 8192
+      --gpu-memory-utilization 0.55
+      --uvicorn-log-level warning
+    ipc: host
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 600s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
               capabilities: [gpu]
 
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant:v1.19.0
     container_name: qdrant
     ports:
       - "6333:6333"
       - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
+    environment:
+      # The full wiki18_100w corpus is ~21M x 768-dim vectors (~64 GiB of raw
+      # float32) plus the passage text. Keeping vectors and payloads on disk
+      # and letting the OS page-cache them is what makes the collection fit
+      # next to vLLM on a single 128 GiB unified-memory host. cmd/ingest also
+      # sets on_disk on the collection itself; this is the storage-wide
+      # default for anything created outside it.
+      QDRANT__STORAGE__ON_DISK_PAYLOAD: "true"
+      # One ingest batch (256 points x 768 floats + passage text) is a few MiB
+      # of JSON; the 32 MiB default leaves little room, so raise it.
+      QDRANT__SERVICE__MAX_REQUEST_SIZE_MB: "128"
+      QDRANT__LOG_LEVEL: "INFO"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/6333"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
 volumes:
   qdrant_data:

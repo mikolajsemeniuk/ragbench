@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPaired",
+      "value": "7405"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchA",
+      "value": "0.3409"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchB",
+      "value": "0.3367"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchDiff",
+      "value": "-0.0042"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchCILow",
+      "value": "-0.0089"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchCIHigh",
+      "value": "+0.0004"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchP",
+      "value": "0.0858"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAExactMatchPHolm",
+      "value": "0.3433"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFA",
+      "value": "0.4493"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFB",
+      "value": "0.4464"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFDiff",
+      "value": "-0.0029"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFCILow",
+      "value": "-0.0075"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFCIHigh",
+      "value": "+0.0017"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFP",
+      "value": "0.2259"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAFPHolm",
+      "value": "0.4517"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionA",
+      "value": "0.1030"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionB",
+      "value": "0.1024"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionDiff",
+      "value": "-0.0007"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionCILow",
+      "value": "-0.0050"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionCIHigh",
+      "value": "+0.0038"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionP",
+      "value": "0.8073"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAbstentionPHolm",
+      "value": "0.8073"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredA",
+      "value": "0.3848"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredB",
+      "value": "0.3806"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredDiff",
+      "value": "-0.0041"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredCILow",
+      "value": "-0.0091"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredCIHigh",
+      "value": "+0.0009"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredP",
+      "value": "0.1142"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAEMbothansweredPHolm",
+      "value": "0.3433"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextA",
+      "value": "0.5719"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextB",
+      "value": "0.5782"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextDiff",
+      "value": "+0.0063"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextCILow",
+      "value": "+0.0013"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextCIHigh",
+      "value": "+0.0114"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextP",
+      "value": "0.0166"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAAnswerincontextPHolm",
+      "value": "0.0828"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextA",
+      "value": "0.5629"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextB",
+      "value": "0.5679"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextDiff",
+      "value": "+0.0050"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextCILow",
+      "value": "+0.0020"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextCIHigh",
+      "value": "+0.0081"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextP",
+      "value": "0.0053"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQARecallincontextPHolm",
+      "value": "0.0320"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRA",
+      "value": "0.6969"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRB",
+      "value": "0.6975"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRDiff",
+      "value": "+0.0006"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRCILow",
+      "value": "+0.0002"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRCIHigh",
+      "value": "+0.0010"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRP",
+      "value": "0.0008"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAMRRPHolm",
+      "value": "0.0058"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxA",
+      "value": "6.1326"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxB",
+      "value": "6.5118"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxDiff",
+      "value": "+0.3792"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxCILow",
+      "value": "+0.3014"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxCIHigh",
+      "value": "+0.4583"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsA",
+      "value": "2.3099"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsB",
+      "value": "2.4124"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsDiff",
+      "value": "+0.1025"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsCILow",
+      "value": "+0.0808"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsCIHigh",
+      "value": "+0.1245"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensA",
+      "value": "2483.2747"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensB",
+      "value": "2939.6831"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensDiff",
+      "value": "+456.4084"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensCILow",
+      "value": "+404.5032"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensCIHigh",
+      "value": "+508.9394"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysA",
+      "value": "36.6698"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysB",
+      "value": "48.5825"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysDiff",
+      "value": "+11.9126"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysCILow",
+      "value": "+11.1527"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysCIHigh",
+      "value": "+12.6907"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "IRCoTVsIRCoTOneShotHotpotQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

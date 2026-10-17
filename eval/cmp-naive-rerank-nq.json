@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "NaiveVsRerankNQPaired",
+      "value": "3606"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchA",
+      "value": "0.3353"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchB",
+      "value": "0.2352"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchDiff",
+      "value": "-0.1001"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchCILow",
+      "value": "-0.1145"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchCIHigh",
+      "value": "-0.0860"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQFA",
+      "value": "0.4441"
+    },
+    {
+      "name": "NaiveVsRerankNQFB",
+      "value": "0.3177"
+    },
+    {
+      "name": "NaiveVsRerankNQFDiff",
+      "value": "-0.1265"
+    },
+    {
+      "name": "NaiveVsRerankNQFCILow",
+      "value": "-0.1404"
+    },
+    {
+      "name": "NaiveVsRerankNQFCIHigh",
+      "value": "-0.1125"
+    },
+    {
+      "name": "NaiveVsRerankNQFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionA",
+      "value": "0.1692"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionB",
+      "value": "0.2773"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionDiff",
+      "value": "+0.1082"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionCILow",
+      "value": "+0.0923"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionCIHigh",
+      "value": "+0.1242"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredA",
+      "value": "0.4352"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredB",
+      "value": "0.3489"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredDiff",
+      "value": "-0.0863"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredCILow",
+      "value": "-0.1050"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredCIHigh",
+      "value": "-0.0680"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextA",
+      "value": "0.7267"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextB",
+      "value": "0.5097"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextDiff",
+      "value": "-0.2170"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextCILow",
+      "value": "-0.2334"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextCIHigh",
+      "value": "-0.2003"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPassagesinctxPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQLLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensA",
+      "value": "825.2981"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensB",
+      "value": "836.6400"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensDiff",
+      "value": "+11.3419"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensCILow",
+      "value": "+9.4900"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensCIHigh",
+      "value": "+13.1669"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysA",
+      "value": "17.3662"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysB",
+      "value": "25.3044"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysDiff",
+      "value": "+7.9382"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysCILow",
+      "value": "+7.8065"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysCIHigh",
+      "value": "+8.0753"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "NaiveVsRerankNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

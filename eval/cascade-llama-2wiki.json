@@ -1,0 +1,101 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CascadeLlamaTwoWikiQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiEM",
+      "value": "0.2770"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiFOne",
+      "value": "0.3486"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiAbstentionRate",
+      "value": "0.0004"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiAnsweredQuestions",
+      "value": "12564"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiEMAnswered",
+      "value": "0.2771"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiFOneAnswered",
+      "value": "0.3488"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiMeanPassagesInContext",
+      "value": "4.71"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiTopK",
+      "value": "5"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiAnswerInContext",
+      "value": "0.3787"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiAnswerInContextQuestions",
+      "value": "11262"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiRecallInContext",
+      "value": "0.3845"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiMRR",
+      "value": "0.6613"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiRetrievalEvalQuestions",
+      "value": "12569"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiLLMCalls",
+      "value": "1.29"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiPromptTokens",
+      "value": "958"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiCompletionTokens",
+      "value": "25"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiThroughput",
+      "value": "3.06"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiStageClosedbook",
+      "value": "737"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiStageFused",
+      "value": "11139"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiStageHyde",
+      "value": "693"
+    },
+    {
+      "name": "CascadeLlamaTwoWikiStagesRun",
+      "value": "1.17"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "generator": "cmd/coverage",
+  "commands": [
+    {
+      "name": "CoverageTwoWikiAnnotatedQuestions",
+      "value": "12576"
+    },
+    {
+      "name": "CoverageTwoWikiGoldTitles",
+      "value": "23561"
+    },
+    {
+      "name": "CoverageTwoWikiGoldTitlesPresent",
+      "value": "16379"
+    },
+    {
+      "name": "CoverageTwoWikiGoldTitlesPresentExact",
+      "value": "15317"
+    },
+    {
+      "name": "CoverageTwoWikiRecallCeiling",
+      "value": "0.7260"
+    },
+    {
+      "name": "CoverageTwoWikiRecallCeilingExact",
+      "value": "0.6727"
+    },
+    {
+      "name": "CoverageTwoWikiQuestionsFullyCovered",
+      "value": "6420"
+    },
+    {
+      "name": "CoverageTwoWikiQuestionsFullyCoveredPct",
+      "value": "51.0"
+    }
+  ]
+}

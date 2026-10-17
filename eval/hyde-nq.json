@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "HyDENQQuestions",
+      "value": "3610"
+    },
+    {
+      "name": "HyDENQEM",
+      "value": "0.3476"
+    },
+    {
+      "name": "HyDENQFOne",
+      "value": "0.4602"
+    },
+    {
+      "name": "HyDENQAbstentionRate",
+      "value": "0.1598"
+    },
+    {
+      "name": "HyDENQAnsweredQuestions",
+      "value": "3033"
+    },
+    {
+      "name": "HyDENQEMAnswered",
+      "value": "0.4138"
+    },
+    {
+      "name": "HyDENQFOneAnswered",
+      "value": "0.5347"
+    },
+    {
+      "name": "HyDENQMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "HyDENQTopK",
+      "value": "5"
+    },
+    {
+      "name": "HyDENQHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "HyDENQAnswerInContext",
+      "value": "0.7525"
+    },
+    {
+      "name": "HyDENQAnswerInContextQuestions",
+      "value": "3608"
+    },
+    {
+      "name": "HyDENQLLMCalls",
+      "value": "2.00"
+    },
+    {
+      "name": "HyDENQPromptTokens",
+      "value": "926"
+    },
+    {
+      "name": "HyDENQCompletionTokens",
+      "value": "168"
+    },
+    {
+      "name": "HyDENQThroughput",
+      "value": "2.12"
+    },
+    {
+      "name": "HyDENQConcurrency",
+      "value": "48"
+    }
+  ]
+}

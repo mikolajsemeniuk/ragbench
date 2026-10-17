@@ -1,0 +1,97 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "CRAGHotpotQAQuestions",
+      "value": "7403"
+    },
+    {
+      "name": "CRAGHotpotQAEM",
+      "value": "0.3284"
+    },
+    {
+      "name": "CRAGHotpotQAFOne",
+      "value": "0.4367"
+    },
+    {
+      "name": "CRAGHotpotQAAbstentionRate",
+      "value": "0.1035"
+    },
+    {
+      "name": "CRAGHotpotQAAnsweredQuestions",
+      "value": "6637"
+    },
+    {
+      "name": "CRAGHotpotQAEMAnswered",
+      "value": "0.3663"
+    },
+    {
+      "name": "CRAGHotpotQAFOneAnswered",
+      "value": "0.4829"
+    },
+    {
+      "name": "CRAGHotpotQAMeanPassagesInContext",
+      "value": "5.32"
+    },
+    {
+      "name": "CRAGHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "CRAGHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "CRAGHotpotQAAnswerInContext",
+      "value": "0.5482"
+    },
+    {
+      "name": "CRAGHotpotQAAnswerInContextQuestions",
+      "value": "6945"
+    },
+    {
+      "name": "CRAGHotpotQARecallInContext",
+      "value": "0.5462"
+    },
+    {
+      "name": "CRAGHotpotQAMRR",
+      "value": "0.7145"
+    },
+    {
+      "name": "CRAGHotpotQARetrievalEvalQuestions",
+      "value": "7403"
+    },
+    {
+      "name": "CRAGHotpotQALLMCalls",
+      "value": "2.99"
+    },
+    {
+      "name": "CRAGHotpotQAPromptTokens",
+      "value": "1895"
+    },
+    {
+      "name": "CRAGHotpotQACompletionTokens",
+      "value": "36"
+    },
+    {
+      "name": "CRAGHotpotQAThroughput",
+      "value": "0.98"
+    },
+    {
+      "name": "CRAGHotpotQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "CRAGHotpotQABranchAmbiguous",
+      "value": "4980"
+    },
+    {
+      "name": "CRAGHotpotQABranchCorrect",
+      "value": "92"
+    },
+    {
+      "name": "CRAGHotpotQABranchIncorrect",
+      "value": "2331"
+    }
+  ]
+}

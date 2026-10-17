@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePaired",
+      "value": "2414"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchA",
+      "value": "0.0812"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchB",
+      "value": "0.0841"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchDiff",
+      "value": "+0.0029"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchCILow",
+      "value": "-0.0070"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchCIHigh",
+      "value": "+0.0128"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchP",
+      "value": "0.6230"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueExactMatchPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFA",
+      "value": "0.1635"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFB",
+      "value": "0.1728"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFDiff",
+      "value": "+0.0093"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFCILow",
+      "value": "-0.0019"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFCIHigh",
+      "value": "+0.0205"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFP",
+      "value": "0.0553"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueFPHolm",
+      "value": "0.1660"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionA",
+      "value": "0.2129"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionB",
+      "value": "0.0456"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionDiff",
+      "value": "-0.1674"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionCILow",
+      "value": "-0.1839"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionCIHigh",
+      "value": "-0.1508"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredA",
+      "value": "0.1054"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredB",
+      "value": "0.1044"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredDiff",
+      "value": "-0.0011"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredCILow",
+      "value": "-0.0134"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredCIHigh",
+      "value": "+0.0113"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredP",
+      "value": "0.9326"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueEMbothansweredPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextA",
+      "value": "0.2684"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextB",
+      "value": "0.2216"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextDiff",
+      "value": "-0.0468"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextCILow",
+      "value": "-0.0621"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextCIHigh",
+      "value": "-0.0315"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextA",
+      "value": "0.2681"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextB",
+      "value": "0.2176"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextDiff",
+      "value": "-0.0504"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextCILow",
+      "value": "-0.0604"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextCIHigh",
+      "value": "-0.0409"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueRecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRA",
+      "value": "0.4431"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRB",
+      "value": "0.3532"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRDiff",
+      "value": "-0.0899"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRCILow",
+      "value": "-0.1064"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRCIHigh",
+      "value": "-0.0736"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxA",
+      "value": "5.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxB",
+      "value": "3.9685"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxDiff",
+      "value": "-1.0315"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxCILow",
+      "value": "-1.1143"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxCIHigh",
+      "value": "-0.9507"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsB",
+      "value": "1.9420"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsDiff",
+      "value": "+0.9420"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsCILow",
+      "value": "+0.8911"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsCIHigh",
+      "value": "+0.9930"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLLMcallsPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensA",
+      "value": "844.8612"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensB",
+      "value": "1212.9097"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensDiff",
+      "value": "+368.0485"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensCILow",
+      "value": "+349.1284"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensCIHigh",
+      "value": "+387.7564"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQuePrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysA",
+      "value": "16.6430"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysB",
+      "value": "30.4362"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysDiff",
+      "value": "+13.7932"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysCILow",
+      "value": "+13.0660"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysCIHigh",
+      "value": "+14.5128"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "RerankVsCascadeLogprobMuSiQueLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

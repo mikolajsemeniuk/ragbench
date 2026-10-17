@@ -1,0 +1,73 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "IRCoTOneShotTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAEM",
+      "value": "0.5756"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAFOne",
+      "value": "0.6648"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAAbstentionRate",
+      "value": "0.0723"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAAnsweredQuestions",
+      "value": "10495"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAEMAnswered",
+      "value": "0.6205"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAFOneAnswered",
+      "value": "0.7118"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAMeanPassagesInContext",
+      "value": "5.64"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAAnswerInContext",
+      "value": "0.7465"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAAnswerInContextQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQALLMCalls",
+      "value": "2.19"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAPromptTokens",
+      "value": "2302"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQACompletionTokens",
+      "value": "77"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAThroughput",
+      "value": "1.29"
+    },
+    {
+      "name": "IRCoTOneShotTriviaQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

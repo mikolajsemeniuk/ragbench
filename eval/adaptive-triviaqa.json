@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "AdaptiveTriviaQAQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "AdaptiveTriviaQAEM",
+      "value": "0.5698"
+    },
+    {
+      "name": "AdaptiveTriviaQAFOne",
+      "value": "0.6593"
+    },
+    {
+      "name": "AdaptiveTriviaQAAbstentionRate",
+      "value": "0.0791"
+    },
+    {
+      "name": "AdaptiveTriviaQAAnsweredQuestions",
+      "value": "10418"
+    },
+    {
+      "name": "AdaptiveTriviaQAEMAnswered",
+      "value": "0.6187"
+    },
+    {
+      "name": "AdaptiveTriviaQAFOneAnswered",
+      "value": "0.7108"
+    },
+    {
+      "name": "AdaptiveTriviaQAMeanPassagesInContext",
+      "value": "5.02"
+    },
+    {
+      "name": "AdaptiveTriviaQATopK",
+      "value": "5"
+    },
+    {
+      "name": "AdaptiveTriviaQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "AdaptiveTriviaQAAnswerInContext",
+      "value": "0.7346"
+    },
+    {
+      "name": "AdaptiveTriviaQAAnswerInContextQuestions",
+      "value": "11313"
+    },
+    {
+      "name": "AdaptiveTriviaQALLMCalls",
+      "value": "2.06"
+    },
+    {
+      "name": "AdaptiveTriviaQAPromptTokens",
+      "value": "1039"
+    },
+    {
+      "name": "AdaptiveTriviaQACompletionTokens",
+      "value": "16"
+    },
+    {
+      "name": "AdaptiveTriviaQAThroughput",
+      "value": "1.96"
+    },
+    {
+      "name": "AdaptiveTriviaQAConcurrency",
+      "value": "48"
+    },
+    {
+      "name": "AdaptiveTriviaQARouteClosedbook",
+      "value": "27"
+    },
+    {
+      "name": "AdaptiveTriviaQARouteMulti",
+      "value": "600"
+    },
+    {
+      "name": "AdaptiveTriviaQARouteSingle",
+      "value": "10686"
+    }
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPaired",
+      "value": "7404"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchA",
+      "value": "0.2183"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchB",
+      "value": "0.3355"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchDiff",
+      "value": "+0.1172"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchCILow",
+      "value": "+0.1067"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchCIHigh",
+      "value": "+0.1279"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAExactMatchPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFA",
+      "value": "0.3060"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFB",
+      "value": "0.4410"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFDiff",
+      "value": "+0.1350"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFCILow",
+      "value": "+0.1242"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFCIHigh",
+      "value": "+0.1457"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAFPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionA",
+      "value": "0.0080"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionB",
+      "value": "0.0700"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionDiff",
+      "value": "+0.0620"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionCILow",
+      "value": "+0.0562"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionCIHigh",
+      "value": "+0.0681"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAbstentionPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredA",
+      "value": "0.2301"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredB",
+      "value": "0.3623"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredDiff",
+      "value": "+0.1322"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredCILow",
+      "value": "+0.1208"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredCIHigh",
+      "value": "+0.1434"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAEMbothansweredPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextB",
+      "value": "0.5422"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextDiff",
+      "value": "+0.5422"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextCILow",
+      "value": "+0.5304"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextCIHigh",
+      "value": "+0.5538"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextB",
+      "value": "0.5405"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextDiff",
+      "value": "+0.5405"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextCILow",
+      "value": "+0.5324"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextCIHigh",
+      "value": "+0.5485"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQARecallincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRB",
+      "value": "0.6958"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRDiff",
+      "value": "+0.6958"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRCILow",
+      "value": "+0.6863"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRCIHigh",
+      "value": "+0.7053"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAMRRPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxA",
+      "value": "0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxB",
+      "value": "5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxDiff",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxCILow",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxCIHigh",
+      "value": "+5.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPassagesinctxPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsA",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsB",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsDiff",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsCILow",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsCIHigh",
+      "value": "+0.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsP",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALLMcallsPHolm",
+      "value": "1.0000"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensA",
+      "value": "49.3241"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensB",
+      "value": "814.5320"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensDiff",
+      "value": "+765.2079"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensCILow",
+      "value": "+764.1167"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensCIHigh",
+      "value": "+766.2916"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQAPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysA",
+      "value": "0.8437"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysB",
+      "value": "13.0739"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysDiff",
+      "value": "+12.2302"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysCILow",
+      "value": "+12.1160"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysCIHigh",
+      "value": "+12.3464"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "ClosedBookVsNaiveRAGLlamaHotpotQALatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

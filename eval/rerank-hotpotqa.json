@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "RerankHotpotQAQuestions",
+      "value": "7396"
+    },
+    {
+      "name": "RerankHotpotQAEM",
+      "value": "0.3757"
+    },
+    {
+      "name": "RerankHotpotQAFOne",
+      "value": "0.4911"
+    },
+    {
+      "name": "RerankHotpotQAAbstentionRate",
+      "value": "0.0791"
+    },
+    {
+      "name": "RerankHotpotQAAnsweredQuestions",
+      "value": "6811"
+    },
+    {
+      "name": "RerankHotpotQAEMAnswered",
+      "value": "0.4080"
+    },
+    {
+      "name": "RerankHotpotQAFOneAnswered",
+      "value": "0.5300"
+    },
+    {
+      "name": "RerankHotpotQAMeanPassagesInContext",
+      "value": "5.00"
+    },
+    {
+      "name": "RerankHotpotQATopK",
+      "value": "5"
+    },
+    {
+      "name": "RerankHotpotQAHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "RerankHotpotQAAnswerInContext",
+      "value": "0.6326"
+    },
+    {
+      "name": "RerankHotpotQAAnswerInContextQuestions",
+      "value": "6940"
+    },
+    {
+      "name": "RerankHotpotQARecallInContext",
+      "value": "0.6408"
+    },
+    {
+      "name": "RerankHotpotQAMRR",
+      "value": "0.8084"
+    },
+    {
+      "name": "RerankHotpotQARetrievalEvalQuestions",
+      "value": "7396"
+    },
+    {
+      "name": "RerankHotpotQALLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "RerankHotpotQAPromptTokens",
+      "value": "866"
+    },
+    {
+      "name": "RerankHotpotQACompletionTokens",
+      "value": "9"
+    },
+    {
+      "name": "RerankHotpotQAThroughput",
+      "value": "1.88"
+    },
+    {
+      "name": "RerankHotpotQAConcurrency",
+      "value": "48"
+    }
+  ]
+}

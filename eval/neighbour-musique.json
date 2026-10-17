@@ -1,0 +1,85 @@
+{
+  "generator": "cmd/bench",
+  "commands": [
+    {
+      "name": "NeighbourMuSiQueQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NeighbourMuSiQueEM",
+      "value": "0.0691"
+    },
+    {
+      "name": "NeighbourMuSiQueFOne",
+      "value": "0.1379"
+    },
+    {
+      "name": "NeighbourMuSiQueAbstentionRate",
+      "value": "0.2205"
+    },
+    {
+      "name": "NeighbourMuSiQueAnsweredQuestions",
+      "value": "1884"
+    },
+    {
+      "name": "NeighbourMuSiQueEMAnswered",
+      "value": "0.0886"
+    },
+    {
+      "name": "NeighbourMuSiQueFOneAnswered",
+      "value": "0.1699"
+    },
+    {
+      "name": "NeighbourMuSiQueMeanPassagesInContext",
+      "value": "12.26"
+    },
+    {
+      "name": "NeighbourMuSiQueTopK",
+      "value": "5"
+    },
+    {
+      "name": "NeighbourMuSiQueHNSWEf",
+      "value": "256"
+    },
+    {
+      "name": "NeighbourMuSiQueAnswerInContext",
+      "value": "0.2644"
+    },
+    {
+      "name": "NeighbourMuSiQueAnswerInContextQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NeighbourMuSiQueRecallInContext",
+      "value": "0.2209"
+    },
+    {
+      "name": "NeighbourMuSiQueMRR",
+      "value": "0.3149"
+    },
+    {
+      "name": "NeighbourMuSiQueRetrievalEvalQuestions",
+      "value": "2417"
+    },
+    {
+      "name": "NeighbourMuSiQueLLMCalls",
+      "value": "1.00"
+    },
+    {
+      "name": "NeighbourMuSiQuePromptTokens",
+      "value": "1961"
+    },
+    {
+      "name": "NeighbourMuSiQueCompletionTokens",
+      "value": "16"
+    },
+    {
+      "name": "NeighbourMuSiQueThroughput",
+      "value": "2.52"
+    },
+    {
+      "name": "NeighbourMuSiQueConcurrency",
+      "value": "48"
+    }
+  ]
+}

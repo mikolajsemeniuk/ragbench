@@ -1,0 +1,261 @@
+{
+  "generator": "cmd/compare",
+  "commands": [
+    {
+      "name": "CascadeHybridVsCascadeNQPaired",
+      "value": "3603"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchA",
+      "value": "0.3269"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchB",
+      "value": "0.3417"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchDiff",
+      "value": "+0.0147"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchCILow",
+      "value": "+0.0044"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchCIHigh",
+      "value": "+0.0247"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchP",
+      "value": "0.0054"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQExactMatchPHolm",
+      "value": "0.0270"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFA",
+      "value": "0.4476"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFB",
+      "value": "0.4603"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFDiff",
+      "value": "+0.0126"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFCILow",
+      "value": "+0.0033"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFCIHigh",
+      "value": "+0.0219"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFP",
+      "value": "0.0081"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQFPHolm",
+      "value": "0.0326"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionA",
+      "value": "0.0275"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionB",
+      "value": "0.0316"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionDiff",
+      "value": "+0.0042"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionCILow",
+      "value": "+0.0008"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionCIHigh",
+      "value": "+0.0078"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionP",
+      "value": "0.0288"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAbstentionPHolm",
+      "value": "0.0864"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredA",
+      "value": "0.3386"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredB",
+      "value": "0.3541"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredDiff",
+      "value": "+0.0155"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredCILow",
+      "value": "+0.0049"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredCIHigh",
+      "value": "+0.0259"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredP",
+      "value": "0.0045"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQEMbothansweredPHolm",
+      "value": "0.0270"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextA",
+      "value": "0.6407"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextB",
+      "value": "0.6748"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextDiff",
+      "value": "+0.0342"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextCILow",
+      "value": "+0.0236"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextCIHigh",
+      "value": "+0.0442"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQAnswerincontextPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxA",
+      "value": "4.5643"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxB",
+      "value": "4.5157"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxDiff",
+      "value": "-0.0486"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxCILow",
+      "value": "-0.0860"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxCIHigh",
+      "value": "-0.0111"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxP",
+      "value": "0.0289"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPassagesinctxPHolm",
+      "value": "0.0864"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsA",
+      "value": "1.4374"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsB",
+      "value": "1.4377"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsDiff",
+      "value": "+0.0003"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsCILow",
+      "value": "-0.0269"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsCIHigh",
+      "value": "+0.0286"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsP",
+      "value": "0.8237"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLLMcallsPHolm",
+      "value": "0.8237"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensA",
+      "value": "986.6964"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensB",
+      "value": "985.9142"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensDiff",
+      "value": "-0.7821"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensCILow",
+      "value": "-11.9156"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensCIHigh",
+      "value": "+10.2689"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQPrompttokensPHolm",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysA",
+      "value": "33.5870"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysB",
+      "value": "32.2624"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysDiff",
+      "value": "-1.3246"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysCILow",
+      "value": "-1.7501"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysCIHigh",
+      "value": "-0.8980"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysP",
+      "value": "<0.0001"
+    },
+    {
+      "name": "CascadeHybridVsCascadeNQLatencysPHolm",
+      "value": "<0.0001"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 \label{sec:results}
 
 We organise the results as six questions. Full per-set tables for every
-architecture and metric are in Appendix~\ref{app:full-tables}; unless
+architecture and metric are in Supplementary Material, Section~S2; unless
 stated otherwise, differences quoted below are paired Exact Match
 differences with Holm-adjusted p-values, and ``significant'' means
 $p<0.05$ after adjustment.
@@ -38,7 +38,7 @@ dense baseline on the open-domain sets
 \emph{ahead} of it on 2WikiMultihopQA
 (\NaiveVsBMTwentyFiveTwoWikiExactMatchDiff), whose questions name their
 target articles verbatim --- exactly the rare-surface-form failure of
-Section~\ref{sec:embeddings}. Fusing the two (Hybrid) is a small but
+Supplementary Material, Section~S1. Fusing the two (Hybrid) is a small but
 uniformly non-negative improvement
 (\NaiveVsHybridNQExactMatchDiff{} to
 \NaiveVsHybridTwoWikiExactMatchDiff{} across sets) at one CPU search of
@@ -253,7 +253,7 @@ extra calls. The greedy reader is nearly as confident when wrong as when
 right: its token log-probabilities carry almost no information the
 abstention did not already carry. We report this negative result because
 the opposite is widely assumed; the abstention-only cascade remains the
-proposed configuration. (Full sweep in Appendix~\ref{app:sweep}.)
+proposed configuration. (Full sweep in Supplementary Material, Section~S3.)
 
 \paragraph{The one-shot IRCoT objection.} Prompted with a worked example
 as the original method prescribes, IRCoT changes by
@@ -281,4 +281,4 @@ large gains over reranking on NaturalQuestions
 naive baseline on every set, and the escalation worth
 \FusedVsCascadeLlamaNQExactMatchDiff{} to
 \FusedVsCascadeLlamaTwoWikiExactMatchDiff{} over stage one alone. The
-full second-reader table is in Appendix~\ref{app:full-tables}.
+full second-reader table is in Supplementary Material, Section~S2.

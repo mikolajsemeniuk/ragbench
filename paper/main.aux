@@ -16,17 +16,17 @@
 \citation{hu2022lora}
 \citation{ovadia2024finetuning}
 \citation{lewis2020rag}
-\citation{vaswani2017attention,devlin2019bert}
-\citation{reimers2019sbert}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Background: how retrieval-augmented generation works}{4}{section.2}\protected@file@percent }
 \newlabel{sec:background}{{2}{4}{Background: how retrieval-augmented generation works}{section.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}The knowledge problem, and why not simply retrain the model}{4}{subsection.2.1}\protected@file@percent }
 \newlabel{sec:why-rag}{{2.1}{4}{The knowledge problem, and why not simply retrain the model}{subsection.2.1}{}}
-\citation{nogueira2019passage}
+\citation{vaswani2017attention,devlin2019bert}
+\citation{reimers2019sbert}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Embeddings and cosine similarity}{5}{subsection.2.2}\protected@file@percent }
 \newlabel{sec:embeddings}{{2.2}{5}{Embeddings and cosine similarity}{subsection.2.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Embedding models and cross-encoders}{5}{subsection.2.3}\protected@file@percent }
 \newlabel{sec:encoders}{{2.3}{5}{Embedding models and cross-encoders}{subsection.2.3}{}}
+\citation{nogueira2019passage}
 \citation{johnson2019faiss}
 \citation{malkov2020hnsw}
 \citation{robertson2009bm25}
@@ -49,6 +49,11 @@
 \citation{robertson2009bm25}
 \citation{cormack2009rrf}
 \citation{nogueira2019passage}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The naive RAG pipeline. Offline, the document collection is split into passages, embedded, and stored in a vector database. At query time the question is embedded with the same model, the $k$ most similar passages are retrieved, and the generator answers from the question plus those passages. Every architecture in this article is a modification of one or more blocks of this pipeline.}}{7}{figure.2}\protected@file@percent }
+\newlabel{fig:naive-pipeline}{{2}{7}{The naive RAG pipeline. Offline, the document collection is split into passages, embedded, and stored in a vector database. At query time the question is embedded with the same model, the $k$ most similar passages are retrieved, and the generator answers from the question plus those passages. Every architecture in this article is a modification of one or more blocks of this pipeline}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Related work}{7}{section.3}\protected@file@percent }
+\newlabel{sec:related}{{3}{7}{Related work}{section.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Retrieval-augmented generation}{7}{section*.2}\protected@file@percent }
 \citation{gao2022hyde}
 \citation{trivedi2023ircot}
 \citation{wei2022cot}
@@ -56,12 +61,6 @@
 \citation{press2023selfask}
 \citation{jiang2023flare}
 \citation{shao2023iterretgen}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The naive RAG pipeline. Offline, the document collection is split into passages, embedded, and stored in a vector database. At query time the question is embedded with the same model, the $k$ most similar passages are retrieved, and the generator answers from the question plus those passages. Every architecture in this article is a modification of one or more blocks of this pipeline.}}{7}{figure.2}\protected@file@percent }
-\newlabel{fig:naive-pipeline}{{2}{7}{The naive RAG pipeline. Offline, the document collection is split into passages, embedded, and stored in a vector database. At query time the question is embedded with the same model, the $k$ most similar passages are retrieved, and the generator answers from the question plus those passages. Every architecture in this article is a modification of one or more blocks of this pipeline}{figure.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Related work}{7}{section.3}\protected@file@percent }
-\newlabel{sec:related}{{3}{7}{Related work}{section.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Retrieval-augmented generation}{7}{section*.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Retrieval-side refinements}{7}{section*.3}\protected@file@percent }
 \citation{asai2024selfrag}
 \citation{yan2024crag}
 \citation{jeong2024adaptiverag}
@@ -75,63 +74,64 @@
 \citation{chen2024benchmarking}
 \citation{es2024ragas}
 \citation{wang2024bestpractices}
-\citation{viola2001cascade}
-\citation{wang2011cascade}
+\@writefile{toc}{\contentsline {paragraph}{Retrieval-side refinements}{8}{section*.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Query-side refinements}{8}{section*.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Self-assessing and adaptive systems}{8}{section*.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Structure-augmented retrieval}{8}{section*.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Benchmarks and evaluation}{8}{section*.7}\protected@file@percent }
+\citation{viola2001cascade}
+\citation{wang2011cascade}
 \citation{jin2024flashrag}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The compared architectures grouped by control flow. $^{*}$ClosedBook retrieves nothing and serves as a bottom line method for comparisons. The two architectures in bold are introduced in Section~\ref {sec:cascade}.}}{9}{figure.3}\protected@file@percent }
 \newlabel{fig:taxonomy}{{3}{9}{The compared architectures grouped by control flow. $^{*}$ClosedBook retrieves nothing and serves as a bottom line method for comparisons. The two architectures in bold are introduced in Section~\ref {sec:cascade}}{figure.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Qualitative comparison. ``Modifies'' names the part of the naive pipeline (Figure~\ref {fig:naive-pipeline}) that the architecture changes; ``Calls'' is the number of generator calls per question; ``Budget'' is the number of passages placed in the generator's context; ``Targets'' is the retrieval failure cause (Section~\ref {sec:results-diagnosis}) the architecture is meant to repair. The measured per-question costs are in Table~\ref {tab:cost}.}}{9}{table.1}\protected@file@percent }
 \newlabel{tab:qualitative}{{1}{9}{Qualitative comparison. ``Modifies'' names the part of the naive pipeline (Figure~\ref {fig:naive-pipeline}) that the architecture changes; ``Calls'' is the number of generator calls per question; ``Budget'' is the number of passages placed in the generator's context; ``Targets'' is the retrieval failure cause (Section~\ref {sec:results-diagnosis}) the architecture is meant to repair. The measured per-question costs are in Table~\ref {tab:cost}}{table.1}{}}
 \@writefile{toc}{\contentsline {paragraph}{Cascades (the new approach)}{9}{section*.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}The architectures under study}{9}{section.4}\protected@file@percent }
-\newlabel{sec:architectures}{{4}{9}{The architectures under study}{section.4}{}}
 \citation{cormack2009rrf}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Hybrid retrieval. Dense and lexical rankings over the same corpus are merged by Reciprocal Rank Fusion; the BM25 row is this diagram with the dense branch removed.}}{10}{figure.4}\protected@file@percent }
-\newlabel{fig:arch-hybrid}{{4}{10}{Hybrid retrieval. Dense and lexical rankings over the same corpus are merged by Reciprocal Rank Fusion; the BM25 row is this diagram with the dense branch removed}{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}The architectures under study}{10}{section.4}\protected@file@percent }
+\newlabel{sec:architectures}{{4}{10}{The architectures under study}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}ClosedBook: the bottom line method for comparisons}{10}{subsection.4.1}\protected@file@percent }
 \newlabel{sec:arch-closedbook}{{4.1}{10}{ClosedBook: the bottom line method for comparisons}{subsection.4.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}NaiveRAG: the baseline and its budget controls}{10}{subsection.4.2}\protected@file@percent }
 \newlabel{sec:arch-naive}{{4.2}{10}{NaiveRAG: the baseline and its budget controls}{subsection.4.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}BM25 and hybrid retrieval}{10}{subsection.4.3}\protected@file@percent }
 \newlabel{sec:arch-hybrid}{{4.3}{10}{BM25 and hybrid retrieval}{subsection.4.3}{}}
+\newlabel{eq:rrf}{{2}{10}{BM25 and hybrid retrieval}{equation.2}{}}
 \citation{gao2022hyde}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Hybrid retrieval. Dense and lexical rankings over the same corpus are merged by Reciprocal Rank Fusion; the BM25 row is this diagram with the dense branch removed.}}{11}{figure.4}\protected@file@percent }
+\newlabel{fig:arch-hybrid}{{4}{11}{Hybrid retrieval. Dense and lexical rankings over the same corpus are merged by Reciprocal Rank Fusion; the BM25 row is this diagram with the dense branch removed}{figure.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Cross-encoder reranking: a deep bi-encoder shortlist is reordered by a jointly-encoding relevance model; only the reordered top five reach the generator.}}{11}{figure.5}\protected@file@percent }
 \newlabel{fig:arch-rerank}{{5}{11}{Cross-encoder reranking: a deep bi-encoder shortlist is reordered by a jointly-encoding relevance model; only the reordered top five reach the generator}{figure.5}{}}
-\newlabel{eq:rrf}{{2}{11}{BM25 and hybrid retrieval}{equation.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Rerank: cross-encoder reordering}{11}{subsection.4.4}\protected@file@percent }
 \newlabel{sec:arch-rerank}{{4.4}{11}{Rerank: cross-encoder reordering}{subsection.4.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Neighbour expansion}{11}{subsection.4.5}\protected@file@percent }
 \newlabel{sec:arch-neighbour}{{4.5}{11}{Neighbour expansion}{subsection.4.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}HyDE: search with a hypothetical document}{11}{subsection.4.6}\protected@file@percent }
-\newlabel{sec:arch-hyde}{{4.6}{11}{HyDE: search with a hypothetical document}{subsection.4.6}{}}
 \citation{trivedi2023ircot}
-\citation{yan2024crag}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces HyDE. The generator first writes the encyclopedia passage it imagines would answer the question; the search runs on the average of the draft's and the question's embeddings. The draft's factual errors are discarded --- only its vector is used.}}{12}{figure.6}\protected@file@percent }
 \newlabel{fig:arch-hyde}{{6}{12}{HyDE. The generator first writes the encyclopedia passage it imagines would answer the question; the search runs on the average of the draft's and the question's embeddings. The draft's factual errors are discarded --- only its vector is used}{figure.6}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces IRCoT. Each reasoning sentence names entities the question never mentioned, and is used verbatim as the next retrieval query; accumulated passages (up to 15) go to the same reader prompt as NaiveRAG.}}{12}{figure.7}\protected@file@percent }
 \newlabel{fig:arch-ircot}{{7}{12}{IRCoT. Each reasoning sentence names entities the question never mentioned, and is used verbatim as the next retrieval query; accumulated passages (up to 15) go to the same reader prompt as NaiveRAG}{figure.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}HyDE: search with a hypothetical document}{12}{subsection.4.6}\protected@file@percent }
+\newlabel{sec:arch-hyde}{{4.6}{12}{HyDE: search with a hypothetical document}{subsection.4.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.7}IRCoT: interleaved retrieval and reasoning}{12}{subsection.4.7}\protected@file@percent }
 \newlabel{sec:arch-ircot}{{4.7}{12}{IRCoT: interleaved retrieval and reasoning}{subsection.4.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}CRAG: corrective retrieval (offline, corpus-only)}{12}{subsection.4.8}\protected@file@percent }
-\newlabel{sec:arch-crag}{{4.8}{12}{CRAG: corrective retrieval (offline, corpus-only)}{subsection.4.8}{}}
+\citation{yan2024crag}
 \citation{jeong2024adaptiverag}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces CRAG (offline form). The generator grades its own retrieval; on a poor grade the query is rewritten and the corpus searched again, replacing (no passage relevant) or topping up (some relevant) the context.}}{13}{figure.8}\protected@file@percent }
 \newlabel{fig:arch-crag}{{8}{13}{CRAG (offline form). The generator grades its own retrieval; on a poor grade the query is rewritten and the corpus searched again, replacing (no passage relevant) or topping up (some relevant) the context}{figure.8}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Adaptive-RAG (training-free form). One classification call routes each question to the no-retrieval, single-step, or iterative branch; the branches are the very architectures of the neighbouring rows.}}{13}{figure.9}\protected@file@percent }
 \newlabel{fig:arch-adaptive}{{9}{13}{Adaptive-RAG (training-free form). One classification call routes each question to the no-retrieval, single-step, or iterative branch; the branches are the very architectures of the neighbouring rows}{figure.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}CRAG: corrective retrieval (offline, corpus-only)}{13}{subsection.4.8}\protected@file@percent }
+\newlabel{sec:arch-crag}{{4.8}{13}{CRAG: corrective retrieval (offline, corpus-only)}{subsection.4.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Adaptive-RAG: routing by predicted difficulty}{13}{subsection.4.9}\protected@file@percent }
 \newlabel{sec:arch-adaptive}{{4.9}{13}{Adaptive-RAG: routing by predicted difficulty}{subsection.4.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Fused retrieval, the cascade's first stage. The cross-encoder is one voter among three rather than the arbiter: dense, lexical, and reranked orderings of the same candidate pool are merged by RRF (Eq.~\ref {eq:rrf}). A passage found by dense retrieval is voted for twice (bi-encoder rank and cross-encoder rank); a passage only the lexical index found is voted for once --- the lexical list is there to rescue passages dense retrieval missed, not to outvote it.}}{14}{figure.10}\protected@file@percent }
-\newlabel{fig:arch-fused}{{10}{14}{Fused retrieval, the cascade's first stage. The cross-encoder is one voter among three rather than the arbiter: dense, lexical, and reranked orderings of the same candidate pool are merged by RRF (Eq.~\ref {eq:rrf}). A passage found by dense retrieval is voted for twice (bi-encoder rank and cross-encoder rank); a passage only the lexical index found is voted for once --- the lexical list is there to rescue passages dense retrieval missed, not to outvote it}{figure.10}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}CascadeRAG: an abstention-triggered cascade}{14}{section.5}\protected@file@percent }
 \newlabel{sec:cascade}{{5}{14}{CascadeRAG: an abstention-triggered cascade}{section.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Stage one: fused retrieval}{14}{subsection.5.1}\protected@file@percent }
 \newlabel{sec:cascade-fused}{{5.1}{14}{Stage one: fused retrieval}{subsection.5.1}{}}
 \citation{chow1970reject,geifman2017selective}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Fused retrieval, the cascade's first stage. The cross-encoder is one voter among three rather than the arbiter: dense, lexical, and reranked orderings of the same candidate pool are merged by RRF (Eq.~\ref {eq:rrf}). A passage found by dense retrieval is voted for twice (bi-encoder rank and cross-encoder rank); a passage only the lexical index found is voted for once --- the lexical list is there to rescue passages dense retrieval missed, not to outvote it.}}{15}{figure.10}\protected@file@percent }
+\newlabel{fig:arch-fused}{{10}{15}{Fused retrieval, the cascade's first stage. The cross-encoder is one voter among three rather than the arbiter: dense, lexical, and reranked orderings of the same candidate pool are merged by RRF (Eq.~\ref {eq:rrf}). A passage found by dense retrieval is voted for twice (bi-encoder rank and cross-encoder rank); a passage only the lexical index found is voted for once --- the lexical list is there to rescue passages dense retrieval missed, not to outvote it}{figure.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces The cascade. A stage's answer is kept unless the reader declined; only declined questions pay for the next stage. The last stage's answer is kept whatever it says --- a refusal is still the most honest answer available.}}{15}{figure.11}\protected@file@percent }
 \newlabel{fig:arch-cascade}{{11}{15}{The cascade. A stage's answer is kept unless the reader declined; only declined questions pay for the next stage. The last stage's answer is kept whatever it says --- a refusal is still the most honest answer available}{figure.11}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Stage two and three: escalation on abstention}{15}{subsection.5.2}\protected@file@percent }
@@ -140,16 +140,12 @@
 \@writefile{toc}{\contentsline {paragraph}{It is lossless under Exact Match}{15}{section*.10}\protected@file@percent }
 \citation{kadavath2022know}
 \citation{xiong2024uncertainty}
-\citation{jin2024flashrag}
-\citation{xiao2023bge}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}A second, continuous trigger: answer confidence}{16}{subsection.5.3}\protected@file@percent }
 \newlabel{sec:cascade-confidence}{{5.3}{16}{A second, continuous trigger: answer confidence}{subsection.5.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Reading the cascade's numbers fairly}{16}{subsection.5.4}\protected@file@percent }
 \newlabel{sec:cascade-caveats}{{5.4}{16}{Reading the cascade's numbers fairly}{subsection.5.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental setup}{16}{section.6}\protected@file@percent }
-\newlabel{sec:setup}{{6}{16}{Experimental setup}{section.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Unified settings}{16}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:setup-unified}{{6.1}{16}{Unified settings}{subsection.6.1}{}}
+\citation{jin2024flashrag}
+\citation{xiao2023bge}
 \citation{qwen2025qwen25}
 \citation{kwon2023vllm}
 \citation{grattafiori2024llama3}
@@ -161,15 +157,19 @@
 \citation{rajpurkar2016squad}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Question sets (FlashRAG splits). Recall ceiling is the mean fraction of a question's gold articles present in the corpus at all (Section~\ref {sec:setup-metrics}); NaturalQuestions and TriviaQA annotate no gold documents.}}{17}{table.2}\protected@file@percent }
 \newlabel{tab:datasets}{{2}{17}{Question sets (FlashRAG splits). Recall ceiling is the mean fraction of a question's gold articles present in the corpus at all (Section~\ref {sec:setup-metrics}); NaturalQuestions and TriviaQA annotate no gold documents}{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental setup}{17}{section.6}\protected@file@percent }
+\newlabel{sec:setup}{{6}{17}{Experimental setup}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Unified settings}{17}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:setup-unified}{{6.1}{17}{Unified settings}{subsection.6.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Question sets}{17}{subsection.6.2}\protected@file@percent }
 \newlabel{sec:setup-datasets}{{6.2}{17}{Question sets}{subsection.6.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Metrics}{17}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:setup-metrics}{{6.3}{17}{Metrics}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Answer quality}{17}{section*.11}\protected@file@percent }
 \citation{mcnemar1947}
 \citation{wilcoxon1945}
 \citation{efron1979bootstrap}
 \citation{holm1979}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Metrics}{18}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:setup-metrics}{{6.3}{18}{Metrics}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Answer quality}{18}{section*.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Abstention}{18}{section*.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Retrieval quality}{18}{section*.13}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The corpus ceiling}{18}{section*.14}\protected@file@percent }
@@ -185,14 +185,14 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.2}RQ2: what does each single refinement buy?}{19}{subsection.7.2}\protected@file@percent }
 \newlabel{sec:results-single}{{7.2}{19}{RQ2: what does each single refinement buy?}{subsection.7.2}{}}
 \@writefile{toc}{\contentsline {paragraph}{Lexical and hybrid retrieval}{19}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Cross-encoder reranking}{19}{section*.17}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Diagnosis of the naive baseline's retrieval failures (300 sampled failures per set; percentages of the diagnosed sample). The last row is the Exact Match an oracle choosing per question between the naive run and closed-book would add over the better single system.}}{20}{table.3}\protected@file@percent }
-\newlabel{tab:diagnosis}{{3}{20}{Diagnosis of the naive baseline's retrieval failures (300 sampled failures per set; percentages of the diagnosed sample). The last row is the Exact Match an oracle choosing per question between the naive run and closed-book would add over the better single system}{table.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Cross-encoder reranking}{20}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{HyDE}{20}{section*.18}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Neighbour expansion}{20}{section*.19}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Iterative and corrective methods}{20}{section*.20}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.3}RQ3: why does retrieval fail?}{20}{subsection.7.3}\protected@file@percent }
 \newlabel{sec:results-diagnosis}{{7.3}{20}{RQ3: why does retrieval fail?}{subsection.7.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Diagnosis of the naive baseline's retrieval failures (300 sampled failures per set; percentages of the diagnosed sample). The last row is the Exact Match an oracle choosing per question between the naive run and closed-book would add over the better single system.}}{21}{table.3}\protected@file@percent }
+\newlabel{tab:diagnosis}{{3}{21}{Diagnosis of the naive baseline's retrieval failures (300 sampled failures per set; percentages of the diagnosed sample). The last row is the Exact Match an oracle choosing per question between the naive run and closed-book would add over the better single system}{table.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces The proposed cascade against every baseline on every question set. Each cell is the paired Exact Match difference (cascade minus baseline); \textbf  {bold} marks a significant cascade win and \underline  {underline} a significant loss under McNemar's test with Holm adjustment over all 57{} cells jointly. The cascade wins 41{}, loses 1{}, ties 15{}.}}{21}{table.4}\protected@file@percent }
 \newlabel{tab:main}{{4}{21}{The proposed cascade against every baseline on every question set. Each cell is the paired Exact Match difference (cascade minus baseline); \textbf {bold} marks a significant cascade win and \underline {underline} a significant loss under McNemar's test with Holm adjustment over all \ResultPairs {} cells jointly. The cascade wins \ResultWins {}, loses \ResultLosses {}, ties \ResultTies {}}{table.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.4}RQ4: the cascade against every baseline}{21}{subsection.7.4}\protected@file@percent }
@@ -204,23 +204,23 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.6}RQ6: which parts of the cascade matter?}{22}{subsection.7.6}\protected@file@percent }
 \newlabel{sec:results-ablations}{{7.6}{22}{RQ6: which parts of the cascade matter?}{subsection.7.6}{}}
 \@writefile{toc}{\contentsline {paragraph}{What the fusion adds}{22}{section*.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{What the escalation adds}{22}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What the escalation adds}{23}{section*.22}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The confidence trigger does not pay}{23}{section*.23}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The one-shot IRCoT objection}{23}{section*.24}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.7}RQ7: does it survive a different reader?}{23}{subsection.7.7}\protected@file@percent }
 \newlabel{sec:results-reader}{{7.7}{23}{RQ7: does it survive a different reader?}{subsection.7.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Discussion: lessons for practitioners and evaluators}{23}{section.8}\protected@file@percent }
 \newlabel{sec:discussion}{{8}{23}{Discussion: lessons for practitioners and evaluators}{section.8}{}}
-\@writefile{toc}{\contentsline {paragraph}{No retrieval refinement is universally safe --- except the boring one}{23}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{No retrieval refinement is universally safe --- except the boring one}{24}{section*.25}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Compare at matched budget, or measure context size by accident}{24}{section*.26}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Report abstention, or Exact Match will lie}{24}{section*.27}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Posterior signals beat prior predictions}{24}{section*.28}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Confidence is not a second signal --- at least not for free}{24}{section*.29}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Report the ceiling}{24}{section*.30}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Escalation prices expensive methods correctly}{24}{section*.31}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Limitations}{24}{section.9}\protected@file@percent }
-\newlabel{sec:limitations}{{9}{24}{Limitations}{section.9}{}}
-\@writefile{toc}{\contentsline {paragraph}{One corpus, one domain}{24}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Limitations}{25}{section.9}\protected@file@percent }
+\newlabel{sec:limitations}{{9}{25}{Limitations}{section.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{One corpus, one domain}{25}{section*.32}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The abstention detector is heuristic}{25}{section*.33}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Two implementation deviations are inherited by the comparison}{25}{section*.34}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Structure-augmented methods are absent}{25}{section*.35}\protected@file@percent }

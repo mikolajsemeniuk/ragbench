@@ -9,10 +9,10 @@ two rows of any table is the architecture itself.
 
 \begin{itemize}
 \item \textbf{Corpus:} the FlashRAG release of \texttt{wiki18\_100w}
-  \cite{jin2024flashrag} --- the December 2018 English Wikipedia snapshot
+  \citep{jin2024flashrag} --- the December 2018 English Wikipedia snapshot
   chunked into 21{,}015{,}324 passages of $\sim$100 words, the first line
   of each passage being its article title.
-\item \textbf{Dense index:} \texttt{bge-base-en-v1.5}~\cite{xiao2023bge}
+\item \textbf{Dense index:} \texttt{bge-base-en-v1.5}~\citep{xiao2023bge}
   embeddings (768 dimensions, cosine similarity) in Qdrant, HNSW with a
   fixed search width (\texttt{ef}~$=256$; raised to 1024 where a deeper
   shortlist is requested, so the graph walk never limits a ranking the
@@ -25,8 +25,8 @@ two rows of any table is the architecture itself.
   retrievers can be fused by passage id.
 \item \textbf{Cross-encoder:} \texttt{bge-reranker-base} over the dense
   top-100.
-\item \textbf{Generator:} Qwen2.5-7B-Instruct~\cite{qwen2025qwen25} served
-  by vLLM~\cite{kwon2023vllm}, greedy decoding (temperature 0, so every
+\item \textbf{Generator:} Qwen2.5-7B-Instruct~\citep{qwen2025qwen25} served
+  by vLLM~\citep{kwon2023vllm}, greedy decoding (temperature 0, so every
   run is reproducible), 64-token cap on answers, 256 on intermediate
   generations (a reasoning sentence truncated at the answer's cap would be
   half a sentence, then used verbatim as a retrieval query). All
@@ -35,32 +35,31 @@ two rows of any table is the architecture itself.
   Appendix~\ref{app:prompts}), so a score difference measures the passages
   in context, not answer formatting. The second-reader replication
   (Section~\ref{sec:results-reader}) swaps in
-  Llama-3.1-8B-Instruct~\cite{grattafiori2024llama3} and changes nothing
+  Llama-3.1-8B-Instruct~\citep{grattafiori2024llama3} and changes nothing
   else.
 \end{itemize}
 
 \subsection{Question sets}
 \label{sec:setup-datasets}
 
-\begin{table}[t]
-\centering\small
+\begin{widetable}[t]
 \caption{Question sets (FlashRAG splits). Recall ceiling is the mean
 fraction of a question's gold articles present in the corpus at all
 (Section~\ref{sec:setup-metrics}); NaturalQuestions and TriviaQA annotate
 no gold documents.}
 \label{tab:datasets}
-\begin{tabular}{lrlrr}
+\fitwidth{\begin{tabular}{lrlrr}
 \toprule
 Question set & Questions & Type & Gold docs & Recall ceiling \\
 \midrule
-NaturalQuestions~\cite{kwiatkowski2019nq} & \NaiveRAGNQQuestions{} & single-hop & no & --- \\
-TriviaQA~\cite{joshi2017triviaqa} & \NaiveRAGTriviaQAQuestions{} & single-hop & no & --- \\
-HotpotQA~\cite{yang2018hotpotqa} & \NaiveRAGHotpotQAQuestions{} & 2-hop & yes & \CoverageHotpotQARecallCeiling{} \\
-2WikiMultihopQA~\cite{ho20202wiki} & \NaiveRAGTwoWikiQuestions{} & 2--4-hop & yes & \CoverageTwoWikiRecallCeiling{} \\
-MuSiQue~\cite{trivedi2022musique} & \NaiveRAGMuSiQueQuestions{} & 2--4-hop & yes & \CoverageMuSiQueRecallCeiling{} \\
+NaturalQuestions~\citep{kwiatkowski2019nq} & \NaiveRAGNQQuestions{} & single-hop & no & --- \\
+TriviaQA~\citep{joshi2017triviaqa} & \NaiveRAGTriviaQAQuestions{} & single-hop & no & --- \\
+HotpotQA~\citep{yang2018hotpotqa} & \NaiveRAGHotpotQAQuestions{} & 2-hop & yes & \CoverageHotpotQARecallCeiling{} \\
+2WikiMultihopQA~\citep{ho20202wiki} & \NaiveRAGTwoWikiQuestions{} & 2--4-hop & yes & \CoverageTwoWikiRecallCeiling{} \\
+MuSiQue~\citep{trivedi2022musique} & \NaiveRAGMuSiQueQuestions{} & 2--4-hop & yes & \CoverageMuSiQueRecallCeiling{} \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular}}
+\end{widetable}
 
 Table~\ref{tab:datasets} lists the five sets: two single-hop open-domain
 sets and three multi-hop sets of increasing compositional depth.
@@ -71,9 +70,9 @@ only to tune the cascade's confidence threshold
 \subsection{Metrics}
 \label{sec:setup-metrics}
 
-\paragraph{Answer quality.} \emph{Exact Match} (EM): the normalised answer
+\paragraph{Answer quality} \emph{Exact Match} (EM): the normalised answer
 (lower-cased, punctuation and articles stripped --- the standard SQuAD
-normalisation~\cite{rajpurkar2016squad}) equals one of the gold answers;
+normalisation~\citep{rajpurkar2016squad}) equals one of the gold answers;
 the primary endpoint throughout. \emph{Token-level F1} against the best-matching gold answer.
 The reader is instructed to output only the answer because the gold
 answers are short spans; without that instruction an instruct model's
@@ -81,14 +80,14 @@ correct-but-verbose replies score EM~0 (measured: constraining the output
 moves EM from 0.02 to 0.40 on a HotpotQA subsample without touching
 retrieval).
 
-\paragraph{Abstention.} EM cannot tell a refusal from a wrong guess, and
+\paragraph{Abstention} EM cannot tell a refusal from a wrong guess, and
 the two say opposite things about a system. An answer is counted as an
 abstention on an explicit refusal phrase or when longer than twenty words.
 We report the abstention rate and EM restricted to answered
 questions; Section~\ref{sec:results-worth} shows a ranking that reverses
 without them.
 
-\paragraph{Retrieval quality.} \emph{Recall in context}: the fraction of a
+\paragraph{Retrieval quality} \emph{Recall in context}: the fraction of a
 question's gold articles among the passages actually placed in the
 generator's context --- deliberately not ``Recall@$k$'', because iterative
 architectures accumulate more than $k$ passages, so the mean context size
@@ -102,7 +101,7 @@ passage --- for the two sets without gold-document annotation (matching
 whole tokens, because a substring test scores 0.97 for questions whose
 gold answer is ``no'', which occurs inside ``north'' and ``known'').
 
-\paragraph{The corpus ceiling.} A recall figure is unreadable without the
+\paragraph{The corpus ceiling} A recall figure is unreadable without the
 ceiling the corpus imposes: only \CoverageTwoWikiRecallCeiling{} of
 2WikiMultihopQA's gold articles exist in \texttt{wiki18\_100w} at all, so
 a perfect retriever would score \CoverageTwoWikiRecallCeiling{} there, and
@@ -110,7 +109,7 @@ the baseline's \NaiveRAGTwoWikiRecallInContext{} is about half of what is
 achievable, not a third of it. We measure the ceiling per question set
 (Table~\ref{tab:datasets}) and read every recall against it.
 
-\paragraph{Cost.} Generator calls and prompt/completion tokens per
+\paragraph{Cost} Generator calls and prompt/completion tokens per
 question, read from the per-question logs --- the only cost measure
 comparable across hardware. Latency is reported nowhere: at the
 concurrency the runs used, per-question timing measures the queue, and
@@ -126,11 +125,11 @@ Both systems of every comparison answered the same questions, so all tests
 are paired, which removes question difficulty from the variance ---
 two overlapping confidence intervals can hide a consistent per-question
 win. Exact Match and the other binary metrics use McNemar's
-test~\cite{mcnemar1947} on the discordant pairs; continuous metrics use
-the Wilcoxon signed-rank test~\cite{wilcoxon1945}; the size of every
-difference carries a paired bootstrap~\cite{efron1979bootstrap} 95\%
+test~\citep{mcnemar1947} on the discordant pairs; continuous metrics use
+the Wilcoxon signed-rank test~\citep{wilcoxon1945}; the size of every
+difference carries a paired bootstrap~\citep{efron1979bootstrap} 95\%
 interval (10{,}000 resamples, fixed seed). Because a dozen metrics are
-tested per comparison, p-values are Holm-adjusted~\cite{holm1979} within
+tested per comparison, p-values are Holm-adjusted~\citep{holm1979} within
 each comparison, with Exact Match the pre-declared primary endpoint. The
 headline table (Table~\ref{tab:main}) is stricter still: its claim ---
 ``wins $W$, loses $L$, ties $T$ of $P$ pairs'' --- is one family of tests,

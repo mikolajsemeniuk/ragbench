@@ -1,0 +1,136 @@
+% The "MLJ Contribution Information Sheet" that the Springer journal
+% "Machine Learning" requires with every submission: a 1-2 page document
+% answering four fixed questions (main claim and its importance, evidence,
+% closest related work, prior publication). Submissions with an incomplete
+% sheet are returned without review. It is uploaded as a separate file
+% next to the manuscript. The numbers come from the same generated
+% fragments as the article, so the two cannot disagree.
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage[natbibapa]{apacite}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\useresults}[1]{\IfFileExists{#1.gen.tex}{\input{#1.gen.tex}}{}}
+\input{fragments}
+
+\title{MLJ Contribution Information Sheet}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-3em}
+\noindent\textbf{Manuscript:} \emph{CascadeRAG: Abstention-Triggered
+Escalation that Outperforms Costlier Retrieval-Augmented Generation
+Architectures at a Fraction of their Cost}\\
+\textbf{Authors:} Miko{\l}aj Semeniuk (corresponding author) and Agnieszka
+Jastrz{\k{e}}bska, Warsaw University of Technology, Warsaw, Poland
+
+\section*{1. What is the main claim of the paper? Why is this an important
+contribution to the machine learning literature?}
+
+\paragraph{Main claim.} Among the architectural refinements proposed for
+retrieval-augmented generation (RAG), none is universally safe, and the
+design that wins a controlled comparison is a cascade that spends extra
+computation only where a free, posterior signal says it is needed. The
+paper makes three concrete claims. (i)~Under one controlled stack, the
+strongest single refinement, cross-encoder reranking, gains $+0.051$ Exact
+Match on one question set and loses $0.100$ on another, a reversal that
+single-benchmark evaluations do not reveal. (ii)~A per-question diagnosis
+of \emph{why} retrieval fails (five causes) predicts which refinement pays
+off on which question set. (iii)~CascadeRAG, a novel architecture built
+from that diagnosis, fuses dense, lexical, and cross-encoder rankings and
+escalates a question to a more expensive strategy only when the reader
+itself, having seen the evidence, declines to answer. This abstention
+trigger is a reject option with provably zero selective risk under Exact
+Match, so escalation can never discard a correct answer. CascadeRAG wins
+\ResultWins{} of \ResultPairs{} paired (baseline, question set)
+comparisons, loses \ResultLosses{}, and ties \ResultTies{}, at 1.16--1.58
+generator calls per question against 2.3--3.0 for iterative and corrective
+methods.
+
+\paragraph{Why it matters.} RAG is now the standard way of grounding large
+language models in a document collection, yet its architectures are
+compared in the literature as point scores on incompatible stacks. The
+paper supplies two things the machine learning literature lacks here: a
+research-methodology contribution, namely a comparison protocol with
+paired significance tests under multiplicity control, budget-matched
+controls, abstention accounted for separately from error, and a measured
+corpus-imposed recall ceiling, under which most published-style gains
+shrink and one reverses; and a learning-systems contribution that connects
+RAG design to selective prediction, showing that a training-free,
+posterior deferral signal dominates both prior routing and
+confidence-threshold deferral. Two documented negative results
+(neighbour-chunk expansion adds nothing once context size is controlled;
+answer-token confidence adds nothing over abstention) save practitioners
+from two widely assumed improvements.
+
+\section*{2. What is the evidence you provide to support your claim? Be
+precise.}
+
+Thirteen RAG architectures are evaluated on a single stack: one
+21-million-passage Wikipedia corpus, one embedding model, one vector
+database, one generator (Qwen2.5-7B-Instruct), and one answer prompt,
+over five question sets (NaturalQuestions, TriviaQA, HotpotQA,
+2WikiMultihopQA, MuSiQue) totalling more than 37{,}000 questions.
+Differences are tested with paired statistics (McNemar's test on Exact
+Match, the Wilcoxon signed-rank test on continuous metrics) with
+Holm-adjusted p-values, and every difference carries a paired bootstrap
+95\% confidence interval. Budget-matched controls separate a better
+architecture from more text in the context. The main results are:
+(a)~cross-encoder reranking gains $+0.051$ Exact Match on HotpotQA and
+loses $0.100$ on NaturalQuestions; (b)~the distribution of five retrieval
+failure causes, measured per question, explains these reversals;
+(c)~CascadeRAG wins \ResultWins{} of \ResultPairs{} paired comparisons
+against every baseline on every question set, loses \ResultLosses{}, and
+ties \ResultTies{}, at 1.16--1.58 generator calls per question;
+(d)~the losslessness of the abstention trigger holds with zero exceptions
+over all 887{,}917 (question, architecture) pairs measured; (e)~the result
+replicates under a second, unrelated generator (Llama-3.1-8B-Instruct);
+(f)~ablations isolate what the fused first stage and the escalation each
+add, and show that a confidence threshold adds nothing. Every number in
+the manuscript is generated by the benchmark code from the per-question
+logs and imported as a named macro; the code, the logs, and the manuscript
+pipeline are publicly released.
+
+\section*{3. What papers by other authors make the most closely related
+contributions, and how is your paper related to them?}
+
+\begin{itemize}
+\item \citet{jin2024flashrag} (FlashRAG) standardise datasets, corpora,
+and reimplementations of a dozen RAG methods, and are the source of our
+corpus and question sets. We add paired significance testing with
+multiplicity control, the corpus-imposed ceiling, abstention accounting,
+and a per-question failure diagnosis, and we study a different set of
+architectures under one stack.
+\item \citet{jeong2024adaptiverag} (Adaptive-RAG), \citet{asai2024selfrag}
+(Self-RAG), and \citet{yan2024crag} (CRAG) all decide how much work a
+question needs, from the question alone or with a trained component.
+CascadeRAG decides \emph{after} the reader has seen the evidence (a
+posterior signal) and requires no trained component; Adaptive-RAG and CRAG
+are rows in our comparison.
+\item \citet{chow1970reject} and \citet{geifman2017selective} formalise
+the reject option and selective prediction; we show that the reader's
+abstention is a reject option with zero selective risk under Exact Match
+and exploit it as a deferral trigger.
+\item \citet{viola2001cascade} and \citet{wang2011cascade} introduce
+cascades in vision and in cascade ranking for retrieval; we apply the idea
+at the level of whole RAG strategies.
+\item \citet{wang2024bestpractices} tune RAG components in isolation; our
+controlled comparison shows that the gains of such components depend on
+the question distribution and can reverse.
+\end{itemize}
+
+\section*{4. Have you published parts of your paper before, for instance
+in a conference?}
+
+No. No part of this manuscript has been published before, in a conference
+or elsewhere, and the manuscript is not under review at any other venue.
+
+\bibliographystyle{apacite}
+{\small\bibliography{references}}
+
+\end{document}

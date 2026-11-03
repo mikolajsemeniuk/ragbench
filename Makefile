@@ -290,6 +290,12 @@ pdf: render
 	cd paper && bibtex main
 	cd paper && pdflatex -interaction=nonstopmode -halt-on-error main.tex
 	cd paper && pdflatex -interaction=nonstopmode -halt-on-error main.tex
+# The MLJ Contribution Information Sheet that the journal requires next to
+# the manuscript; it reads the same generated fragments as the article.
+	cd paper && pdflatex -interaction=nonstopmode -halt-on-error information-sheet.tex
+	cd paper && bibtex information-sheet
+	cd paper && pdflatex -interaction=nonstopmode -halt-on-error information-sheet.tex
+	cd paper && pdflatex -interaction=nonstopmode -halt-on-error information-sheet.tex
 
 # A SECOND READER. Everything the cascade claims rests on how the reader
 # behaves with irrelevant passages, so the rows the claims stand on are

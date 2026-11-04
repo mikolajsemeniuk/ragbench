@@ -1,48 +1,74 @@
-% The article, prepared for submission to the Journal of the Association for
-% Information Science and Technology (JASIST, Wiley). Every number in it
-% comes from a generated fragment (*.gen.tex, written by cmd/bench,
-% cmd/compare, cmd/diagnose, cmd/coverage, cmd/result, cmd/cost, cmd/sweep);
-% none is typed by hand. A \newcommand that is renamed, dropped or never
-% generated shows up as a build failure here instead of as a stale number in
-% a table nobody re-checked.
+% The article, prepared for the Springer journal "Machine Learning" (MLJ)
+% with the Springer Nature LaTeX class sn-jnl.cls (December 2024 version).
+% The class and the bibliography style it needs (sn-apacite.bst) sit next
+% to this file because the journal asks for every style file to be
+% submitted together with the source, in one flat directory.
+%
+% What the journal asks for and where it is met here:
+%   - author-year citations in APA style: class option sn-apa, \citep/\citet
+%   - an abstract of 150-250 words and 4-6 keywords: see below \begin{document}
+%   - affiliation and corresponding-author e-mail on the title page
+%   - a "Declarations" section before the reference list
+%   - decimal headings with at most three levels (paragraph heads are unnumbered)
+%
+% Every number in the article comes from a generated fragment
+% (*.gen.tex, written by cmd/bench, cmd/compare, cmd/diagnose, cmd/coverage,
+% cmd/result, cmd/cost, cmd/sweep); none is typed by hand. A \newcommand that
+% is renamed, dropped or never generated shows up as a build failure here
+% instead of as a stale number in a table nobody re-checked.
 %
 % Each section lives in its own .tex file next to this one; this file
-% assembles them. The former appendix is built separately as
-% supplement.tex (JASIST counts supplemental material outside the word
-% limit and asks for it as a separate file).
-%
-% JASIST requirements this file implements (abbreviated author guidelines,
-% August 2021, and the journal's "for authors" page):
-%   - APA style citations and reference list      -> apacite
-%   - abstract of at most 200 words, then keywords
-%   - title page with affiliations, addresses, e-mail and corresponding author
-%   - single or 1.5 line spacing                   -> single
-%   - figures and tables after the paragraph that first mentions them -> [H]
-%   - data availability, conflict of interest and funding statements
-\documentclass[11pt]{article}
-\usepackage[a4paper,margin=2.5cm]{geometry}
+% assembles them.
+\documentclass[pdflatex,sn-apa]{sn-jnl}
+
+% Packages the class does not already load. The class itself loads
+% geometry, hyperref and (through the sn-apa option) apacite, so those are
+% deliberately absent here: loading them twice breaks the build. T1 font
+% encoding is needed for the ogonek in Jastrz\k{e}bska; the class leaves
+% the encoding at the OT1 default, which has no such accent.
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{microtype}
 \usepackage{amsmath}
 \usepackage{booktabs}
+% capt-of gives \captionof (a caption outside a float) without the caption
+% package, whose formatting would fight the class's own caption layout.
+\usepackage{capt-of}
 \usepackage{graphicx}
-\usepackage{caption}
-\usepackage{float}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
-% APA 7 style references with natbib-compatible \citep / \citet commands.
-\usepackage[natbibapa]{apacite}
-\usepackage[hidelinks]{hyperref}
 
 \input{tikzstyles}
 
-% JASIST: "Figures and tables should be positioned in the manuscript after
-% the paragraph in which they are first mentioned." [H] puts every float
-% exactly where it stands in the source.
-\floatplacement{figure}{H}
-\floatplacement{table}{H}
+% The class sets \paragraph as a display heading; the article uses
+% paragraph heads as run-in leads ("Cost. The ..."), so restore the run-in
+% form (a negative after-skip means run-in in LaTeX's \@startsection).
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                      {-12pt \@plus -4pt \@minus-2pt}%
+                                      {-1em}%
+                                      {\paragraphfont}}
+\makeatother
+
+% The Springer text width (31pc, approx. 13cm) is narrower than the base
+% layout's 16cm, so a few diagrams and tables are wider than the column.
+% \fitwidth shrinks its argument to the text width only when it is wider,
+% and leaves it alone otherwise.
+\newcommand{\fitwidth}[1]{\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{#1}}
+
+% The class wraps every "table" in a threeparttable, which sets the caption
+% as wide as the tabular (so a wide table pushes its caption off the page)
+% and cannot hold a tabular inside a box such as \fitwidth. Wide tables
+% therefore use "widetable": the class's own untouched float (it keeps the
+% original environment as "tableorg"), with the caption at full text width.
+\newenvironment{widetable}[1][t]{\begin{tableorg}[#1]\centering\small}{\end{tableorg}}
+
+% Let a page carry more float material (figures/tables) before text is
+% pushed to the next page; the defaults leave large gaps when a figure and a
+% table with a long caption land on the same page.
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\setcounter{topnumber}{3}
 
 % Fragments are input only when they exist, so the skeleton still builds
 % while a run is half finished. A table that references a command from a
@@ -52,49 +78,47 @@
 %   ls *.gen.tex | sed "s/\\.gen\\.tex$//" | awk '{print "\\useresults{" $0 "}"}' > fragments.tex
 \input{fragments}
 
-\title{CascadeRAG: Abstention-Triggered Escalation\\
-that Outperforms Costlier Retrieval-Augmented Generation\\
-Architectures at a Fraction of their Cost}
-\author{Miko{\l}aj Semeniuk$^{1,*}$ \and Agnieszka Jastrz{\k{e}}bska$^{1}$\\[2ex]
-\normalsize $^{1}$Faculty of Mathematics and Information Science,
-Warsaw University of Technology,\\
-\normalsize Koszykowa 75, 00-662 Warsaw, Poland\\[1ex]
-\normalsize $^{*}$Corresponding author: \href{mailto:m.semeniuk@icloud.com}{m.semeniuk@icloud.com},
-ORCID \href{https://orcid.org/0009-0001-2247-2004}{0009-0001-2247-2004}}
-\date{}
-
 \begin{document}
 
-\maketitle
+\title[CascadeRAG: abstention-triggered escalation for retrieval-augmented generation]{CascadeRAG: Abstention-Triggered Escalation that Outperforms Costlier Retrieval-Augmented Generation Architectures at a Fraction of their Cost}
 
-% JASIST: an informative abstract of at most 200 words.
-\begin{abstract}
-Retrieval-Augmented Generation (RAG) grounds a language model's answers in
-an external document collection, and many architectural refinements
-compete for a place in practical systems. Their published evaluations are
-rarely comparable, because each uses its own corpus, retriever, generator,
-and context budget. We present a controlled comparison of thirteen RAG
+\author*[1]{\fnm{Miko{\l}aj} \sur{Semeniuk}}\email{m.semeniuk@icloud.com}
+\author[1]{\fnm{Agnieszka} \sur{Jastrz{\k{e}}bska}}\email{agnieszka.jastrzebska@mini.pw.edu.pl}
+
+\affil*[1]{\orgdiv{Faculty of Mathematics and Information Science}, \orgname{Warsaw University of Technology}, \orgaddress{\street{Koszykowa 75}, \city{Warsaw}, \postcode{00-662}, \country{Poland}}}
+
+% The journal allows 150-250 words here; keep it under 250.
+\abstract{Retrieval-Augmented Generation (RAG) grounds a language model's
+answers in an external document collection, and many architectural
+refinements (hybrid retrieval, cross-encoder reranking, hypothetical
+document embeddings, corrective and iterative retrieval, routing) compete
+for a place in practical systems. Their published evaluations are rarely
+comparable, because each uses its own corpus, retriever, generator, and
+context budget. We present a controlled comparison of thirteen RAG
 architectures on a single stack (one 21-million-passage corpus, one
 embedding model, one generator, one prompt) over five question sets and
 more than 37{,}000 questions, with paired significance tests under
 multiplicity control, budget-matched controls, abstention measured
-separately from error, and retrieval read against the measured ceiling the
-corpus imposes. No refinement is universally safe: cross-encoder reranking
-gains $+0.051$ Exact Match on one question set and loses $0.100$ on
-another. A per-question diagnosis of why retrieval fails explains these
-reversals and yields a novel design, CascadeRAG: retrieve with a fusion of
-dense, lexical, and cross-encoder rankings, and escalate to a costlier
-strategy only when the reader itself declines to answer, a posterior signal
-that is provably lossless under Exact Match. Across \ResultPairs{} paired
-comparisons CascadeRAG wins \ResultWins{}, loses \ResultLosses{}, and ties
-\ResultTies{}, at 1.16--1.58 generator calls per question against 2.3--3.0
-for iterative and corrective methods, and replicates under a second
-generator.
-\end{abstract}
+separately from error, and retrieval read against the measured ceiling
+the corpus imposes. No refinement is universally safe: cross-encoder
+reranking gains $+0.051$ Exact Match on one question set and loses
+$0.100$ on another. A per-question diagnosis of why retrieval fails
+explains these reversals and yields a novel design, CascadeRAG: retrieve
+with a fusion of dense, lexical, and cross-encoder rankings, and escalate
+to a costlier strategy only when the reader itself, having seen the
+evidence, declines to answer, a posterior signal that is provably
+lossless under Exact Match. Across \ResultPairs{} paired comparisons
+CascadeRAG wins \ResultWins{}, loses \ResultLosses{}, and ties
+\ResultTies{}, at 1.16--1.58 generator calls per question against
+2.3--3.0 for iterative and corrective methods, and the result replicates
+under a second generator. Two negative results are documented:
+neighbour-chunk expansion adds nothing once context size is controlled,
+and answer-token confidence adds nothing over abstention. Every number is
+generated from the released per-question logs.}
 
-\noindent\textbf{Keywords:} retrieval-augmented generation; large language
-models; question answering; information retrieval; evaluation methodology;
-cascade architectures
+\keywords{retrieval-augmented generation, large language models, open-domain question answering, selective prediction, cascade architectures, evaluation methodology}
+
+\maketitle
 
 \input{01-introduction}
 \input{02-background}
@@ -106,28 +130,55 @@ cascade architectures
 \input{08-discussion}
 \input{09-conclusion}
 
-% Declarations required by the journal.
-\section*{Acknowledgements}
-% TODO before submission: add acknowledgements or delete this section.
-[Acknowledgements, if any.]
+\backmatter
 
-\section*{Funding}
-% TODO before submission: name the funding source or keep the sentence below.
-This research received no specific grant from any funding agency in the
-public, commercial, or not-for-profit sectors.
+% The journal returns submissions without these declarations as
+% incomplete; a heading that does not apply still has to appear, with
+% "Not applicable".
+\section*{Declarations}
 
-\section*{Conflict of interest}
-The authors declare no conflict of interest.
+\bmhead{Funding}
+The authors did not receive support from any organization for the
+submitted work.
 
-\section*{Data availability statement}
-The benchmark code, the analysis tools, the per-question logs of every
-run, the generated result fragments, and the source of this manuscript and
-of its Supplementary Material are openly available at
+\bmhead{Competing interests}
+The authors have no competing interests to declare that are relevant to
+the content of this article.
+
+\bmhead{Ethics approval and consent to participate}
+Not applicable: the study involves no human participants and no animals.
+
+\bmhead{Consent for publication}
+Not applicable.
+
+\bmhead{Data availability}
+The per-question logs of every run, the aggregated results computed from
+them, and the generated result fragments that every number in this
+article is drawn from are openly available at
 \url{https://github.com/mikolajsemeniuk/ragbench}. The corpus and the
 question sets are the publicly released FlashRAG versions
 \citep{jin2024flashrag}.
 
-\bibliographystyle{apacite}
+\bmhead{Materials availability}
+Not applicable.
+
+\bmhead{Code availability}
+The benchmark code, the analysis tools, and the manuscript build pipeline
+are openly available at \url{https://github.com/mikolajsemeniuk/ragbench}.
+
+% Please confirm the wording of this statement with the co-author before
+% submission.
+\bmhead{Author contributions}
+Conceptualization, methodology, software, experiments, formal analysis,
+and writing of the original draft: Miko{\l}aj Semeniuk. Supervision, and
+writing (review and editing): Agnieszka Jastrz{\k{e}}bska. Both authors read
+and approved the final manuscript.
+
+\begin{appendices}
+\input{appendix}
+\end{appendices}
+
+% The bibliography style (sn-apacite) is selected by the class option.
 \bibliography{references}
 
 \end{document}

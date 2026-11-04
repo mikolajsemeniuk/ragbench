@@ -2,7 +2,7 @@
 \label{app:full-tables}
 
 Recall is measured over the passages actually in the generator's context,
-whose mean size is reported beside it (Section~6.3 of the article);
+whose mean size is reported beside it (Section~\ref{sec:setup-metrics});
 ``EM answ.''\ is Exact Match restricted to the questions the system did
 not decline. Dashes mark metrics that are undefined for a row (ClosedBook
 retrieves nothing; NaturalQuestions and TriviaQA annotate no gold
@@ -127,7 +127,7 @@ Cascade & \CascadeTriviaQAEM & \CascadeTriviaQAFOne & \CascadeTriviaQAAbstention
 
 \subsection{Cascade ablations (Exact Match)}
 \begin{center}\small
-\begin{tabular}{lrrrrr}
+\fitwidth{\begin{tabular}{lrrrrr}
 \toprule
 Variant & MuSiQue & HotpotQA & 2Wiki & NQ & TriviaQA \\
 \midrule
@@ -139,7 +139,7 @@ Cascade, hybrid first & \CascadeHybridMuSiQueEM & \CascadeHybridHotpotQAEM & \Ca
 Cascade + confidence trigger & \CascadeLogprobMuSiQueEM & \CascadeLogprobHotpotQAEM & \CascadeLogprobTwoWikiEM & \CascadeLogprobNQEM & \CascadeLogprobTriviaQAEM \\
 IRCoT, one-shot & \IRCoTOneShotMuSiQueEM & \IRCoTOneShotHotpotQAEM & \IRCoTOneShotTwoWikiEM & \IRCoTOneShotNQEM & \IRCoTOneShotTriviaQAEM \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{center}
 
 \subsection{Second reader (Llama-3.1-8B-Instruct, Exact Match)}
@@ -167,7 +167,7 @@ Cascade, calls/question & \CascadeLlamaMuSiQueLLMCalls & \CascadeLlamaHotpotQALL
 
 Swept offline over \SweepQuestions{} sampled train questions by composing
 the three independently-run stages question by question
-(Section~5.3 of the article). ``Escalated'' counts stage-1
+(Section~\ref{sec:cascade-confidence}). ``Escalated'' counts stage-1
 answers handed on at that threshold, ``discarded'' the correct answers
 among them, ``missed'' those no later stage recovered. Exact Match peaks
 at \SweepBestEM{} (threshold \SweepBestThreshold) against
@@ -188,9 +188,9 @@ Threshold & EM & F1 & Calls & Escalated & Discarded & Missed \\
 
 All prompts, verbatim from the implementation. The reader prompt is shared
 by every architecture; the instruction to output only the answer exists
-because the gold answers are short spans (Section~6.3 of the article).
+because the gold answers are short spans (Section~\ref{sec:setup-metrics}).
 
-\paragraph{Reader (all architectures).}
+\paragraph{Reader (all architectures)}
 \begin{quote}\small\ttfamily\raggedright
 Answer the question based on the given documents. Only give me the answer
 and do not output any other words.\\[2pt]
@@ -199,9 +199,9 @@ Documents:\\
 Question: \{question\}
 \end{quote}
 
-\paragraph{ClosedBook reader.} As above, minus the documents block.
+\paragraph{ClosedBook reader} As above, minus the documents block.
 
-\paragraph{HyDE drafter.}
+\paragraph{HyDE drafter}
 \begin{quote}\small\ttfamily\raggedright
 Write a short encyclopedia passage that answers the question.\\[2pt]
 Question: \{question\}\\[2pt]
@@ -211,7 +211,7 @@ the facts, write the most plausible passage anyway. Reply with only the
 passage.
 \end{quote}
 
-\paragraph{IRCoT reasoning step.}
+\paragraph{IRCoT reasoning step}
 \begin{quote}\small\ttfamily\raggedright
 You are answering a question step by step using the documents below.\\[2pt]
 Documents: \ldots\\
@@ -224,7 +224,7 @@ need to be looked up. If the documents already answer the question, write
 The one-shot variant prepends a single hand-written two-hop worked example
 (identical for every question set).
 
-\paragraph{CRAG retrieval grader.}
+\paragraph{CRAG retrieval grader}
 \begin{quote}\small\ttfamily\raggedright
 Judge which documents contain information useful for answering the
 question.\\[2pt]
@@ -234,7 +234,7 @@ Reply with only the numbers of the useful documents, separated by commas.
 If none of them are useful, reply with "none".
 \end{quote}
 
-\paragraph{CRAG query rewrite.}
+\paragraph{CRAG query rewrite}
 \begin{quote}\small\ttfamily\raggedright
 The search results for this question were not useful.\\[2pt]
 Question: \{question\}\\[2pt]
@@ -243,7 +243,7 @@ Spell out the entities the question only refers to indirectly. Reply with
 only the query.
 \end{quote}
 
-\paragraph{Adaptive-RAG router.}
+\paragraph{Adaptive-RAG router}
 \begin{quote}\small\ttfamily\raggedright
 Classify how much looking up the question needs.\\[2pt]
 Question: \{question\}\\[2pt]
@@ -255,7 +255,7 @@ example when the question refers to an entity it does not name.\\[2pt]
 Reply with only the letter A, B or C.
 \end{quote}
 
-\paragraph{Abstention phrases.} An answer is counted as an abstention if,
+\paragraph{Abstention phrases} An answer is counted as an abstention if,
 after normalisation, it contains any of: \emph{do(es) not contain, no
 information, not mentioned, can(not) answer, not provided, no mention,
 unable to answer, not enough information, insufficient information, there

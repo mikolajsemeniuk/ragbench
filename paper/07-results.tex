@@ -2,7 +2,7 @@
 \label{sec:results}
 
 We organise the results as six questions. Full per-set tables for every
-architecture and metric are in Supplementary Material, Section~S2; unless
+architecture and metric are in Appendix~\ref{app:full-tables}; unless
 stated otherwise, differences quoted below are paired Exact Match
 differences with Holm-adjusted p-values, and ``significant'' means
 $p<0.05$ after adjustment.
@@ -32,19 +32,19 @@ carries both.
 \subsection{RQ2: what does each single refinement buy?}
 \label{sec:results-single}
 
-\paragraph{Lexical and hybrid retrieval.} BM25 alone is well below the
+\paragraph{Lexical and hybrid retrieval} BM25 alone is well below the
 dense baseline on the open-domain sets
 (\NaiveVsBMTwentyFiveNQExactMatchDiff{} on NaturalQuestions) but
 \emph{ahead} of it on 2WikiMultihopQA
 (\NaiveVsBMTwentyFiveTwoWikiExactMatchDiff), whose questions name their
 target articles verbatim --- exactly the rare-surface-form failure of
-Supplementary Material, Section~S1. Fusing the two (Hybrid) is a small but
+Section~\ref{sec:embeddings}. Fusing the two (Hybrid) is a small but
 uniformly non-negative improvement
 (\NaiveVsHybridNQExactMatchDiff{} to
 \NaiveVsHybridTwoWikiExactMatchDiff{} across sets) at one CPU search of
 extra cost --- the cheapest strictly-safe refinement measured here.
 
-\paragraph{Cross-encoder reranking.} The strongest single gain and the
+\paragraph{Cross-encoder reranking} The strongest single gain and the
 worst single failure, on different sets: \NaiveVsRerankHotpotQAExactMatchDiff{}
 on HotpotQA and \NaiveVsRerankTwoWikiExactMatchDiff{} on 2WikiMultihopQA,
 against \NaiveVsRerankNQExactMatchDiff{} on NaturalQuestions, where
@@ -53,14 +53,14 @@ answer-in-context falls from \NaiveRAGNQAnswerInContext{} to
 Section~\ref{sec:cascade-fused}. Reranking is a bet on the question
 distribution, not a safe default.
 
-\paragraph{HyDE.} The one refinement that beats the baseline on
+\paragraph{HyDE} The one refinement that beats the baseline on
 NaturalQuestions (\NaiveVsHyDENQExactMatchDiff{}, answer-in-context
 \NaiveRAGNQAnswerInContext{} $\rightarrow$ \HyDENQAnswerInContext) and it
 helps on the multi-hop sets as well
 (\NaiveVsHyDETwoWikiExactMatchDiff{} on 2WikiMultihopQA), at the fixed
 price of doubling the generator calls on every question.
 
-\paragraph{Neighbour expansion.} Read against the twelve-passage control,
+\paragraph{Neighbour expansion} Read against the twelve-passage control,
 expansion is worth \NaiveTwelveVsNeighbourHotpotQAExactMatchDiff{} on
 HotpotQA, \NaiveTwelveVsNeighbourTwoWikiExactMatchDiff{} on
 2WikiMultihopQA and \NaiveTwelveVsNeighbourMuSiQueExactMatchDiff{} on
@@ -70,7 +70,7 @@ repairs at 5--14\% of failures. The popular advice to always fetch
 neighbouring chunks is, on this corpus, worth approximately nothing once
 context size is controlled.
 
-\paragraph{Iterative and corrective methods.} Against the matched
+\paragraph{Iterative and corrective methods} Against the matched
 ten-passage control, IRCoT gains
 \NaiveTenVsIRCoTHotpotQAExactMatchDiff{} on HotpotQA,
 \NaiveTenVsIRCoTTwoWikiExactMatchDiff{} on 2WikiMultihopQA and
@@ -133,8 +133,7 @@ retrieval cannot help but a guess might).
 \subsection{RQ4: the cascade against every baseline}
 \label{sec:results-main}
 
-\begin{table}[t]
-\centering\small
+\begin{widetable}[t]
 \caption{The proposed cascade against every baseline on every question
 set. Each cell is the paired Exact Match difference (cascade minus
 baseline); \textbf{bold} marks a significant cascade win and
@@ -142,8 +141,8 @@ baseline); \textbf{bold} marks a significant cascade win and
 adjustment over all \ResultPairs{} cells jointly. The cascade wins
 \ResultWins{}, loses \ResultLosses{}, ties \ResultTies{}.}
 \label{tab:main}
-\ResultTable
-\end{table}
+\fitwidth{\ResultTable}
+\end{widetable}
 
 Table~\ref{tab:main} is the headline result: \ResultWins{} significant
 wins, \ResultLosses{} loss, \ResultTies{} ties over \ResultPairs{}
@@ -184,16 +183,15 @@ not by answering differently where its first stage already answered.
 \subsection{RQ5: what does it cost?}
 \label{sec:results-cost}
 
-\begin{table}[t]
-\centering\small
+\begin{widetable}[t]
 \caption{Cost per question, averaged over the sets each architecture ran
 on, from the per-question logs. The last column is prompt tokens relative
 to the naive baseline. The cross-encoder pass (rerank, fused, cascade) and
 the CPU lexical search (BM25, hybrid, fused, cascade) are outside the
 token count.}
 \label{tab:cost}
-\resizebox{\textwidth}{!}{\CostTable}
-\end{table}
+\fitwidth{\CostTable}
+\end{widetable}
 
 Table~\ref{tab:cost} prices every row. The cascade averages
 \CostcascadeCalls{} generator calls and \CostcascadePromptRatio$\times$ the
@@ -210,7 +208,7 @@ escalate.
 \subsection{RQ6: which parts of the cascade matter?}
 \label{sec:results-ablations}
 
-\paragraph{What the fusion adds.} Stage one alone against plain reranking:
+\paragraph{What the fusion adds} Stage one alone against plain reranking:
 \RerankVsFusedNQExactMatchDiff{} on NaturalQuestions and
 \RerankVsFusedHotpotQAExactMatchDiff{} on HotpotQA --- the fusion buys
 back the collapse at the price of part of the gain, and its mean over the
@@ -226,7 +224,7 @@ the cheapest variant; hybrid-first sits between
 stage wins everywhere; fused has the best mean and the smallest
 worst-case loss, which is its case.
 
-\paragraph{What the escalation adds.} The cascade against its own first
+\paragraph{What the escalation adds} The cascade against its own first
 stage run without escalation: \FusedVsCascadeNQExactMatchDiff{} on
 NaturalQuestions, \FusedVsCascadeTriviaQAExactMatchDiff{} on TriviaQA,
 \FusedVsCascadeHotpotQAExactMatchDiff{} on HotpotQA,
@@ -237,7 +235,7 @@ is worth roughly this much on top of \emph{any} first stage we tried;
 which first stage is best depends on the set, but that the escalation
 helps does not.
 
-\paragraph{The confidence trigger does not pay.} The sweep over
+\paragraph{The confidence trigger does not pay} The sweep over
 \SweepQuestions{} held-out train questions puts the best threshold at
 \SweepBestThreshold{} for a gain of $+0.0018$ EM over the abstention-only
 cascade ($p=0.42$) at $+0.25$ calls per question. At that threshold on the
@@ -253,9 +251,9 @@ extra calls. The greedy reader is nearly as confident when wrong as when
 right: its token log-probabilities carry almost no information the
 abstention did not already carry. We report this negative result because
 the opposite is widely assumed; the abstention-only cascade remains the
-proposed configuration. (Full sweep in Supplementary Material, Section~S3.)
+proposed configuration. (Full sweep in Appendix~\ref{app:sweep}.)
 
-\paragraph{The one-shot IRCoT objection.} Prompted with a worked example
+\paragraph{The one-shot IRCoT objection} Prompted with a worked example
 as the original method prescribes, IRCoT changes by
 \IRCoTVsIRCoTOneShotHotpotQAExactMatchDiff{} on HotpotQA and
 \IRCoTVsIRCoTOneShotTwoWikiExactMatchDiff{} on 2WikiMultihopQA relative
@@ -281,4 +279,4 @@ large gains over reranking on NaturalQuestions
 naive baseline on every set, and the escalation worth
 \FusedVsCascadeLlamaNQExactMatchDiff{} to
 \FusedVsCascadeLlamaTwoWikiExactMatchDiff{} over stage one alone. The
-full second-reader table is in Supplementary Material, Section~S2.
+full second-reader table is in Appendix~\ref{app:full-tables}.

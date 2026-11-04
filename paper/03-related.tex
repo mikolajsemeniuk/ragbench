@@ -1,7 +1,7 @@
 \section{Related work}
 \label{sec:related}
 
-\paragraph{Retrieval-augmented generation.}
+\paragraph{Retrieval-augmented generation}
 RAG was introduced as a trainable combination of a dense
 retriever~\citep{karpukhin2020dpr} and a sequence-to-sequence
 generator~\citep{lewis2020rag}, alongside a family of retrieval-augmented
@@ -15,7 +15,7 @@ and its progression from naive through advanced to modular
 pipelines~\citep{gao2023ragsurvey} and, most recently, to agentic
 systems~\citep{singh2025agenticrag}.
 
-\paragraph{Retrieval-side refinements.}
+\paragraph{Retrieval-side refinements}
 Classical lexical scoring~\citep{robertson2009bm25} survives inside modern
 stacks as the complement to dense retrieval, with Reciprocal Rank
 Fusion~\citep{cormack2009rrf} the standard way to merge the two rankings.
@@ -23,7 +23,7 @@ Cross-encoder reranking~\citep{nogueira2019passage} re-scores a dense
 shortlist with a jointly-encoded relevance model. These methods keep one
 generator call per question and modify only which passages reach it.
 
-\paragraph{Query-side refinements.}
+\paragraph{Query-side refinements}
 HyDE~\citep{gao2022hyde} searches with a model-drafted hypothetical answer
 passage instead of the question, bridging the vocabulary gap between
 questions and encyclopedic text. IRCoT~\citep{trivedi2023ircot} interleaves
@@ -37,7 +37,7 @@ model's next sentence is uncertain (FLARE~\citep{jiang2023flare}), or
 alternate full generation and retrieval rounds
 (Iter-RetGen~\citep{shao2023iterretgen}).
 
-\paragraph{Self-assessing and adaptive systems.}
+\paragraph{Self-assessing and adaptive systems}
 Self-RAG~\citep{asai2024selfrag} trains a model to emit reflection tokens
 deciding when to retrieve and whether generations are supported. CRAG
 \citep{yan2024crag} grades retrieved passages with a trained evaluator and
@@ -49,7 +49,7 @@ differs in \emph{when} the decision is made --- after the reader has seen
 the evidence (a posterior signal) rather than from the question alone (a
 prior one) --- and in requiring no trained component at all.
 
-\paragraph{Structure-augmented retrieval.}
+\paragraph{Structure-augmented retrieval}
 GraphRAG~\citep{edge2024graphrag}, RAPTOR~\citep{sarthi2024raptor} and
 HippoRAG~2~\citep{gutierrez2025hipporag2} preprocess the corpus into graphs,
 trees, or memory structures. They occupy a different cost class --- their
@@ -59,7 +59,7 @@ summarisation rather than factoid QA~\citep{han2025ragvsgraphrag}; we
 therefore exclude them from a comparison whose corpus is 21M passages, and
 note the exclusion as a limitation (see Section~\ref{sec:limitations}).
 
-\paragraph{Benchmarks and evaluation.}
+\paragraph{Benchmarks and evaluation}
 FlashRAG~\citep{jin2024flashrag} standardises datasets, corpora, and
 reimplementations of a dozen RAG methods, and is the source of our corpus
 and question sets; MultiHop-RAG~\citep{tang2024multihoprag} benchmarks
@@ -75,7 +75,7 @@ ceiling and of abstention as a behaviour distinct from error; and a
 per-question failure diagnosis that connects each architecture's gain to
 the failure mode it repairs.
 
-\paragraph{Cascades (the new approach).}
+\paragraph{Cascades (the new approach)}
 Deferring expensive computation until a cheap stage proves insufficient has
 a long history --- boosted detector cascades in
 vision~\citep{viola2001cascade} and cascade ranking in

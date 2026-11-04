@@ -1,4 +1,6 @@
 \begin{thebibliography}{}
+\renewcommand{\doi}[1]{\url{https://doi.org/#1}}
+\bibcommenthead
 
 \bibitem [\protect \citeauthoryear {%
 Asai%
@@ -19,7 +21,7 @@ Asai, A.%
 , Wu, Z.%
 , Wang, Y.%
 , Sil, A.%
-\BCBL {}\ \BBA {} Hajishirzi, H.%
+\BCBL {} Hajishirzi, H.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -29,7 +31,7 @@ Asai, A.%
   through Self-Reflection} {Self-{RAG}: Learning to retrieve, generate, and
   critique through self-reflection}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{International Conference on Learning Representations
+ \APACrefbtitle {{International Conference on Learning Representations
   (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
 \PrintBackRefs{\CurrentBib}
 
@@ -52,7 +54,7 @@ Barnett, S.%
 , Kurniawan, S.%
 , Thudumu, S.%
 , Brannelly, Z.%
-\BCBL {}\ \BBA {} Abdelrazek, M.%
+\BCBL {} Abdelrazek, M.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -62,9 +64,9 @@ Barnett, S.%
   Augmented Generation System} {Seven failure points when engineering a
   retrieval augmented generation system}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the IEEE/ACM 3rd International
-  Conference on AI Engineering (CAIN)}.} {{Proceedings of the IEEE/ACM 3rd
-  International Conference on AI Engineering (CAIN)}.}
+ \APACrefbtitle {{Proceedings of the IEEE/ACM 3rd International Conference on
+  AI Engineering (CAIN)}.} {{Proceedings of the IEEE/ACM 3rd International
+  Conference on AI Engineering (CAIN)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -94,9 +96,43 @@ Borgeaud, S.%
   of Tokens} {Improving language models by retrieving from trillions of
   tokens}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 39th International Conference on
-  Machine Learning (ICML)}.} {{Proceedings of the 39th International Conference
-  on Machine Learning (ICML)}.}
+ \APACrefbtitle {{Proceedings of the 39th International Conference on Machine
+  Learning (ICML)}.} {{Proceedings of the 39th International Conference on
+  Machine Learning (ICML)}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Brown%
+\ \protect \BOthers {.}}{%
+Brown%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+brown2020gpt3}
+\APACinsertmetastar {%
+brown2020gpt3}%
+\begin{APACrefauthors}%
+Brown, T.B.%
+, Mann, B.%
+, Ryder, N.%
+, Subbiah, M.%
+, Kaplan, J.%
+, Dhariwal, P.%
+\BDBL {}Amodei, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Language Models are Few-Shot Learners} {Language models
+  are few-shot learners}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Advances in Neural Information Processing
+  Systems}{33}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -116,7 +152,7 @@ chen2024benchmarking}%
 Chen, J.%
 , Lin, H.%
 , Han, X.%
-\BCBL {}\ \BBA {} Sun, L.%
+\BCBL {} Sun, L.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -126,7 +162,7 @@ Chen, J.%
   Retrieval-Augmented Generation} {Benchmarking large language models in
   retrieval-augmented generation}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the AAAI Conference on Artificial
+ \APACrefbtitle {{Proceedings of the AAAI Conference on Artificial
   Intelligence}} {{Proceedings of the AAAI Conference on Artificial
   Intelligence}}\ (\BVOL~38).
 \PrintBackRefs{\CurrentBib}
@@ -142,7 +178,7 @@ chow1970reject}
 \APACinsertmetastar {%
 chow1970reject}%
 \begin{APACrefauthors}%
-Chow, C\BPBI K.%
+Chow, C.K.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -151,7 +187,11 @@ Chow, C\BPBI K.%
 {\BBOQ}\APACrefatitle {On Optimum Recognition Error and Reject Tradeoff} {On
   optimum recognition error and reject tradeoff}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{IEEE Transactions on Information Theory}{16}{1}{}.
+\APACjournalVolNumPages{IEEE Transactions on Information Theory}{16}{1}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -167,9 +207,9 @@ cormack2009rrf}
 \APACinsertmetastar {%
 cormack2009rrf}%
 \begin{APACrefauthors}%
-Cormack, G\BPBI V.%
-, Clarke, C\BPBI L\BPBI A.%
-\BCBL {}\ \BBA {} Buettcher, S.%
+Cormack, G.V.%
+, Clarke, C.L.A.%
+\BCBL {} Buettcher, S.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -179,10 +219,10 @@ Cormack, G\BPBI V.%
   Individual Rank Learning Methods} {Reciprocal rank fusion outperforms
   {Condorcet} and individual rank learning methods}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 32nd International ACM SIGIR
-  Conference on Research and Development in Information Retrieval}.}
-  {{Proceedings of the 32nd International ACM SIGIR Conference on Research and
-  Development in Information Retrieval}.}
+ \APACrefbtitle {{Proceedings of the 32nd International ACM SIGIR Conference on
+  Research and Development in Information Retrieval}.} {{Proceedings of the
+  32nd International ACM SIGIR Conference on Research and Development in
+  Information Retrieval}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -211,10 +251,43 @@ Cuconasu, F.%
 {\BBOQ}\APACrefatitle {The Power of Noise: Redefining Retrieval for {RAG}
   Systems} {The power of noise: Redefining retrieval for {RAG} systems}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 47th International ACM SIGIR
-  Conference on Research and Development in Information Retrieval}.}
-  {{Proceedings of the 47th International ACM SIGIR Conference on Research and
-  Development in Information Retrieval}.}
+ \APACrefbtitle {{Proceedings of the 47th International ACM SIGIR Conference on
+  Research and Development in Information Retrieval}.} {{Proceedings of the
+  47th International ACM SIGIR Conference on Research and Development in
+  Information Retrieval}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Devlin%
+, Chang%
+, Lee%
+\BCBL {}\ \BBA {} Toutanova%
+}{%
+Devlin%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+devlin2019bert}
+\APACinsertmetastar {%
+devlin2019bert}%
+\begin{APACrefauthors}%
+Devlin, J.%
+, Chang, M\BHBI W.%
+, Lee, K.%
+\BCBL {} Toutanova, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{BERT}: Pre-training of Deep Bidirectional Transformers
+  for Language Understanding} {{BERT}: Pre-training of deep bidirectional
+  transformers for language understanding}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 2019 Conference of the North American
+  Chapter of the Association for Computational Linguistics (NAACL)}.}
+  {{Proceedings of the 2019 Conference of the North American Chapter of the
+  Association for Computational Linguistics (NAACL)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -244,7 +317,11 @@ Edge, D.%
   Query-Focused Summarization} {From local to global: A graph {RAG} approach to
   query-focused summarization}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2404.16130}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2404.16130}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -267,7 +344,11 @@ Efron, B.%
 {\BBOQ}\APACrefatitle {Bootstrap Methods: Another Look at the Jackknife}
   {Bootstrap methods: Another look at the jackknife}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{The Annals of Statistics}{7}{1}{}.
+\APACjournalVolNumPages{The Annals of Statistics}{7}{1}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -287,7 +368,7 @@ es2024ragas}%
 Es, S.%
 , James, J.%
 , Espinosa-Anke, L.%
-\BCBL {}\ \BBA {} Schockaert, S.%
+\BCBL {} Schockaert, S.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -297,11 +378,10 @@ Es, S.%
   Generation} {{RAGAS}: Automated evaluation of retrieval augmented
   generation}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 18th Conference of the European
-  Chapter of the Association for Computational Linguistics: System
-  Demonstrations}.} {{Proceedings of the 18th Conference of the European
-  Chapter of the Association for Computational Linguistics: System
-  Demonstrations}.}
+ \APACrefbtitle {{Proceedings of the 18th Conference of the European Chapter of
+  the Association for Computational Linguistics: System Demonstrations}.}
+  {{Proceedings of the 18th Conference of the European Chapter of the
+  Association for Computational Linguistics: System Demonstrations}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -321,7 +401,7 @@ gao2022hyde}%
 Gao, L.%
 , Ma, X.%
 , Lin, J.%
-\BCBL {}\ \BBA {} Callan, J.%
+\BCBL {} Callan, J.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -330,7 +410,11 @@ Gao, L.%
 {\BBOQ}\APACrefatitle {Precise Zero-Shot Dense Retrieval without Relevance
   Labels} {Precise zero-shot dense retrieval without relevance labels}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2212.10496}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2212.10496}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -360,7 +444,11 @@ Gao, Y.%
   Models: A Survey} {Retrieval-augmented generation for large language models:
   A survey}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2312.10997}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2312.10997}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -386,7 +474,7 @@ Geifman, Y.%
 {\BBOQ}\APACrefatitle {Selective Classification for Deep Neural Networks}
   {Selective classification for deep neural networks}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Advances in Neural Information Processing Systems}}
+ \APACrefbtitle {{Advances in Neural Information Processing Systems}}
   {{Advances in Neural Information Processing Systems}}\ (\BVOL~30).
 \PrintBackRefs{\CurrentBib}
 
@@ -405,11 +493,11 @@ gutierrez2025hipporag2}
 \APACinsertmetastar {%
 gutierrez2025hipporag2}%
 \begin{APACrefauthors}%
-Guti{\'e}rrez, B\BPBI J.%
+Guti{\'e}rrez, B.J.%
 , Shu, Y.%
 , Qi, W.%
 , Zhou, S.%
-\BCBL {}\ \BBA {} Su, Y.%
+\BCBL {} Su, Y.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -419,7 +507,11 @@ Guti{\'e}rrez, B\BPBI J.%
   for Large Language Models} {From {RAG} to memory: Non-parametric continual
   learning for large language models}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2502.14802}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2502.14802}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -441,7 +533,7 @@ Guu, K.%
 , Lee, K.%
 , Tung, Z.%
 , Pasupat, P.%
-\BCBL {}\ \BBA {} Chang, M\BHBI W.%
+\BCBL {} Chang, M\BHBI W.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -451,9 +543,9 @@ Guu, K.%
   Pre-Training} {{REALM}: Retrieval-augmented language model
   pre-training}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 37th International Conference on
-  Machine Learning (ICML)}.} {{Proceedings of the 37th International Conference
-  on Machine Learning (ICML)}.}
+ \APACrefbtitle {{Proceedings of the 37th International Conference on Machine
+  Learning (ICML)}.} {{Proceedings of the 37th International Conference on
+  Machine Learning (ICML)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -483,7 +575,11 @@ Han, H.%
   Insights} {{RAG} vs.\ {GraphRAG}: A systematic evaluation and key
   insights}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2502.11371}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2502.11371}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -501,9 +597,9 @@ ho20202wiki}
 ho20202wiki}%
 \begin{APACrefauthors}%
 Ho, X.%
-, Nguyen, A\BHBI K\BPBI D.%
+, Nguyen, A\BHBI K.D.%
 , Sugawara, S.%
-\BCBL {}\ \BBA {} Aizawa, A.%
+\BCBL {} Aizawa, A.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -513,7 +609,7 @@ Ho, X.%
   Evaluation of Reasoning Steps} {Constructing a multi-hop {QA} dataset for
   comprehensive evaluation of reasoning steps}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 28th International Conference on
+ \APACrefbtitle {{Proceedings of the 28th International Conference on
   Computational Linguistics (COLING)}.} {{Proceedings of the 28th International
   Conference on Computational Linguistics (COLING)}.}
 \PrintBackRefs{\CurrentBib}
@@ -538,7 +634,41 @@ Holm, S.%
 {\BBOQ}\APACrefatitle {A Simple Sequentially Rejective Multiple Test Procedure}
   {A simple sequentially rejective multiple test procedure}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{Scandinavian Journal of Statistics}{6}{2}{}.
+\APACjournalVolNumPages{Scandinavian Journal of Statistics}{6}{2}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hu%
+\ \protect \BOthers {.}}{%
+Hu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+hu2022lora}
+\APACinsertmetastar {%
+hu2022lora}%
+\begin{APACrefauthors}%
+Hu, E.J.%
+, Shen, Y.%
+, Wallis, P.%
+, Allen-Zhu, Z.%
+, Li, Y.%
+, Wang, S.%
+\BDBL {}Chen, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{LoRA}: Low-Rank Adaptation of Large Language Models}
+  {{LoRA}: Low-rank adaptation of large language models}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{International Conference on Learning Representations
+  (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -565,10 +695,10 @@ Izacard, G.%
   Open Domain Question Answering} {Leveraging passage retrieval with generative
   models for open domain question answering}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 16th Conference of the European
-  Chapter of the Association for Computational Linguistics (EACL)}.}
-  {{Proceedings of the 16th Conference of the European Chapter of the
-  Association for Computational Linguistics (EACL)}.}
+ \APACrefbtitle {{Proceedings of the 16th Conference of the European Chapter of
+  the Association for Computational Linguistics (EACL)}.} {{Proceedings of the
+  16th Conference of the European Chapter of the Association for Computational
+  Linguistics (EACL)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -589,8 +719,8 @@ jeong2024adaptiverag}%
 Jeong, S.%
 , Baek, J.%
 , Cho, S.%
-, Hwang, S\BPBI J.%
-\BCBL {}\ \BBA {} Park, J\BPBI C.%
+, Hwang, S.J.%
+\BCBL {} Park, J.C.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -601,10 +731,43 @@ Jeong, S.%
   to adapt retrieval-augmented large language models through question
   complexity}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2024 Conference of the North
-  American Chapter of the Association for Computational Linguistics (NAACL)}.}
+ \APACrefbtitle {{Proceedings of the 2024 Conference of the North American
+  Chapter of the Association for Computational Linguistics (NAACL)}.}
   {{Proceedings of the 2024 Conference of the North American Chapter of the
   Association for Computational Linguistics (NAACL)}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ji%
+\ \protect \BOthers {.}}{%
+Ji%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+ji2023hallucination}
+\APACinsertmetastar {%
+ji2023hallucination}%
+\begin{APACrefauthors}%
+Ji, Z.%
+, Lee, N.%
+, Frieske, R.%
+, Yu, T.%
+, Su, D.%
+, Xu, Y.%
+\BDBL {}Fung, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Survey of Hallucination in Natural Language Generation}
+  {Survey of hallucination in natural language generation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{ACM Computing Surveys}{55}{12}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -619,7 +782,7 @@ jiang2023flare}
 jiang2023flare}%
 \begin{APACrefauthors}%
 Jiang, Z.%
-, Xu, F\BPBI F.%
+, Xu, F.F.%
 , Gao, L.%
 , Sun, Z.%
 , Liu, Q.%
@@ -633,9 +796,9 @@ Jiang, Z.%
 {\BBOQ}\APACrefatitle {Active Retrieval Augmented Generation} {Active retrieval
   augmented generation}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2023 Conference on Empirical Methods
-  in Natural Language Processing (EMNLP)}.} {{Proceedings of the 2023
-  Conference on Empirical Methods in Natural Language Processing (EMNLP)}.}
+ \APACrefbtitle {{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2023 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -657,7 +820,7 @@ Jin, J.%
 , Zhu, Y.%
 , Yang, X.%
 , Zhang, C.%
-\BCBL {}\ \BBA {} Dou, Z.%
+\BCBL {} Dou, Z.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -667,7 +830,42 @@ Jin, J.%
   Retrieval-Augmented Generation Research} {{FlashRAG}: A modular toolkit for
   efficient retrieval-augmented generation research}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2405.13576}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2405.13576}{}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Johnson%
+, Douze%
+\BCBL {}\ \BBA {} J{\'e}gou%
+}{%
+Johnson%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+johnson2019faiss}
+\APACinsertmetastar {%
+johnson2019faiss}%
+\begin{APACrefauthors}%
+Johnson, J.%
+, Douze, M.%
+\BCBL {} J{\'e}gou, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Billion-Scale Similarity Search with {GPUs}}
+  {Billion-scale similarity search with {GPUs}}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Transactions on Big Data}{7}{3}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -686,8 +884,8 @@ joshi2017triviaqa}%
 \begin{APACrefauthors}%
 Joshi, M.%
 , Choi, E.%
-, Weld, D\BPBI S.%
-\BCBL {}\ \BBA {} Zettlemoyer, L.%
+, Weld, D.S.%
+\BCBL {} Zettlemoyer, L.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -697,9 +895,9 @@ Joshi, M.%
   Dataset for Reading Comprehension} {{TriviaQA}: A large scale distantly
   supervised challenge dataset for reading comprehension}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 55th Annual Meeting of the
-  Association for Computational Linguistics (ACL)}.} {{Proceedings of the 55th
-  Annual Meeting of the Association for Computational Linguistics (ACL)}.}
+ \APACrefbtitle {{Proceedings of the 55th Annual Meeting of the Association for
+  Computational Linguistics (ACL)}.} {{Proceedings of the 55th Annual Meeting
+  of the Association for Computational Linguistics (ACL)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -728,7 +926,45 @@ Kadavath, S.%
 {\BBOQ}\APACrefatitle {Language Models (Mostly) Know What They Know} {Language
   models (mostly) know what they know}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2207.05221}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2207.05221}{}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kandpal%
+, Deng%
+, Roberts%
+, Wallace%
+\BCBL {}\ \BBA {} Raffel%
+}{%
+Kandpal%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+kandpal2023longtail}
+\APACinsertmetastar {%
+kandpal2023longtail}%
+\begin{APACrefauthors}%
+Kandpal, N.%
+, Deng, H.%
+, Roberts, A.%
+, Wallace, E.%
+\BCBL {} Raffel, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Large Language Models Struggle to Learn Long-Tail
+  Knowledge} {Large language models struggle to learn long-tail
+  knowledge}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 40th International Conference on Machine
+  Learning (ICML)}.} {{Proceedings of the 40th International Conference on
+  Machine Learning (ICML)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -758,9 +994,9 @@ Karpukhin, V.%
   Answering} {Dense passage retrieval for open-domain question
   answering}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2020 Conference on Empirical Methods
-  in Natural Language Processing (EMNLP)}.} {{Proceedings of the 2020
-  Conference on Empirical Methods in Natural Language Processing (EMNLP)}.}
+ \APACrefbtitle {{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2020 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -782,7 +1018,7 @@ Khandelwal, U.%
 , Levy, O.%
 , Jurafsky, D.%
 , Zettlemoyer, L.%
-\BCBL {}\ \BBA {} Lewis, M.%
+\BCBL {} Lewis, M.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -792,7 +1028,7 @@ Khandelwal, U.%
   Language Models} {Generalization through memorization: Nearest neighbor
   language models}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{International Conference on Learning Representations
+ \APACrefbtitle {{International Conference on Learning Representations
   (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
 \PrintBackRefs{\CurrentBib}
 
@@ -824,7 +1060,11 @@ Kwiatkowski, T.%
   research}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Transactions of the Association for Computational
-  Linguistics}{7}{}{}.
+  Linguistics}{7}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -843,7 +1083,7 @@ Kwon, W.%
 , Zhuang, S.%
 , Sheng, Y.%
 , Zheng, L.%
-, Yu, C\BPBI H.%
+, Yu, C.H.%
 \BDBL {}Stoica, I.%
 \end{APACrefauthors}%
 \unskip\
@@ -854,7 +1094,7 @@ Kwon, W.%
   Serving with {PagedAttention}} {Efficient memory management for large
   language model serving with {PagedAttention}}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 29th Symposium on Operating Systems
+ \APACrefbtitle {{Proceedings of the 29th Symposium on Operating Systems
   Principles (SOSP)}.} {{Proceedings of the 29th Symposium on Operating Systems
   Principles (SOSP)}.}
 \PrintBackRefs{\CurrentBib}
@@ -887,7 +1127,11 @@ Lewis, P.%
   tasks}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Advances in Neural Information Processing
-  Systems}{33}{}{}.
+  Systems}{33}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -901,13 +1145,13 @@ liu2024lost}
 \APACinsertmetastar {%
 liu2024lost}%
 \begin{APACrefauthors}%
-Liu, N\BPBI F.%
+Liu, N.F.%
 , Lin, K.%
 , Hewitt, J.%
 , Paranjape, A.%
 , Bevilacqua, M.%
 , Petroni, F.%
-\BCBL {}\ \BBA {} Liang, P.%
+\BCBL {} Liang, P.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -917,7 +1161,11 @@ Liu, N\BPBI F.%
   Contexts} {Lost in the middle: How language models use long contexts}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Transactions of the Association for Computational
-  Linguistics}{12}{}{}.
+  Linguistics}{12}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -931,7 +1179,7 @@ grattafiori2024llama3}
 \APACinsertmetastar {%
 grattafiori2024llama3}%
 \begin{APACrefauthors}%
-{Llama Team, AI @ Meta}.%
+{Llama Team, AI @ Meta}%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -940,7 +1188,76 @@ grattafiori2024llama3}%
 {\BBOQ}\APACrefatitle {The {Llama} 3 Herd of Models} {The {Llama} 3 herd of
   models}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2407.21783}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2407.21783}{}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Malkov%
+\ \BBA {} Yashunin%
+}{%
+Malkov%
+\ \BBA {} Yashunin%
+}{%
+{\protect \APACyear {2020}}%
+}]{%
+malkov2020hnsw}
+\APACinsertmetastar {%
+malkov2020hnsw}%
+\begin{APACrefauthors}%
+Malkov, Y.A.%
+\BCBT {}\ \BBA {} Yashunin, D.A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Efficient and Robust Approximate Nearest Neighbor Search
+  Using Hierarchical Navigable Small World Graphs} {Efficient and robust
+  approximate nearest neighbor search using hierarchical navigable small world
+  graphs}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}{42}{4}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mallen%
+\ \protect \BOthers {.}}{%
+Mallen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+mallen2023popqa}
+\APACinsertmetastar {%
+mallen2023popqa}%
+\begin{APACrefauthors}%
+Mallen, A.%
+, Asai, A.%
+, Zhong, V.%
+, Das, R.%
+, Khashabi, D.%
+\BCBL {} Hajishirzi, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {When Not to Trust Language Models: Investigating
+  Effectiveness of Parametric and Non-Parametric Memories} {When not to trust
+  language models: Investigating effectiveness of parametric and non-parametric
+  memories}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 61st Annual Meeting of the Association for
+  Computational Linguistics (ACL)}.} {{Proceedings of the 61st Annual Meeting
+  of the Association for Computational Linguistics (ACL)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -964,7 +1281,11 @@ McNemar, Q.%
   Correlated Proportions or Percentages} {Note on the sampling error of the
   difference between correlated proportions or percentages}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{Psychometrika}{12}{2}{}.
+\APACjournalVolNumPages{Psychometrika}{12}{2}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -990,7 +1311,76 @@ Nogueira, R.%
 {\BBOQ}\APACrefatitle {Passage Re-ranking with {BERT}} {Passage re-ranking with
   {BERT}}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:1901.04085}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:1901.04085}{}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ovadia%
+, Brief%
+, Mishaeli%
+\BCBL {}\ \BBA {} Elisha%
+}{%
+Ovadia%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+ovadia2024finetuning}
+\APACinsertmetastar {%
+ovadia2024finetuning}%
+\begin{APACrefauthors}%
+Ovadia, O.%
+, Brief, M.%
+, Mishaeli, M.%
+\BCBL {} Elisha, O.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Fine-Tuning or Retrieval? Comparing Knowledge Injection
+  in {LLMs}} {Fine-tuning or retrieval? comparing knowledge injection in
+  {LLMs}}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2312.05934}{}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Petroni%
+\ \protect \BOthers {.}}{%
+Petroni%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+petroni2019lmkb}
+\APACinsertmetastar {%
+petroni2019lmkb}%
+\begin{APACrefauthors}%
+Petroni, F.%
+, Rockt{\"a}schel, T.%
+, Lewis, P.%
+, Bakhtin, A.%
+, Wu, Y.%
+, Miller, A.H.%
+\BCBL {} Riedel, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Language Models as Knowledge Bases?} {Language models as
+  knowledge bases?}{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 2019 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2019 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1008,8 +1398,8 @@ Press, O.%
 , Zhang, M.%
 , Min, S.%
 , Schmidt, L.%
-, Smith, N\BPBI A.%
-\BCBL {}\ \BBA {} Lewis, M.%
+, Smith, N.A.%
+\BCBL {} Lewis, M.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1019,9 +1409,9 @@ Press, O.%
   Language Models} {Measuring and narrowing the compositionality gap in
   language models}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Findings of the Association for Computational
-  Linguistics: EMNLP 2023}.} {{Findings of the Association for Computational
-  Linguistics: EMNLP 2023}.}
+ \APACrefbtitle {{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}.} {{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1035,7 +1425,7 @@ qwen2025qwen25}
 \APACinsertmetastar {%
 qwen2025qwen25}%
 \begin{APACrefauthors}%
-{Qwen Team}.%
+{Qwen Team}%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1044,7 +1434,11 @@ qwen2025qwen25}%
 {\BBOQ}\APACrefatitle {Qwen2.5 Technical Report} {Qwen2.5 technical
   report}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2412.15115}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2412.15115}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1064,7 +1458,7 @@ rajpurkar2016squad}%
 Rajpurkar, P.%
 , Zhang, J.%
 , Lopyrev, K.%
-\BCBL {}\ \BBA {} Liang, P.%
+\BCBL {} Liang, P.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1073,9 +1467,9 @@ Rajpurkar, P.%
 {\BBOQ}\APACrefatitle {{SQuAD}: 100,000+ Questions for Machine Comprehension of
   Text} {{SQuAD}: 100,000+ questions for machine comprehension of text}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2016 Conference on Empirical Methods
-  in Natural Language Processing (EMNLP)}.} {{Proceedings of the 2016
-  Conference on Empirical Methods in Natural Language Processing (EMNLP)}.}
+ \APACrefbtitle {{Proceedings of the 2016 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2016 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1095,7 +1489,7 @@ Ram, O.%
 , Muhlgay, D.%
 , Shashua, A.%
 , Leyton-Brown, K.%
-\BCBL {}\ \BBA {} Shoham, Y.%
+\BCBL {} Shoham, Y.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1105,7 +1499,70 @@ Ram, O.%
   {In-context retrieval-augmented language models}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Transactions of the Association for Computational
-  Linguistics}{11}{}{}.
+  Linguistics}{11}{}{,}
+\newblock
+
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Reimers%
+\ \BBA {} Gurevych%
+}{%
+Reimers%
+\ \BBA {} Gurevych%
+}{%
+{\protect \APACyear {2019}}%
+}]{%
+reimers2019sbert}
+\APACinsertmetastar {%
+reimers2019sbert}%
+\begin{APACrefauthors}%
+Reimers, N.%
+\BCBT {}\ \BBA {} Gurevych, I.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Sentence-{BERT}: Sentence Embeddings using {Siamese}
+  {BERT}-Networks} {Sentence-{BERT}: Sentence embeddings using {Siamese}
+  {BERT}-networks}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 2019 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2019 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Roberts%
+, Raffel%
+\BCBL {}\ \BBA {} Shazeer%
+}{%
+Roberts%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+roberts2020knowledge}
+\APACinsertmetastar {%
+roberts2020knowledge}%
+\begin{APACrefauthors}%
+Roberts, A.%
+, Raffel, C.%
+\BCBL {} Shazeer, N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {How Much Knowledge Can You Pack Into the Parameters of a
+  Language Model?} {How much knowledge can you pack into the parameters of a
+  language model?}{\BBCQ}
+\newblock
+ \APACrefbtitle {{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2020 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1132,7 +1589,11 @@ Robertson, S.%
   Beyond} {The probabilistic relevance framework: {BM25} and beyond}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Foundations and Trends in Information
-  Retrieval}{3}{4}{}.
+  Retrieval}{3}{4}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1151,7 +1612,7 @@ Sarthi, P.%
 , Tuli, A.%
 , Khanna, S.%
 , Goldie, A.%
-\BCBL {}\ \BBA {} Manning, C\BPBI D.%
+\BCBL {} Manning, C.D.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1161,7 +1622,7 @@ Sarthi, P.%
   Tree-Organized Retrieval} {{RAPTOR}: Recursive abstractive processing for
   tree-organized retrieval}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{International Conference on Learning Representations
+ \APACrefbtitle {{International Conference on Learning Representations
   (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
 \PrintBackRefs{\CurrentBib}
 
@@ -1181,7 +1642,7 @@ Shao, Z.%
 , Shen, Y.%
 , Huang, M.%
 , Duan, N.%
-\BCBL {}\ \BBA {} Chen, W.%
+\BCBL {} Chen, W.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1191,9 +1652,9 @@ Shao, Z.%
   Iterative Retrieval-Generation Synergy} {Enhancing retrieval-augmented large
   language models with iterative retrieval-generation synergy}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Findings of the Association for Computational
-  Linguistics: EMNLP 2023}.} {{Findings of the Association for Computational
-  Linguistics: EMNLP 2023}.}
+ \APACrefbtitle {{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}.} {{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1222,8 +1683,8 @@ Shi, W.%
 {\BBOQ}\APACrefatitle {{REPLUG}: Retrieval-Augmented Black-Box Language Models}
   {{REPLUG}: Retrieval-augmented black-box language models}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2024 Conference of the North
-  American Chapter of the Association for Computational Linguistics (NAACL)}.}
+ \APACrefbtitle {{Proceedings of the 2024 Conference of the North American
+  Chapter of the Association for Computational Linguistics (NAACL)}.}
   {{Proceedings of the 2024 Conference of the North American Chapter of the
   Association for Computational Linguistics (NAACL)}.}
 \PrintBackRefs{\CurrentBib}
@@ -1245,7 +1706,7 @@ singh2025agenticrag}%
 Singh, A.%
 , Ehtesham, A.%
 , Kumar, S.%
-\BCBL {}\ \BBA {} Khoei, T\BPBI T.%
+\BCBL {} Khoei, T.T.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1255,7 +1716,11 @@ Singh, A.%
   Agentic {RAG}} {Agentic retrieval-augmented generation: A survey on agentic
   {RAG}}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2501.09136}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2501.09136}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1282,7 +1747,11 @@ Tang, Y.%
   Generation for Multi-Hop Queries} {{MultiHop-RAG}: Benchmarking
   retrieval-augmented generation for multi-hop queries}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2401.15391}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2401.15391}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1304,7 +1773,7 @@ Thakur, N.%
 , Reimers, N.%
 , R{\"u}ckl{\'e}, A.%
 , Srivastava, A.%
-\BCBL {}\ \BBA {} Gurevych, I.%
+\BCBL {} Gurevych, I.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1314,9 +1783,9 @@ Thakur, N.%
   Evaluation of Information Retrieval Models} {{BEIR}: A heterogeneous
   benchmark for zero-shot evaluation of information retrieval models}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the Neural Information Processing
-  Systems Track on Datasets and Benchmarks}.} {{Proceedings of the Neural
-  Information Processing Systems Track on Datasets and Benchmarks}.}
+ \APACrefbtitle {{Proceedings of the Neural Information Processing Systems
+  Track on Datasets and Benchmarks}.} {{Proceedings of the Neural Information
+  Processing Systems Track on Datasets and Benchmarks}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1336,7 +1805,7 @@ trivedi2022musique}%
 Trivedi, H.%
 , Balasubramanian, N.%
 , Khot, T.%
-\BCBL {}\ \BBA {} Sabharwal, A.%
+\BCBL {} Sabharwal, A.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1347,7 +1816,11 @@ Trivedi, H.%
   composition}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Transactions of the Association for Computational
-  Linguistics}{10}{}{}.
+  Linguistics}{10}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1367,7 +1840,7 @@ trivedi2023ircot}%
 Trivedi, H.%
 , Balasubramanian, N.%
 , Khot, T.%
-\BCBL {}\ \BBA {} Sabharwal, A.%
+\BCBL {} Sabharwal, A.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1378,9 +1851,39 @@ Trivedi, H.%
   chain-of-thought reasoning for knowledge-intensive multi-step
   questions}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 61st Annual Meeting of the
-  Association for Computational Linguistics (ACL)}.} {{Proceedings of the 61st
-  Annual Meeting of the Association for Computational Linguistics (ACL)}.}
+ \APACrefbtitle {{Proceedings of the 61st Annual Meeting of the Association for
+  Computational Linguistics (ACL)}.} {{Proceedings of the 61st Annual Meeting
+  of the Association for Computational Linguistics (ACL)}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vaswani%
+\ \protect \BOthers {.}}{%
+Vaswani%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+vaswani2017attention}
+\APACinsertmetastar {%
+vaswani2017attention}%
+\begin{APACrefauthors}%
+Vaswani, A.%
+, Shazeer, N.%
+, Parmar, N.%
+, Uszkoreit, J.%
+, Jones, L.%
+, Gomez, A.N.%
+\BDBL {}Polosukhin, I.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Attention Is All You Need} {Attention is all you
+  need}.{\BBCQ}
+\newblock
+ \APACrefbtitle {{Advances in Neural Information Processing Systems}}
+  {{Advances in Neural Information Processing Systems}}\ (\BVOL~30).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1408,7 +1911,11 @@ Viola, P.%
   features}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Proceedings of the IEEE Conference on Computer Vision
-  and Pattern Recognition (CVPR)}{}{}{}.
+  and Pattern Recognition (CVPR)}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1426,7 +1933,7 @@ wang2011cascade}%
 \begin{APACrefauthors}%
 Wang, L.%
 , Lin, J.%
-\BCBL {}\ \BBA {} Metzler, D.%
+\BCBL {} Metzler, D.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1436,7 +1943,11 @@ Wang, L.%
   {A cascade ranking model for efficient ranked retrieval}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Proceedings of the 34th International ACM SIGIR
-  Conference on Research and Development in Information Retrieval}{}{}{}.
+  Conference on Research and Development in Information Retrieval}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1466,7 +1977,11 @@ Wang, X.%
   Generation} {Searching for best practices in retrieval-augmented
   generation}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2407.01219}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2407.01219}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1497,7 +2012,11 @@ Wei, J.%
   language models}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Advances in Neural Information Processing
-  Systems}{35}{}{}.
+  Systems}{35}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1520,7 +2039,11 @@ Wilcoxon, F.%
 {\BBOQ}\APACrefatitle {Individual Comparisons by Ranking Methods} {Individual
   comparisons by ranking methods}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{Biometrics Bulletin}{1}{6}{}.
+\APACjournalVolNumPages{Biometrics Bulletin}{1}{6}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1540,7 +2063,7 @@ xiao2023bge}%
 Xiao, S.%
 , Liu, Z.%
 , Zhang, P.%
-\BCBL {}\ \BBA {} Muennighoff, N.%
+\BCBL {} Muennighoff, N.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1550,7 +2073,11 @@ Xiao, S.%
   {Chinese} Embedding} {{C-Pack}: Packaged resources to advance general
   {Chinese} embedding}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2309.07597}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2309.07597}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1570,7 +2097,7 @@ Xiong, M.%
 , Li, Y.%
 , Fu, J.%
 , He, J.%
-\BCBL {}\ \BBA {} Hooi, B.%
+\BCBL {} Hooi, B.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1581,7 +2108,7 @@ Xiong, M.%
   uncertainty? an empirical evaluation of confidence elicitation in
   {LLMs}}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{International Conference on Learning Representations
+ \APACrefbtitle {{International Conference on Learning Representations
   (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
 \PrintBackRefs{\CurrentBib}
 
@@ -1602,7 +2129,7 @@ yan2024crag}%
 Yan, S\BHBI Q.%
 , Gu, J\BHBI C.%
 , Zhu, Y.%
-\BCBL {}\ \BBA {} Ling, Z\BHBI H.%
+\BCBL {} Ling, Z\BHBI H.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1611,7 +2138,11 @@ Yan, S\BHBI Q.%
 {\BBOQ}\APACrefatitle {Corrective Retrieval Augmented Generation} {Corrective
   retrieval augmented generation}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{arXiv preprint arXiv:2401.15884}{}{}{}.
+\APACjournalVolNumPages{arXiv preprint arXiv:2401.15884}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1629,9 +2160,9 @@ Yang, Z.%
 , Qi, P.%
 , Zhang, S.%
 , Bengio, Y.%
-, Cohen, W\BPBI W.%
+, Cohen, W.W.%
 , Salakhutdinov, R.%
-\BCBL {}\ \BBA {} Manning, C\BPBI D.%
+\BCBL {} Manning, C.D.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1641,9 +2172,9 @@ Yang, Z.%
   Question Answering} {{HotpotQA}: A dataset for diverse, explainable multi-hop
   question answering}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{Proceedings of the 2018 Conference on Empirical Methods
-  in Natural Language Processing (EMNLP)}.} {{Proceedings of the 2018
-  Conference on Empirical Methods in Natural Language Processing (EMNLP)}.}
+ \APACrefbtitle {{Proceedings of the 2018 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.} {{Proceedings of the 2018 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}.}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -1663,7 +2194,7 @@ Yao, S.%
 , Du, N.%
 , Shafran, I.%
 , Narasimhan, K.%
-\BCBL {}\ \BBA {} Cao, Y.%
+\BCBL {} Cao, Y.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -1673,8 +2204,42 @@ Yao, S.%
   Models} {{ReAct}: Synergizing reasoning and acting in language
   models}.{\BBCQ}
 \newblock
-\BIn{} \APACrefbtitle {{International Conference on Learning Representations
+ \APACrefbtitle {{International Conference on Learning Representations
   (ICLR)}.} {{International Conference on Learning Representations (ICLR)}.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Zhang%
+\ \protect \BOthers {.}}{%
+Zhang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+zhang2023sirens}
+\APACinsertmetastar {%
+zhang2023sirens}%
+\begin{APACrefauthors}%
+Zhang, Y.%
+, Li, Y.%
+, Cui, L.%
+, Cai, D.%
+, Liu, L.%
+, Fu, T.%
+\BDBL {}Shi, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Siren's Song in the {AI} Ocean: A Survey on
+  Hallucination in Large Language Models} {Siren's song in the {AI} ocean: A
+  survey on hallucination in large language models}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2309.01219}{}{}{,}
+\newblock
+
+\newblock
+
 \PrintBackRefs{\CurrentBib}
 
 \end{thebibliography}
